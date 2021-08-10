@@ -4,6 +4,7 @@ import com.fifth.bean.BaseRespVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * @program: first-git-springboot
  * @description:
@@ -29,10 +30,12 @@ public class GitTestController {
     public BaseRespVo wuhan() {
         return BaseRespVo.ok("jojo, 我dio不做人啦！");
     }
+
     @RequestMapping("gaigai")
     public BaseRespVo gaigai() {
         return BaseRespVo.ok("我只爱gaigai");
     }
+
     @RequestMapping("zs")
     public BaseRespVo zs() {
         return BaseRespVo.ok("zszszs");
@@ -48,5 +51,8 @@ public class GitTestController {
         return BaseRespVo.ok("wordbig");
     }
 
-
+    @RequestMapping("bobo")
+    public BaseRespVo bobo() {
+        return BaseRespVo.ok("波波真可爱");
+    }
 }
