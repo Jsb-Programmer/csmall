@@ -1,5 +1,6 @@
 package com.fifth.controller;
 
+
 import com.fifth.bean.BaseRespVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,10 @@ public class GitTestController {
     @RequestMapping("zs")
     public BaseRespVo zs() {
         return BaseRespVo.ok("zszszs");
+    }
+    @RequestMapping("wpb")
+    public BaseRespVo wpb(){
+        return BaseRespVo.ok("sucessful!");
     }
 
 }
