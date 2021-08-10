@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("test")
 public class GitTestController {
 
+    @RequestMapping("jojo1")
+    public BaseRespVo jojo1() {
+        return BaseRespVo.ok("jojo test");
+    }
+
     @RequestMapping("jojo")
     public BaseRespVo jojo() {
         return BaseRespVo.ok("jojo test");
@@ -25,7 +30,10 @@ public class GitTestController {
     public BaseRespVo wuhan() {
         return BaseRespVo.ok("jojo, 我dio不做人啦！");
     }
-
+    @RequestMapping("gaigai")
+    public BaseRespVo gaigai() {
+        return BaseRespVo.ok("我只爱gaigai");
+    }
     @RequestMapping("zs")
     public BaseRespVo zs() {
         return BaseRespVo.ok("zszszs");
@@ -34,5 +42,16 @@ public class GitTestController {
     public BaseRespVo wpb(){
         return BaseRespVo.ok("sucessful!");
     }
+
+    @RequestMapping("wuyuqi")
+    public BaseRespVo wuyuqi() {
+        return BaseRespVo.ok("吴瑜琦");
+    }
+
+    @RequestMapping("wordbig")
+    public BaseRespVo wordbig() {
+        return BaseRespVo.ok("wordbig");
+    }
+
 
 }
