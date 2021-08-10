@@ -25,4 +25,11 @@ public class GitTestController {
         return BaseRespVo.ok("jojo, 我dio不做人啦！");
     }
 
+    @RequestMapping("gaigai")
+    public BaseRespVo gaigai() {
+        return BaseRespVo.ok("我只爱gaigai");
+    }
+
+
+
 }
