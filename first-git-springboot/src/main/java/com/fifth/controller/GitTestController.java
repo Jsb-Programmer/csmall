@@ -17,12 +17,23 @@ public class GitTestController {
 
     @RequestMapping("jojo")
     public BaseRespVo jojo() {
-        return BaseRespVo.ok("jojo test");
+        return BaseRespVo.ok("jojo test again");
     }
 
     @RequestMapping("wuhan")
     public BaseRespVo wuhan() {
         return BaseRespVo.ok("jojo, 我dio不做人啦！");
     }
+
+    @RequestMapping("zs")
+    public BaseRespVo zs() {
+        return BaseRespVo.ok("zszszs");
+    }
+
+    @RequestMapping("wuyuqi")
+    public BaseRespVo wuyuqi() {
+        return BaseRespVo.ok("吴瑜琦");
+    }
+
 
 }
