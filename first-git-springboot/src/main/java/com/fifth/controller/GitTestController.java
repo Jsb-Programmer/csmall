@@ -17,7 +17,7 @@ public class GitTestController {
 
     @RequestMapping("jojo")
     public BaseRespVo jojo() {
-        return BaseRespVo.ok("jojo test");
+        return BaseRespVo.ok("jojo test again");
     }
 
     @RequestMapping("wuhan")
@@ -29,5 +29,6 @@ public class GitTestController {
     public BaseRespVo zs() {
         return BaseRespVo.ok("zszszs");
     }
+
 
 }
