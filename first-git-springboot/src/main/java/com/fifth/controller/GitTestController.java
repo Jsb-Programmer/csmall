@@ -20,4 +20,9 @@ public class GitTestController {
         return BaseRespVo.ok("jojo test");
     }
 
+    @RequestMapping("wuhan")
+    public BaseRespVo wuhan() {
+        return BaseRespVo.ok("jojo, 我dio不做人啦！");
+    }
+
 }
