@@ -38,4 +38,10 @@ public class GitTestController {
         return BaseRespVo.ok("吴瑜琦");
     }
 
+    @RequestMapping("wordbig")
+    public BaseRespVo wordbig() {
+        return BaseRespVo.ok("wordbig");
+    }
+
+
 }
