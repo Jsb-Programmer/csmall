@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("test")
 public class GitTestController {
 
+    @RequestMapping("jojo1")
+    public BaseRespVo jojo1() {
+        return BaseRespVo.ok("jojo test");
+    }
+
     @RequestMapping("jojo")
     public BaseRespVo jojo() {
         return BaseRespVo.ok("jojo test");
