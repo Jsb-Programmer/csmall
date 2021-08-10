@@ -30,4 +30,10 @@ public class GitTestController {
         return BaseRespVo.ok("zszszs");
     }
 
+    @RequestMapping("wuyuqi")
+    public BaseRespVo wuyuqi() {
+        return BaseRespVo.ok("吴瑜琦");
+    }
+
+
 }
