@@ -53,5 +53,10 @@ public class GitTestController {
         return BaseRespVo.ok("wordbig");
     }
 
+    @RequestMapping("hello")
+    public BaseRespVo hello() {
+        return BaseRespVo.ok("hello");
+    }
+
 
 }
