@@ -2,6 +2,6 @@ package com.fifth;
 
 public class Test {
     public void test() {
-        System.out.println("hello123");
+        System.out.println("hello1234");
     }
 }
