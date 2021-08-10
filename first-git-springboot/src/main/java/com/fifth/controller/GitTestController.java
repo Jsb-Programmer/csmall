@@ -24,12 +24,18 @@ public class GitTestController {
     public BaseRespVo wuhan() {
         return BaseRespVo.ok("jojo, 我dio不做人啦！");
     }
-
     @RequestMapping("gaigai")
     public BaseRespVo gaigai() {
         return BaseRespVo.ok("我只爱gaigai");
     }
+    @RequestMapping("zs")
+    public BaseRespVo zs() {
+        return BaseRespVo.ok("zszszs");
+    }
 
-
+    @RequestMapping("wuyuqi")
+    public BaseRespVo wuyuqi() {
+        return BaseRespVo.ok("吴瑜琦");
+    }
 
 }
