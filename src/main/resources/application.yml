@@ -1,0 +1,19 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #后缀不要省略，增删改查涉及到中文
+    url: jdbc:mysql://localhost:3306/mall32?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    #默认的DataSource 👉  Hikari；如果要指定数据源类型，可以使用type来指定
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+logging:
+  level:
+    com.cskaoyan.mapper: debug
+pagehelper:
+  helper-dialect: mysql
