@@ -5,7 +5,7 @@
 <mapper namespace="com.cskaoyan.mapper.UserMapper">
 
     <!--排序使用的是${}-->
-    <select id="select" resultType="com.cskaoyan.bean.db.CskaoyanmallUser">
+    <select id="select" resultType="com.cskaoyan.bean.pojo.CskaoyanmallUser">
         select id,username,mobile,gender,birthday,last_login_time as lastLoginTime
         from cskaoyanmall_user
         <where>

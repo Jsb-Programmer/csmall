@@ -2,9 +2,10 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+
 import com.cskaoyan.bean.pojo.User;
 import com.cskaoyan.bean.pojo.UserExample;
-import com.cskaoyan.bean.db.CskaoyanmallUser;
+
 import com.cskaoyan.mapper.UserMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
