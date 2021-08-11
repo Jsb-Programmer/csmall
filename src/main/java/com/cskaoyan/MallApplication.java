@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan("com.cskaoyan.mapper")
 @SpringBootApplication
+/**
+ *
+ */
 public class MallApplication {
 
     public static void main(String[] args) {

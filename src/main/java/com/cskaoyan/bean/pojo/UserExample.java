@@ -1,4 +1,4 @@
-package com.cskaoyan.bean;
+package com.cskaoyan.bean.pojo;
 
 import java.util.ArrayList;
 import java.util.Date;
