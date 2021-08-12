@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,6 +223,7 @@ public class UserServiceImpl implements UserService {
      * @return baseData list + total
      */
     @Override
+    @Transactional
     public BaseRespData<ReceivedAddressBO> queryAddress(String name, String userId, BaseParam baseParam) {
         PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
         AddressExample addressExample = new AddressExample();
