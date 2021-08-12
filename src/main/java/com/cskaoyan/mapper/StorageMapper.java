@@ -1,11 +1,9 @@
 package com.cskaoyan.mapper;
 
-
 import com.cskaoyan.bean.pojo.Storage;
 import com.cskaoyan.bean.pojo.StorageExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface StorageMapper {
     long countByExample(StorageExample example);
@@ -29,4 +27,6 @@ public interface StorageMapper {
     int updateByPrimaryKeySelective(Storage record);
 
     int updateByPrimaryKey(Storage record);
+
+    int addStorage(@Param("storage") Storage record);
 }
