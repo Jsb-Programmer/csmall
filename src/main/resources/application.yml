@@ -1,10 +1,10 @@
 server:
-  port: 8081
+  port: 8083
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     #后缀不要省略，增删改查涉及到中文
-    url: jdbc:mysql://localhost:3306/mall32?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/project2?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 123456
     #默认的DataSource 👉  Hikari；如果要指定数据源类型，可以使用type来指定
@@ -17,3 +17,5 @@ logging:
     com.cskaoyan.mapper: debug
 pagehelper:
   helper-dialect: mysql
+mybatis:
+  type-handlers-package: com.cskaoyan.typehandler
