@@ -1,3 +1,4 @@
+
 package com.cskaoyan.bean.pojo;
 
 public class Region {
@@ -50,4 +51,5 @@ public class Region {
     public void setCode(Integer code) {
         this.code = code;
     }
+
 }

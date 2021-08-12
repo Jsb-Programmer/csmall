@@ -4,6 +4,7 @@ package com.cskaoyan.controller;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
+import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,18 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("user/list")
-    public BaseRespVo getUsers(String username, String mobile, BaseParam baseParam){
+    public BaseRespVo getUsers(String username,String mobile,BaseParam baseParam){
         BaseRespData<User> userBaseRespData = userService.queryUsers(username, mobile, baseParam);
         return BaseRespVo.ok(userBaseRespData);
+    }
+
+    @RequestMapping("address/list")
+    public BaseRespVo address(String name , String userId ,BaseParam baseParam){
+        BaseRespData<ReceivedAddressBO> receivedAddress = userService.queryAddress(name,userId,baseParam);
+        if (receivedAddress == null){
+            return BaseRespVo.fail("参数值不对");
+        }
+        return BaseRespVo.ok(receivedAddress);
     }
 
     @RequestMapping("collect/list")

@@ -1,3 +1,4 @@
+
 package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.Region;
@@ -28,4 +29,5 @@ public interface RegionMapper {
     int updateByPrimaryKeySelective(Region record);
 
     int updateByPrimaryKey(Region record);
+
 }

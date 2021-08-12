@@ -209,9 +209,4 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectAll" resultType="com.cskaoyan.bean.vo.market.Province">
-    select
-    <include refid="Base_Column_List" />
-    from cskaoyanmall_region
-  </select>
 </mapper>

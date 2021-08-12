@@ -1,3 +1,4 @@
+
 package com.cskaoyan.bean.pojo;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class RegionExample {
     protected List<Criteria> oredCriteria;
 
     public RegionExample() {
-        oredCriteria = new ArrayList<Criteria>();
+        oredCriteria = new ArrayList<>();
     }
 
     public void setOrderByClause(String orderByClause) {
@@ -68,7 +69,7 @@ public class RegionExample {
 
         protected GeneratedCriteria() {
             super();
-            criteria = new ArrayList<Criterion>();
+            criteria = new ArrayList<>();
         }
 
         public boolean isValid() {
@@ -416,7 +417,6 @@ public class RegionExample {
     }
 
     public static class Criteria extends GeneratedCriteria {
-
         protected Criteria() {
             super();
         }
@@ -507,4 +507,5 @@ public class RegionExample {
             this(condition, value, secondValue, null);
         }
     }
+
 }
