@@ -19,7 +19,7 @@ public class ImgUploadVO {
     private String key;
     private String name;
     private String type;
-    private Long size;
+    private int size;
     private String url;
     private String addTime;
     private String updateTime;

@@ -38,7 +38,7 @@ public class StorageController {
     public BaseRespVo imgUpload(MultipartFile file) {
         String uuid = UUID.randomUUID().toString();
         String originalFilename = file.getOriginalFilename();
-        long size = file.getSize();
+        int size = (int) file.getSize();
         String contentType = file.getContentType();
         Date date = new Date(System.currentTimeMillis());
         String key = uuid + originalFilename;
@@ -58,6 +58,7 @@ public class StorageController {
         }
         ImgUploadVO imgUploadVO = storageService.imgUpload(storage);
         file.transferTo(file1);
+
         return BaseRespVo.ok(imgUploadVO);
     }
 }

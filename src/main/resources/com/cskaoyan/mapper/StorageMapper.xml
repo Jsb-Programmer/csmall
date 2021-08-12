@@ -6,7 +6,7 @@
     <result column="key" jdbcType="VARCHAR" property="key" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="size" jdbcType="BIGINT" property="size" />
+    <result column="size" jdbcType="INTEGER" property="size" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -23,12 +23,7 @@
                   and ${criterion.condition}
                 </when>
                 <when test="criterion.singleValue">
-                  <if test="criterion.condition = 'key ='">
-                    and `key` = #{criterion.value}
-                  </if>
-                  <if test="criterion.condition != 'key ='">
-                    and ${criterion.condition} #{criterion.value}
-                  </if>
+                  and ${criterion.condition} #{criterion.value}
                 </when>
                 <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
@@ -110,10 +105,10 @@
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Storage">
     insert into cskaoyanmall_storage (id, `key`, name,
-      type, size, url, add_time, 
+      type, size, url, add_time,
       update_time, deleted)
-    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{type,jdbcType=VARCHAR}, #{size,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP},
+    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP},
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Storage">
@@ -161,7 +156,7 @@
         #{type,jdbcType=VARCHAR},
       </if>
       <if test="size != null">
-        #{size,jdbcType=BIGINT},
+        #{size,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
@@ -199,7 +194,7 @@
         type = #{record.type,jdbcType=VARCHAR},
       </if>
       <if test="record.size != null">
-        size = #{record.size,jdbcType=BIGINT},
+        size = #{record.size,jdbcType=INTEGER},
       </if>
       <if test="record.url != null">
         url = #{record.url,jdbcType=VARCHAR},
@@ -224,7 +219,7 @@
     key = #{record.key,jdbcType=VARCHAR},
     name = #{record.name,jdbcType=VARCHAR},
     type = #{record.type,jdbcType=VARCHAR},
-    size = #{record.size,jdbcType=BIGINT},
+    size = #{record.size,jdbcType=INTEGER},
     url = #{record.url,jdbcType=VARCHAR},
     add_time = #{record.addTime,jdbcType=TIMESTAMP},
     update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -246,7 +241,7 @@
         type = #{type,jdbcType=VARCHAR},
       </if>
       <if test="size != null">
-        size = #{size,jdbcType=BIGINT},
+        size = #{size,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
@@ -268,7 +263,7 @@
     set key = #{key,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
-      size = #{size,jdbcType=BIGINT},
+      size = #{size,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

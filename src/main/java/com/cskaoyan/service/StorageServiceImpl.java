@@ -1,7 +1,6 @@
 package com.cskaoyan.service;
 
 import com.cskaoyan.bean.pojo.Storage;
-import com.cskaoyan.bean.pojo.StorageExample;
 import com.cskaoyan.bean.vo.storage.ImgUploadVO;
 import com.cskaoyan.mapper.StorageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +8,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Service
 public class StorageServiceImpl implements StorageService {
     @Autowired
     StorageMapper storageMapper;
 
+    /**
+     * 图片上传
+     * @param storage 图片上传POJO对象
+     * @return 图片上传VO对象
+     */
     @Transactional
     @Override
     public ImgUploadVO imgUpload(Storage storage) {
-        int id = storageMapper.addStorage(storage);
-        storage.setId(id);
+        storageMapper.addStorage(storage);
 
         ImgUploadVO imgUploadVO = new ImgUploadVO();
         imgUploadVO.setId(storage.getId());

@@ -85,14 +85,14 @@ public class StorageExample {
         }
 
         protected void addCriterion(String condition) {
-                if (condition == null) {
-                    throw new RuntimeException("Value for condition cannot be null");
-                }
-                criteria.add(new Criterion(condition));
+            if (condition == null) {
+                throw new RuntimeException("Value for condition cannot be null");
             }
+            criteria.add(new Criterion(condition));
+        }
 
-                protected void addCriterion(String condition, Object value, String property) {
-                    if (value == null) {
+        protected void addCriterion(String condition, Object value, String property) {
+            if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
@@ -385,52 +385,52 @@ public class StorageExample {
             return (Criteria) this;
         }
 
-        public Criteria andSizeEqualTo(Long value) {
+        public Criteria andSizeEqualTo(Integer value) {
             addCriterion("size =", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotEqualTo(Long value) {
+        public Criteria andSizeNotEqualTo(Integer value) {
             addCriterion("size <>", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeGreaterThan(Long value) {
+        public Criteria andSizeGreaterThan(Integer value) {
             addCriterion("size >", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeGreaterThanOrEqualTo(Long value) {
+        public Criteria andSizeGreaterThanOrEqualTo(Integer value) {
             addCriterion("size >=", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeLessThan(Long value) {
+        public Criteria andSizeLessThan(Integer value) {
             addCriterion("size <", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeLessThanOrEqualTo(Long value) {
+        public Criteria andSizeLessThanOrEqualTo(Integer value) {
             addCriterion("size <=", value, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeIn(List<Long> values) {
+        public Criteria andSizeIn(List<Integer> values) {
             addCriterion("size in", values, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotIn(List<Long> values) {
+        public Criteria andSizeNotIn(List<Integer> values) {
             addCriterion("size not in", values, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeBetween(Long value1, Long value2) {
+        public Criteria andSizeBetween(Integer value1, Integer value2) {
             addCriterion("size between", value1, value2, "size");
             return (Criteria) this;
         }
 
-        public Criteria andSizeNotBetween(Long value1, Long value2) {
+        public Criteria andSizeNotBetween(Integer value1, Integer value2) {
             addCriterion("size not between", value1, value2, "size");
             return (Criteria) this;
         }
