@@ -1,6 +1,7 @@
 package com.cskaoyan.mapper;
 
 
+import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.pojo.GrouponRules;
 import com.cskaoyan.bean.pojo.GrouponRulesExample;
 import org.apache.ibatis.annotations.Param;
@@ -29,4 +30,6 @@ public interface GrouponRulesMapper {
     int updateByPrimaryKeySelective(GrouponRules record);
 
     int updateByPrimaryKey(GrouponRules record);
+
+    List<GrouponRules> select(BaseParam baseParam);
 }

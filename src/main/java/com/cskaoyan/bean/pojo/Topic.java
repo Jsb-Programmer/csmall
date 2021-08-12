@@ -125,7 +125,4 @@ public class Topic {
         this.content = content == null ? null : content.trim();
     }
 
-    public void setPrice(String price) {
-        this.price = BigDecimal.valueOf(Long.parseLong(price));
-    }
 }

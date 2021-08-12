@@ -2,6 +2,9 @@ package com.cskaoyan.bean.vo.topic;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 
 /**
  * @author yangbo
@@ -27,10 +30,10 @@ public class CreateTopicVO {
     private int id;
     private String title;
     private String subtitle;
-    private int price;
+    private BigDecimal price;
     private String readCount;
-    private String addTime;
-    private String updateTime;
+    private Date addTime;
+    private Date updateTime;
     private String content;
     private String[] goods;
 

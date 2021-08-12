@@ -3,11 +3,12 @@ package com.cskaoyan.controller;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
-import com.cskaoyan.bean.bo.topic.CreateTopicBO;
+import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 import com.cskaoyan.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * Topic专题模块
@@ -21,7 +22,6 @@ public class TopicController {
 
     /**
      * 查看全部专题信息
-     * @return
      */
     @GetMapping("/list")
     public BaseRespVo list(BaseParam baseParam){
@@ -33,13 +33,35 @@ public class TopicController {
 
     /**
      * 增加新的专题
-     * @return
      */
      @PostMapping("create")
-    public BaseRespVo create(@RequestBody CreateTopicBO topicBO){
+    public BaseRespVo create(@RequestBody Topic topic){
 
-         CreateTopicVO topicVO = topicService.createTopic(topicBO);
+         CreateTopicVO topicVO = topicService.createTopic(topic);
          return BaseRespVo.ok(topicVO);
      }
+
+    /**
+     * 更新专题
+     */
+    @PostMapping("update")
+    public BaseRespVo update(@RequestBody Topic topic){
+
+        topic = topicService.updateTopic(topic);
+        return BaseRespVo.ok(topic);
+    }
+
+    /**
+     * 删除专题
+     */
+    @PostMapping("delete")
+    public BaseRespVo delete(@RequestBody Topic topic){
+        int code = topicService.deleteTopic(topic);
+        if (code ==1){
+            return BaseRespVo.ok();
+        }else {
+            return BaseRespVo.fail();
+        }
+    }
 
 }

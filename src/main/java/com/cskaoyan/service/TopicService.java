@@ -2,7 +2,7 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.topic.CreateTopicBO;
+import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 
 /**
@@ -14,5 +14,9 @@ public interface TopicService {
 
     BaseRespData queryList(BaseParam baseParam);
 
-    CreateTopicVO createTopic(CreateTopicBO topicBO);
+    CreateTopicVO createTopic(Topic topic);
+
+    Topic updateTopic(Topic topic);
+
+    int deleteTopic(Topic topic);
 }
