@@ -104,6 +104,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Storage">
+    insert into cskaoyanmall_storage (id, key, name,
+      type, size, url, add_time, 
+      update_time, deleted)
+    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
     insert into cskaoyanmall_storage (id, `key`, name,
       type, size, url, add_time,
       update_time, deleted)
@@ -216,6 +221,14 @@
   <update id="updateByExample" parameterType="map">
     update cskaoyanmall_storage
     set id = #{record.id,jdbcType=INTEGER},
+      key = #{record.key,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      deleted = #{record.deleted,jdbcType=BIT}
     key = #{record.key,jdbcType=VARCHAR},
     name = #{record.name,jdbcType=VARCHAR},
     type = #{record.type,jdbcType=VARCHAR},
@@ -232,7 +245,7 @@
     update cskaoyanmall_storage
     <set>
       <if test="key != null">
-        key = #{key,jdbcType=VARCHAR},
+        `key` = #{key,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},

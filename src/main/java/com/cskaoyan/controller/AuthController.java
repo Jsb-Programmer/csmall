@@ -1,6 +1,6 @@
 package com.cskaoyan.controller;
 
-import com.cskaoyan.bean.BaseRespVo;
+import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.InfoData;
 import com.cskaoyan.bean.LoginUser;
 import com.cskaoyan.bean.vo.dashbord.AllKindsTotals;

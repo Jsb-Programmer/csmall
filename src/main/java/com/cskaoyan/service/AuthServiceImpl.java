@@ -11,6 +11,7 @@ import com.cskaoyan.mapper.ProductMapper;
 import com.cskaoyan.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @description:
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService{
 
 
     @Override
+    @Transactional
     public AllKindsTotals queryTotals() {
         long orderCount = orderMapper.countByExample(new OrderExample());
         long goodsCount = goodsMapper.countByExample(new GoodsExample());

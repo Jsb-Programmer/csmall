@@ -38,7 +38,7 @@ public class ListUserDataVo {
 
     private Short goodsType;
 
-    private List goodsValue;
+    private String[] goodsValue;
 
     private Short timeType;
 

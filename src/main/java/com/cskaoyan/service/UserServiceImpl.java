@@ -2,13 +2,17 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.mapper.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +39,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     FeedbackMapper feedbackMapper;
 
+    @Autowired
+    AddressMapper addressMapper;
+
+    @Autowired
+    RegionMapper regionMapper;
+
     /**
+     * Todo   criteria.andDeletedEqualTo(false);
+     *
      * @param username  用于条件查找
      * @param mobile    同上
      * @param baseParam 提供 base限制条件
@@ -78,6 +90,7 @@ public class UserServiceImpl implements UserService {
         CollectExample collectExample = new CollectExample();
         collectExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         CollectExample.Criteria criteria = collectExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
 
         int userid;
         int valueid;
@@ -114,6 +127,7 @@ public class UserServiceImpl implements UserService {
 
         footPrintExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         FootPrintExample.Criteria criteria = footPrintExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
 
         int userid;
         int goodsid;
@@ -149,6 +163,7 @@ public class UserServiceImpl implements UserService {
         SearchHistoryExample searchHistoryExample = new SearchHistoryExample();
         searchHistoryExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         SearchHistoryExample.Criteria criteria = searchHistoryExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
         if (keyword != null && !"".equals(keyword.trim())) {
             criteria.andKeywordLike("%" + keyword + "%");
         }
@@ -181,6 +196,7 @@ public class UserServiceImpl implements UserService {
         FeedbackExample feedbackExample = new FeedbackExample();
         feedbackExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         FeedbackExample.Criteria criteria = feedbackExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
         if (username != null && !"".equals(username.trim())) {
             criteria.andUsernameLike("%" + username + "%");
         }
@@ -199,4 +215,48 @@ public class UserServiceImpl implements UserService {
         long total = new PageInfo<>(feedbacks).getTotal();
         return new BaseRespData<>(feedbacks, total);
     }
+
+    /**
+     * @param name      查询参数
+     * @param userId    查询参数
+     * @param baseParam 查询参数
+     * @return baseData list + total
+     */
+    @Override
+    @Transactional
+    public BaseRespData<ReceivedAddressBO> queryAddress(String name, String userId, BaseParam baseParam) {
+        PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
+        AddressExample addressExample = new AddressExample();
+        addressExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
+        AddressExample.Criteria criteria = addressExample.createCriteria();
+        if (name!=null&&!"".equals(name.trim())){
+            criteria.andNameEqualTo(name);
+        }
+        int userid;
+        try {
+            if (userId!=null&&!"".equals(userId.trim())){
+                userid = Integer.parseInt(userId);
+                criteria.andUserIdEqualTo(userid);
+            }
+        }catch (Exception e){
+            return null;
+        }
+        List<ReceivedAddressBO> receivedAddressBOS = new ArrayList<>();
+        List<Address> addresses = addressMapper.selectByExample(addressExample);
+        for (Address address : addresses) {
+            ReceivedAddressBO receivedAddressBO = new ReceivedAddressBO();
+            BeanUtils.copyProperties(address,receivedAddressBO);
+            Region area = regionMapper.selectByPrimaryKey(address.getAreaId());
+            Region city = regionMapper.selectByPrimaryKey(address.getCityId());
+            Region province = regionMapper.selectByPrimaryKey(address.getProvinceId());
+            receivedAddressBO.setArea(area.getName());
+            receivedAddressBO.setCity(city.getName());
+            receivedAddressBO.setProvince(province.getName());
+            receivedAddressBOS.add(receivedAddressBO);
+        }
+        long total = new PageInfo<>(addresses).getTotal();
+
+        return new BaseRespData<>(receivedAddressBOS,total);
+    }
 }
+

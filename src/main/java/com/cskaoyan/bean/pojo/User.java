@@ -1,3 +1,4 @@
+
 package com.cskaoyan.bean.pojo;
 
 import java.util.Date;
@@ -162,4 +163,5 @@ public class User {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
 }
