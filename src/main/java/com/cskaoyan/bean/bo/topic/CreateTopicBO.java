@@ -1,4 +1,4 @@
-package com.cskaoyan.bean.bo.promotion2BO;
+package com.cskaoyan.bean.bo.topic;
 
 import lombok.Data;
 

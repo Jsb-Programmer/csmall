@@ -379,7 +379,7 @@
     select * from cskaoyanmall_topic
   </select>
 
-  <select id="selectCreateTopic" resultType="com.cskaoyan.bean.vo.promotion2VO.CreateTopicVO">
+  <select id="selectCreateTopic" resultType="com.cskaoyan.bean.vo.topic.CreateTopicVO">
     select id,add_time as addTime,update_time as updateTime from cskaoyanmall_topic where title = #{title}
   </select>
 </mapper>

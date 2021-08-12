@@ -4,7 +4,7 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.pojo.TopicExample;
-import com.cskaoyan.bean.vo.promotion2VO.CreateTopicVO;
+import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.promotion2BO.CreateTopicBO;
-import com.cskaoyan.bean.vo.promotion2VO.CreateTopicVO;
+import com.cskaoyan.bean.bo.topic.CreateTopicBO;
+import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 
 /**
  * @author yangbo
