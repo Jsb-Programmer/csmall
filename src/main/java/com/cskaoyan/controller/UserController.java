@@ -2,7 +2,7 @@ package com.cskaoyan.controller;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.BaseRespVo;
+import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

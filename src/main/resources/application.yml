@@ -10,7 +10,7 @@ spring:
     #默认的DataSource 👉  Hikari；如果要指定数据源类型，可以使用type来指定
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
-    date-format: yyyy-MM-dd
+    date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 logging:
   level:

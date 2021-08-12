@@ -1,4 +1,4 @@
-package com.cskaoyan.bean;
+package com.cskaoyan.bean.vo.market;
 
 import lombok.Data;
 
