@@ -37,6 +37,8 @@
         FROM
                 cskaoyanmall_order AS o
                 INNER JOIN cskaoyanmall_order_goods AS g ON o.id = order_id
+        WHERE
+                order_status = 201 OR order_status = 301 OR order_status = 401 or order_status = 402
         GROUP BY
                 day
     </select>
