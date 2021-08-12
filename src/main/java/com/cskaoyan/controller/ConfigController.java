@@ -1,6 +1,5 @@
 package com.cskaoyan.controller;
 
-import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.vo.config.ExpressConfigVO;
 import com.cskaoyan.bean.vo.config.MallConfigVO;

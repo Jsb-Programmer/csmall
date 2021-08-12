@@ -1,4 +1,4 @@
-package com.cskaoyan.typeHandler;
+package com.cskaoyan.typehandler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

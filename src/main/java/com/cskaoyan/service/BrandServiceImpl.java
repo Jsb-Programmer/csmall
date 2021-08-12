@@ -1,7 +1,5 @@
 package com.cskaoyan.service;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.bo.market.BaseParamBO;
 import com.cskaoyan.bean.bo.market.BrandCreateBO;
 import com.cskaoyan.bean.bo.market.BrandDeleteBO;
@@ -10,7 +8,6 @@ import com.cskaoyan.bean.pojo.Brand;
 import com.cskaoyan.bean.pojo.BrandExample;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
 import com.cskaoyan.bean.vo.market.BrandCreateVO;
-import com.cskaoyan.bean.vo.market.BrandDeleteVO;
 import com.cskaoyan.bean.vo.market.BrandUpdateVO;
 import com.cskaoyan.mapper.BrandMapper;
 import com.github.pagehelper.PageHelper;
@@ -18,7 +15,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
 import java.util.List;

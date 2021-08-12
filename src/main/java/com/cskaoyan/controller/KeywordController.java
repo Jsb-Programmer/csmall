@@ -3,7 +3,6 @@ package com.cskaoyan.controller;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
-import com.cskaoyan.bean.pojo.Ad;
 import com.cskaoyan.bean.pojo.Keyword;
 import com.cskaoyan.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
