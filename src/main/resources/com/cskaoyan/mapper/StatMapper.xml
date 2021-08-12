@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cskaoyan.mapper.StatMapper">
+
+    <select id="selectGroupByAddtime" resultType="com.cskaoyan.bean.vo.stat.RowsUserBean">
+        SELECT
+                COUNT( id ) AS users,
+                DATE_FORMAT( add_time, '%Y-%m-%d' ) AS day
+        FROM
+                cskaoyanmall_user
+        GROUP BY
+                day
+    </select>
+
+    <select id="selectOrderGroupByAddtime" resultType="com.cskaoyan.bean.vo.stat.RowsOrderBean">
+        SELECT
+                SUM( actual_price ) as amount,
+                COUNT( id ) as orders,
+                COUNT( user_id ) as customers,
+                AVG( actual_price ) as pcr,
+                DATE_FORMAT(add_time,'%Y-%m-%d') as day
+        FROM
+                cskaoyanmall_order
+        GROUP BY
+                day
+    </select>
+
+    <select id="selectGoodsGroupByAddtime" resultType="com.cskaoyan.bean.vo.stat.RowsGoodsBean">
+        SELECT
+                sum( o.actual_price ) as amount,
+                COUNT( o.id ) as orders,
+                COUNT( g.order_id ) as products,
+                DATE_FORMAT(o.add_time,'%Y-%m-%d') as day
+        FROM
+                cskaoyanmall_order AS o
+                INNER JOIN cskaoyanmall_order_goods AS g ON o.id = order_id
+        GROUP BY
+                day
+    </select>
+</mapper>

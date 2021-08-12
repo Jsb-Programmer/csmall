@@ -2,7 +2,6 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.CreateCouponBo;
 import com.cskaoyan.bean.pojo.Coupon;
 import com.cskaoyan.bean.vo.coupon.ListUserDataVo;
 
@@ -19,7 +18,7 @@ public interface CouponService {
 
     ListUserDataVo listuser(Integer couponId, Integer userId, Short status);
 
-    int createCoupon(CreateCouponBo createCouponBo);
+    int createCoupon(Coupon coupon);
 
     int deleteCoupon(Coupon coupon);
 
