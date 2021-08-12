@@ -1,17 +1,12 @@
 package com.cskaoyan.service;
 
-import com.cskaoyan.bean.User;
-import com.cskaoyan.bean.UserExample;
 import com.cskaoyan.bean.vo.stat.*;
 import com.cskaoyan.mapper.StatMapper;
-import com.cskaoyan.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @program: mall
