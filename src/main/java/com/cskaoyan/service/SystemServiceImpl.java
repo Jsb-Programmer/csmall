@@ -50,6 +50,8 @@ public class SystemServiceImpl implements SystemService{
         if (username != null && !"".equals(username)){
             criteria.andUsernameLike("%"+username+"%");
         }
+        //只筛选没有被逻辑删除的
+        criteria.andDeletedEqualTo(false);
         //数据库查询
         List<Admin> admins = adminMapper.selectByExample(adminExample);
 
@@ -58,6 +60,59 @@ public class SystemServiceImpl implements SystemService{
 
         return BaseRespData.create(admins,total);
     }
+
+
+    /**
+     * create admin
+     * @param admin
+     * @return
+     */
+    @Override
+    public Admin adminCreate(Admin admin) {
+        Date time = new Date(System.currentTimeMillis());
+        //第一次修改的时间默认为创建的时间
+        admin.setAddTime(time);
+        admin.setUpdateTime(time);
+        admin.setDeleted(false);
+        //最后一次登录的时间和ip默认不传
+        int insert = adminMapper.insert(admin);
+
+        //将添加到数据库的管理员信息返回
+        int id = adminMapper.selectIdByUsername(admin.getUsername());
+        admin.setId(id);
+
+        return admin;
+    }
+
+    /**
+     * 修改admin信息
+     * @param admin
+     * @return
+     */
+    @Override
+    public Admin adminUpdate(Admin admin) {
+        admin.setUpdateTime(new Date(System.currentTimeMillis()));
+        AdminExample adminExample = new AdminExample();
+        AdminExample.Criteria criteria = adminExample.createCriteria();
+        //通过id检索
+        criteria.andIdEqualTo(admin.getId());
+        adminMapper.updateByExampleSelective(admin,adminExample);
+        return admin;
+    }
+
+    /**
+     * 逻辑删除管理员
+     * @param admin
+     * @return
+     */
+    @Override
+    public Integer adminDelete(Admin admin) {
+        //将deleted设置为true
+        admin.setDeleted(true);
+        int i = adminMapper.updateByPrimaryKeySelective(admin);
+        return i;
+    }
+
 
     /**
      * 模糊查询log
@@ -77,6 +132,8 @@ public class SystemServiceImpl implements SystemService{
         if (name != null && !"".equals(name)){
             criteria.andAdminLike("%"+name+"%");
         }
+        //只筛选没有被逻辑删除的
+        criteria.andDeletedEqualTo(false);
         //数据库查询
         List<Log> logs = logMapper.selectByExample(logExample);
 
@@ -105,6 +162,8 @@ public class SystemServiceImpl implements SystemService{
         if (name != null && !"".equals(name)){
             criteria.andNameLike("%"+name+"%");
         }
+        //只筛选没有被逻辑删除的
+        criteria.andDeletedEqualTo(false);
         //数据库查询
         List<Role> roles = roleMapper.selectByExample(roleExample);
         PageInfo<Role> rolePageInfo = new PageInfo<>(roles);
@@ -131,6 +190,8 @@ public class SystemServiceImpl implements SystemService{
         if (name != null && !"".equals(name)){
             criteria.andKeyLike("%"+key+"%");
         }
+        //只筛选没有被逻辑删除的
+        criteria.andDeletedEqualTo(false);
         //数据库查询
         List<Storage> storages = storageMapper.selectByExample(storageExample);
         PageInfo<Storage> storagePageInfo = new PageInfo<>(storages);
@@ -158,11 +219,13 @@ public class SystemServiceImpl implements SystemService{
 
     /**
      * 根据id进项逻辑删除角色,但是需要判断该角色有无管理员正在使用
-     * @param id
+     * @param role
      */
     @Override
-    public void roleDelete(Integer id) {
-
+    public void roleDelete(Role role) {
+        //将deleted设置为true
+        role.setDeleted(true);
+        int i = roleMapper.updateByPrimaryKeySelective(role);
     }
 
     /**
@@ -190,5 +253,25 @@ public class SystemServiceImpl implements SystemService{
         List<RoleOptions> list = roleMapper.selectAllRoleCusto();
         return list;
     }
+
+    /**
+     * 修改对象名
+     * @param storage
+     * @return
+     */
+    @Override
+    public int storageUpdate(Storage storage) {
+        int i = storageMapper.updateByPrimaryKeySelective(storage);
+        return i;
+    }
+
+    @Override
+    public int storageDelete(Storage storage) {
+        //将deleted设置为true
+        storage.setDeleted(true);
+        int i = storageMapper.updateByPrimaryKeySelective(storage);
+        return i;
+    }
+
 
 }

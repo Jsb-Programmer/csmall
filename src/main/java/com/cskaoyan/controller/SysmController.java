@@ -5,14 +5,14 @@ import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.bo.system.RoleOptions;
+import com.cskaoyan.bean.pojo.Admin;
 import com.cskaoyan.bean.pojo.Role;
-import com.cskaoyan.bean.vo.system.AdminList;
+import com.cskaoyan.bean.pojo.Storage;
 import com.cskaoyan.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class SysmController {
     SystemService systemService;
 
     /**
-     * 模糊查询管理员的信息        role/options
+     * 模糊查询管理员的信息
      * @param username
      * @param param
      * @return
@@ -37,6 +37,40 @@ public class SysmController {
     public BaseRespVo adminList(String username, BaseParam param){
         BaseRespData baseRespData = systemService.adminList(username, param);
         return BaseRespVo.ok(baseRespData);
+    }
+
+
+    /**
+     * 管理员创建             admin/update
+     * @param admin
+     * @return
+     */
+    @RequestMapping("admin/create")
+    public BaseRespVo adminCreate(@RequestBody Admin admin){
+        Admin adminCreate = systemService.adminCreate(admin);
+        return BaseRespVo.ok(adminCreate);
+    }
+
+    /**
+     * admin信息修改
+     * @param admin
+     * @return
+     */
+    @RequestMapping("admin/update")
+    public BaseRespVo adminUpdate(@RequestBody Admin admin){
+        Admin adminCreate = systemService.adminUpdate(admin);
+        return BaseRespVo.ok(adminCreate);
+    }
+
+    /**
+     *
+     * @param admin
+     * @return
+     */
+    @RequestMapping("admin/delete")
+    public BaseRespVo adminDelete(@RequestBody Admin admin){
+        Integer affectedRows = systemService.adminDelete(admin);
+        return BaseRespVo.ok();
     }
 
     /**
@@ -99,7 +133,7 @@ public class SysmController {
      */
     @RequestMapping("role/delete")
     public BaseRespVo roleDelete(@RequestBody Role role){
-        systemService.roleDelete(role.getId());
+        systemService.roleDelete(role);
         return BaseRespVo.ok(role,"成功");
     }
 
@@ -116,7 +150,7 @@ public class SysmController {
 
 
     /**
-     * 通过key 和 name 模糊查询storage           storage/create
+     * 通过key 和 name 模糊查询storage
      * @param name
      * @param key
      * @param param
@@ -128,8 +162,26 @@ public class SysmController {
         return BaseRespVo.ok(baseRespData,"成功");
     }
 
+    /**
+     * 修改文件名   storage/delete
+     * @param storage
+     * @return
+     */
+    @RequestMapping("storage/update")
+    public BaseRespVo storageUpdate(@RequestBody Storage storage){
+        int i = systemService.storageUpdate(storage);
+        return BaseRespVo.ok();
+    }
 
-//                          该接口 吴寒 已写
+
+    @RequestMapping("storage/delete")
+    public BaseRespVo storageDelete(@RequestBody Storage storage){
+        int i = systemService.storageDelete(storage);
+        return BaseRespVo.ok();
+    }
+
+
+// ----------------------该接口 吴寒 已写-------------------------
 //
 //    /**
 //     * 上传管理员头像

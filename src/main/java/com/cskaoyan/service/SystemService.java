@@ -2,10 +2,10 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.bo.system.RoleOptions;
+import com.cskaoyan.bean.pojo.Admin;
 import com.cskaoyan.bean.pojo.Role;
-import org.springframework.web.multipart.MultipartFile;
+import com.cskaoyan.bean.pojo.Storage;
 
 import java.util.List;
 
@@ -21,10 +21,19 @@ public interface SystemService {
 
     Role roleCreate(String name, String desc);
 
-    void roleDelete(Integer id);
+    void roleDelete(Role id);
 
     void roleUpdate(Role role);
 
     List<RoleOptions> roleOptions();
 
+    Admin adminCreate(Admin admin);
+
+    Admin adminUpdate(Admin admin);
+
+    Integer adminDelete(Admin admin);
+
+    int storageUpdate(Storage storage);
+
+    int storageDelete(Storage storage);
 }

@@ -289,4 +289,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="selectIdByUsername" resultType="int">
+    select id from cskaoyanmall_admin where username = #{username}
+  </select>
 </mapper>
