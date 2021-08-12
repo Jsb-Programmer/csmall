@@ -1,12 +1,10 @@
 package com.cskaoyan.mapper;
 
-import com.cskaoyan.bean.User;
-import com.cskaoyan.bean.UserExample;
+import com.cskaoyan.bean.pojo.User;
+import com.cskaoyan.bean.pojo.UserExample;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public interface UserMapper {
     long countByExample(UserExample example);
