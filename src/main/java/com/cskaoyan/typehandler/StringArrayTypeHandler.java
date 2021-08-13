@@ -1,4 +1,4 @@
-package com.cskaoyan.typeHandler;
+package com.cskaoyan.typehandler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,14 +18,15 @@ import java.sql.SQLException;
 public class StringArrayTypeHandler implements TypeHandler<String[]> {
     //Jackson ObjectMapper
     ObjectMapper objectMapper = new ObjectMapper();
-
+    //select id,username,password from cskaoyan_user where username = ? and password = ?
     //index：？对应参数的序号
     //第三个参数：输入映射传入的值
     @SneakyThrows
     @Override
-    public void setParameter(PreparedStatement preparedStatement, int i, String[] strings, JdbcType jdbcType) throws SQLException {
-        String value = objectMapper.writeValueAsString(strings);
-        preparedStatement.setString(i, value);
+    public void setParameter(PreparedStatement preparedStatement, int index, String[] parameter, JdbcType jdbcType) throws SQLException {
+        //使用jackson将Object转换为字符串
+        String value = objectMapper.writeValueAsString(parameter);
+        preparedStatement.setString(index,value);
     }
 
     /**
@@ -52,7 +53,7 @@ public class StringArrayTypeHandler implements TypeHandler<String[]> {
     }
 
     private String[] transfer(String result) {
-        if (result == null || result.length() == 0) {
+        if (result == null || "".equals(result)) {
             return new String[0];
         }
         String[] strings = new String[0];
@@ -63,5 +64,4 @@ public class StringArrayTypeHandler implements TypeHandler<String[]> {
         }
         return strings;
     }
-
 }
