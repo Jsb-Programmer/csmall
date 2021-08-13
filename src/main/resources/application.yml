@@ -17,6 +17,7 @@ spring:
       static-locations: file:d:/project2-f7/img/
   mvc:
     static-path-pattern: /**
+
 logging:
   level:
     com.cskaoyan.mapper: debug
@@ -25,8 +26,11 @@ pagehelper:
 #图片存储磁盘路径
 file:
   path: d:/project2-f7/img/wx/storage/fetch/
-#图片网络路径URL
+
 img:
+  #图片网络路径URL
   url: http://localhost:8083/wx/storage/fetch/
+  #上传失败网络路径URL
+  failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler
