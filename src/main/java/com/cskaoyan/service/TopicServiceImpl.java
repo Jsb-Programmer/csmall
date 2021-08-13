@@ -38,8 +38,9 @@ public class TopicServiceImpl implements TopicService {
         //构造排序
         example.setOrderByClause(baseParam.getSort()+" "+baseParam.getOrder());
 
-
-        List<Topic> topicList = topicMapper.select(baseParam);
+        TopicExample.Criteria criteria = example.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        List<Topic> topicList = topicMapper.selectByExample(example);
 
         //可以获得分页信息,在PageInfo中放入查询结果
         PageInfo<Topic> pageInfo = new PageInfo<>(topicList);
@@ -73,6 +74,7 @@ public class TopicServiceImpl implements TopicService {
         return topicVO;
     }
 
+    //更新专题
     @Override
     public Topic updateTopic(Topic topic) {
         topic.setUpdateTime(new Date());
@@ -81,6 +83,7 @@ public class TopicServiceImpl implements TopicService {
         return topic;
     }
 
+    //逻辑删除专题
     @Override
     public int deleteTopic(Topic topic) {
         topic.setDeleted(true);
