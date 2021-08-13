@@ -1,14 +1,12 @@
-package com.cskaoyan.bean.pojo;
+package com.cskaoyan.bean.bo;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.validation.constraints.Digits;
+
 
 @Data
-public class Goods {
-    private Integer id;
-
+public class CreateGoodBeanBO {
     private String goodsSn;
 
     private String name;
@@ -25,11 +23,7 @@ public class Goods {
 
     private Boolean isOnSale;
 
-    private Short sortOrder;
-
     private String picUrl;
-
-    private String shareUrl;
 
     private Boolean isNew;
 
@@ -37,15 +31,11 @@ public class Goods {
 
     private String unit;
 
-    private BigDecimal counterPrice;
+    @Digits(integer = 10, fraction = 4, message = "专柜价格要为数字")
+    private String counterPrice;
 
-    private BigDecimal retailPrice;
-
-    private Date addTime;
-
-    private Date updateTime;
-
-    private Boolean deleted;
+    @Digits(integer = 10, fraction = 4, message = "当前价格要为数字")
+    private String retailPrice;
 
     private String detail;
 }
