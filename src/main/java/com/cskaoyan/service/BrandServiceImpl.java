@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -75,6 +76,8 @@ public class BrandServiceImpl implements BrandService {
     public BrandCreateVO brandCreate(BrandCreateBO brandCreateBO) {
         Brand brand = new Brand();
         BeanUtils.copyProperties(brandCreateBO,brand);
+        BigDecimal bigDecimal = new BigDecimal(brandCreateBO.getFloorPrice());
+        brand.setFloorPrice(bigDecimal);
         brand.setAddTime(new Date());
         brand.setUpdateTime(new Date());
         byte count = brandMapper.selectCount();

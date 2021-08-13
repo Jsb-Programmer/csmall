@@ -6,10 +6,11 @@ import com.cskaoyan.bean.bo.market.BrandUpdateBO;
 import com.cskaoyan.bean.vo.market.*;
 import com.cskaoyan.bean.bo.market.BaseParamBO;
 import com.cskaoyan.service.BrandService;
+import com.cskaoyan.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName BrandController
@@ -32,7 +33,7 @@ public class BrandController {
      * @param baseParamBO
      * @return
      */
-    @RequestMapping("list")
+    @GetMapping("list")
     public BaseRespVo brandList(Integer id,String name,BaseParamBO baseParamBO){
         BaseRespDataVO baseRespDataVO = brandService.brandList(id,name,baseParamBO);
         return BaseRespVo.ok(baseRespDataVO);
@@ -43,8 +44,14 @@ public class BrandController {
      * @param brandCreateBO
      * @return
      */
-    @RequestMapping("create")
-    public BaseRespVo brandCreate(@RequestBody BrandCreateBO brandCreateBO){
+    @PostMapping("create")
+    public BaseRespVo brandCreate(@RequestBody @Validated BrandCreateBO brandCreateBO, BindingResult bindingResult){
+//        //通过ExceptionHandler去处理异常
+//        int i = Integer.parseInt(brandCreateBO.getFloorPrice());
+        String s = ValidationUtil.dealWithFieldError(bindingResult);
+        if (s != null){
+            return BaseRespVo.fail(s);
+        }
         BrandCreateVO brandCreateVO = brandService.brandCreate(brandCreateBO);
         return BaseRespVo.ok(brandCreateVO);
     }
@@ -54,7 +61,7 @@ public class BrandController {
      * @param brandUpdateBO
      * @return
      */
-    @RequestMapping("update")
+    @PostMapping("update")
     public BaseRespVo brandUpdate(@RequestBody BrandUpdateBO brandUpdateBO){
         BrandUpdateVO brandUpdateVO = brandService.brandUpdate(brandUpdateBO);
         return BaseRespVo.ok(brandUpdateVO);
@@ -65,7 +72,7 @@ public class BrandController {
      * @param brandDeleteBO
      * @return
      */
-    @RequestMapping("delete")
+    @PostMapping("delete")
     public BaseRespVo brandDelete(@RequestBody BrandDeleteBO brandDeleteBO){
         brandService.brandDelete(brandDeleteBO);
         return BaseRespVo.ok();
