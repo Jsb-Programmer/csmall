@@ -24,6 +24,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
+
+
     @RequestMapping("user/list")
     public BaseRespVo getUsers(String username,String mobile,BaseParam baseParam){
         BaseRespData<User> userBaseRespData = userService.queryUsers(username, mobile, baseParam);
@@ -64,6 +66,7 @@ public class UserController {
             return BaseRespVo.fail("参数值不对");
         }
         return BaseRespVo.ok(searchHistoryBaseRespData);
+
     }
 
     @RequestMapping("feedback/list")

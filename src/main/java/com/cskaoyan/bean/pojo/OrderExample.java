@@ -1,3 +1,4 @@
+
 package com.cskaoyan.bean.pojo;
 
 import java.math.BigDecimal;
@@ -1838,4 +1839,5 @@ public class OrderExample {
             this(condition, value, secondValue, null);
         }
     }
+
 }

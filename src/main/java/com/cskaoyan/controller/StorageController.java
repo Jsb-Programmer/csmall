@@ -8,6 +8,7 @@ import com.cskaoyan.service.StorageService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,7 @@ public class StorageController {
 
     /**
      * 图片上传
+     *
      * @param file 从页面获取到的文件
      * @return
      */
@@ -41,8 +43,13 @@ public class StorageController {
         int size = (int) file.getSize();
         String contentType = file.getContentType();
         Date date = new Date(System.currentTimeMillis());
-        String key = uuid + originalFilename;
+//        String key = uuid + originalFilename;
+        int i = originalFilename.lastIndexOf(".");//用于截取文件尾缀
+        String weizhui = originalFilename.substring(i, originalFilename.length());
+
+        String key = uuid + weizhui;
         String url = imgUrl + key;
+
         Storage storage = new Storage();
         storage.setKey(key);
         storage.setName(originalFilename);
@@ -52,10 +59,13 @@ public class StorageController {
         storage.setAddTime(date);
         storage.setUpdateTime(date);
         storage.setDeleted(false);
+
+
         File file1 = new File(filePath, key);
-        if(!file1.getParentFile().exists()){
+        if (!file1.getParentFile().exists()) {
             file1.getParentFile().mkdirs();
         }
+
         ImgUploadVO imgUploadVO = storageService.imgUpload(storage);
         file.transferTo(file1);
 
