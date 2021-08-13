@@ -2,7 +2,7 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.*;
+import com.cskaoyan.bean.bo.goods.*;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.goods.*;
 import com.cskaoyan.mapper.*;

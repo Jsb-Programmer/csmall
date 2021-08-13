@@ -1,4 +1,4 @@
-package com.cskaoyan.bean.bo;
+package com.cskaoyan.bean.bo.goods;
 
 import com.cskaoyan.bean.pojo.GoodsAttribute;
 

@@ -2,8 +2,8 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.CreateGoodBO;
-import com.cskaoyan.bean.bo.UpdateGoodBO;
+import com.cskaoyan.bean.bo.goods.CreateGoodBO;
+import com.cskaoyan.bean.bo.goods.UpdateGoodBO;
 import com.cskaoyan.bean.pojo.Goods;
 import com.cskaoyan.bean.vo.goods.CatAndBrandVO;
 import com.cskaoyan.bean.vo.goods.GoodDetailVO;
