@@ -88,7 +88,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, 
+    id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price,
     freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, 
     pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, 
     add_time, update_time, deleted
@@ -150,7 +150,7 @@
         id,
       </if>
       <if test="userId != null">
-        user_id,
+        user_id ,
       </if>
       <if test="orderSn != null">
         order_sn,
@@ -540,4 +540,34 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from cskaoyanmall_order
+    <where>
+      <trim suffixOverrides=",">
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="orderSn != null">
+        order_sn = #{orderSn},
+      </if>
+      <if test="orderStatusArray != null">
+        order_status in
+        <foreach collection="orderStatusArray" item="orderStatus" separator="," open="(" close=")">
+          #{orderStatus}
+        </foreach>
+      </if>
+      </trim>
+    </where>
+  </select>
+
+  <update id="updateStatusById">
+    update cskaoyanmall_order set order_status = 301 where id = #{orderId}
+  </update>
+
+  <insert id="insertMessagebyId">
+    insert into  cskaoyanmall_order(shipChannel,shipSn) values (#{shipChannel},#{shipSn}) where id=#{orderId}
+  </insert>
 </mapper>

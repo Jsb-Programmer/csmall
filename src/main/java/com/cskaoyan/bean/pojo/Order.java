@@ -6,6 +6,17 @@ import java.util.Date;
 public class Order {
     private Integer id;
 
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.id=orderId;
+        this.orderId = orderId;
+    }
+
+    private Integer orderId;
+
     private Integer userId;
 
     private String orderSn;

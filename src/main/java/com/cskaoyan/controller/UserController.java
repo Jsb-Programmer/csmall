@@ -14,7 +14,13 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
+    /**
+    * @author:wpb
+    * @Description:
+    * @Date: 2021/8/13 
+    * @Param: [username, mobile, param]
+    * @return com.cskaoyan.bean.BaseRespVo
+    **/
     @RequestMapping("list")
     //public BaseRespVo list(Integer page, Integer limit, String username, String mobile, String sort, String order) {
     public BaseRespVo list(String username, String mobile, BaseParam param) {
