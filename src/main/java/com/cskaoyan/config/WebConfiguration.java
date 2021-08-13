@@ -17,9 +17,9 @@ public class WebConfiguration implements WebMvcConfigurer {
 //                .allowedOrigins("*");
 //                //.allowCredentials(true);
 //    }
-    public Validator getValidator(){
-        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-        validator.setProviderClass(HibernateValidator.class);
-        return validator;
-    }
+//    public Validator getValidator(){
+//        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+//        validator.setProviderClass(HibernateValidator.class);
+//        return validator;
+//    }
 }
