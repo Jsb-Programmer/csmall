@@ -3,6 +3,7 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.pojo.Category;
 import com.cskaoyan.bean.pojo.CategoryExample;
 import com.cskaoyan.bean.vo.market.CategoryL1VO;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -31,4 +32,5 @@ public interface CategoryMapper {
     int updateByPrimaryKey(Category record);
 
     List<CategoryL1VO> selectALL();
+
 }

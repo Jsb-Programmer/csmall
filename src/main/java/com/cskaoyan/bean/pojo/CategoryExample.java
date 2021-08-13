@@ -12,6 +12,7 @@ public class CategoryExample {
     protected List<Criteria> oredCriteria;
 
     public CategoryExample() {
+        oredCriteria = new ArrayList<>();
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -69,7 +70,7 @@ public class CategoryExample {
 
         protected GeneratedCriteria() {
             super();
-            criteria = new ArrayList<Criterion>();
+            criteria = new ArrayList<>();
         }
 
         public boolean isValid() {
@@ -887,7 +888,6 @@ public class CategoryExample {
     }
 
     public static class Criteria extends GeneratedCriteria {
-
         protected Criteria() {
             super();
         }

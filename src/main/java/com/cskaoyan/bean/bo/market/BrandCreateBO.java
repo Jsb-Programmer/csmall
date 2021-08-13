@@ -2,6 +2,7 @@ package com.cskaoyan.bean.bo.market;
 
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 /**
@@ -23,7 +24,9 @@ public class BrandCreateBO {
 
     private String name;
     private String desc;
-    private BigDecimal floorPrice;
+    @Min(value = 0,message = "参数值不对")
+//    private BigDecimal floorPrice;
+    private String floorPrice;
     private String picUrl;
 
 
