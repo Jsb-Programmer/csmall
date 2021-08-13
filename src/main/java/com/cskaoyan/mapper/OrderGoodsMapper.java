@@ -2,6 +2,7 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.OrderGoods;
 import com.cskaoyan.bean.pojo.OrderGoodsExample;
+import com.cskaoyan.bean.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

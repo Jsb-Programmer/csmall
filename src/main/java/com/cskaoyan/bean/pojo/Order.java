@@ -1,4 +1,7 @@
+
 package com.cskaoyan.bean.pojo;
+
+
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -9,7 +12,7 @@ public class Order {
     public Integer getOrderId() {
         return orderId;
     }
-
+   //TODO
     public void setOrderId(Integer orderId) {
         this.id=orderId;
         this.orderId = orderId;
@@ -274,4 +277,5 @@ public class Order {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
 }

@@ -1,3 +1,4 @@
+
 package com.cskaoyan.bean.pojo;
 
 import java.math.BigDecimal;
@@ -59,8 +60,6 @@ public class OrderExample {
         return criteria;
     }
 
-
-
     public void clear() {
         oredCriteria.clear();
         orderByClause = null;
@@ -99,14 +98,6 @@ public class OrderExample {
                 throw new RuntimeException("Value for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value));
-        }
-        public Criteria addUserIdLike(String value){
-            addCriterion("userId like",value,"userId");
-            return (Criteria)this;
-        }
-        public Criteria addOrderSnLike(String value){
-            addCriterion("orderSn like",value,"orderSn");
-            return (Criteria)this;
         }
 
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
@@ -1848,4 +1839,5 @@ public class OrderExample {
             this(condition, value, secondValue, null);
         }
     }
+
 }

@@ -10,10 +10,23 @@ spring:
     #默认的DataSource 👉  Hikari；如果要指定数据源类型，可以使用type来指定
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
-    date-format: yyyy-MM-dd
+    date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  web:
+    resources:
+      static-locations: file:d:/project2-f7/img/
+  mvc:
+    static-path-pattern: /**
 logging:
   level:
     com.cskaoyan.mapper: debug
 pagehelper:
   helper-dialect: mysql
+#图片存储磁盘路径
+file:
+  path: d:/project2-f7/img/wx/storage/fetch/
+#图片网络路径URL
+img:
+  url: http://localhost:8083/wx/storage/fetch/
+mybatis:
+  type-handlers-package: com.cskaoyan.typehandler

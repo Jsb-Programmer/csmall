@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public RespDetailData queryDetail(Integer id) {
-        //GsonFormat
+        //GsonFormat 改过了
         Order order = orderMapper.selectByPrimaryKey(id);
         List<OrderGoods> orderGoods = orderGoodsMapper.selectByOrderID(id);
         User user =orderGoodsMapper.selectJoinUser(id);
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Integer id, BigDecimal goodsPrice) {
-        //这里写假删除 ，然后controller层返回ok
+        //这里写假删除 ，然后controller层返回ok refund不用做
     }
 
     @Override
