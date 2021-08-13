@@ -99,7 +99,9 @@ public class GrouponServiceImpl implements GrouponService {
 
         GrouponListRecordVO recordVO;
 
-        List<Groupon> grouponList = grouponMapper.select();
+        GrouponExample.Criteria criteria = example.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        List<Groupon> grouponList = grouponMapper.selectByExample(example);
         for (Groupon groupon : grouponList) {
             recordVO = new GrouponListRecordVO();
             recordVO.setGroupon(groupon);
