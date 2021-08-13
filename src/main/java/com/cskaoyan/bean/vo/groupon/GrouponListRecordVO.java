@@ -6,6 +6,7 @@ import com.cskaoyan.bean.pojo.GrouponRules;
 import lombok.Data;
 
 
+
 /**
  * @author yangbo
  * @description
@@ -16,4 +17,5 @@ public class GrouponListRecordVO {
     private Groupon groupon;
     private Goods goods;
     private GrouponRules rules;
+    private String[] subGroupons;
 }
