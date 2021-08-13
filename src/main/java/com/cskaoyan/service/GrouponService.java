@@ -17,4 +17,6 @@ public interface GrouponService {
     int updateGroupon(GrouponRules grouponRules);
 
     int deleteTopic(GrouponRules grouponRules);
+
+    BaseRespData queryListRecord(BaseParam baseParam);
 }

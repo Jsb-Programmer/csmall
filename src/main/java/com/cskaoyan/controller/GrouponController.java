@@ -45,6 +45,16 @@ public class GrouponController {
     }
 
     /**
+     * 查看团购记录信息
+     */
+    @GetMapping("/listRecord")
+    public BaseRespVo listRecord(BaseParam baseParam){
+
+        BaseRespData data = grouponService.queryListRecord(baseParam);
+        return BaseRespVo.ok(data);
+    }
+
+    /**
      * 更新团购信息
      */
     @PostMapping("update")
