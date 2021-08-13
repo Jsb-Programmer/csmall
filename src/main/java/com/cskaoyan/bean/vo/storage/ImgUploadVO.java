@@ -15,11 +15,11 @@ public class ImgUploadVO {
      * updateTime : 2021-08-11 20:15:48
      */
 
-    private int id;
+    private Integer id;
     private String key;
     private String name;
     private String type;
-    private int size;
+    private Integer size;
     private String url;
     private String addTime;
     private String updateTime;
