@@ -160,6 +160,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public BaseRespData<SearchHistory> querySearchHistory(String userId, String keyword, BaseParam baseParam) {
         PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
+
         SearchHistoryExample searchHistoryExample = new SearchHistoryExample();
         searchHistoryExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         SearchHistoryExample.Criteria criteria = searchHistoryExample.createCriteria();
@@ -213,6 +214,9 @@ public class UserServiceImpl implements UserService {
         List<Feedback> feedbacks = feedbackMapper.selectByExample(feedbackExample);
 
         long total = new PageInfo<>(feedbacks).getTotal();
+
+
+
         return new BaseRespData<>(feedbacks, total);
     }
 
