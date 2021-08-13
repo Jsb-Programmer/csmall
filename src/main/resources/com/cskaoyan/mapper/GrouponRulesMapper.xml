@@ -288,4 +288,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="select" resultMap="BaseResultMap">
+    select * from cskaoyanmall_groupon_rules
+  </select>
 </mapper>

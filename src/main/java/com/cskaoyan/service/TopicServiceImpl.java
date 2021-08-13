@@ -2,16 +2,17 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.bo.topic.CreateTopicBO;
 import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.pojo.TopicExample;
 import com.cskaoyan.bean.vo.topic.CreateTopicVO;
+import com.cskaoyan.mapper.GoodsMapper;
 import com.cskaoyan.mapper.TopicMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     TopicMapper topicMapper;
 
+    //查看全部专题信息
     @Override
     public BaseRespData queryList(BaseParam baseParam) {
 
@@ -46,33 +48,43 @@ public class TopicServiceImpl implements TopicService {
         return BaseRespData.create(topicList,total);
     }
 
+    //增加新的专题
     @Override
-    public CreateTopicVO createTopic(CreateTopicBO topicBO) {
+    public CreateTopicVO createTopic(Topic topic) {
 
-        Topic topic = new Topic();
-        topic.setSubtitle(topicBO.getSubtitle());
-        topic.setContent(topicBO.getContent());
-        topic.setPrice(topicBO.getPrice());
-        topic.setGoods(topicBO.getGoods());
-        topic.setReadCount(topicBO.getReadCount());
         topic.setAddTime(new Date());
         topic.setUpdateTime(new Date());
-        topic.setTitle(topicBO.getTitle());
+        topic.setDeleted(false);
         //添加数据
-        int code = topicMapper.insertSelective(topic);
+        int code = topicMapper.insert(topic);
 
         CreateTopicVO topicVO = new CreateTopicVO();
-        if (code > 0){
             //查新专题自动生成数据
-            topicVO = topicMapper.selectCreateTopic(topic);
-            topicVO.setSubtitle(topicBO.getSubtitle());
-            topicVO.setContent(topicBO.getContent());
-            topicVO.setPrice(Integer.parseInt(topicBO.getPrice()));
-            topicVO.setReadCount(topicBO.getReadCount());
-            topicVO.setGoods(topicBO.getGoods());
-            topicVO.setTitle(topicBO.getTitle());
-        }
+            topicVO.setId(topic.getId());
+            topicVO.setAddTime(topic.getAddTime());
+            topicVO.setUpdateTime(topic.getUpdateTime());
+            topicVO.setSubtitle(topic.getSubtitle());
+            topicVO.setContent(topic.getContent());
+            topicVO.setPrice(topic.getPrice());
+            topicVO.setReadCount(topic.getReadCount());
+            topicVO.setGoods(topic.getGoods());
+            topicVO.setTitle(topic.getTitle());
 
         return topicVO;
+    }
+
+    @Override
+    public Topic updateTopic(Topic topic) {
+        topic.setUpdateTime(new Date());
+        int code = topicMapper.updateByPrimaryKey(topic);
+        topic = topicMapper.selectByPrimaryKey(topic.getId());
+        return topic;
+    }
+
+    @Override
+    public int deleteTopic(Topic topic) {
+        topic.setDeleted(true);
+        int code = topicMapper.updateByPrimaryKey(topic);
+        return code;
     }
 }

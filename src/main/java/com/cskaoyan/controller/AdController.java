@@ -6,7 +6,6 @@ import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Ad;
 import com.cskaoyan.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

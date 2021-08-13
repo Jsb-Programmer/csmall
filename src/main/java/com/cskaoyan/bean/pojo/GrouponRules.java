@@ -1,6 +1,7 @@
 package com.cskaoyan.bean.pojo;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class GrouponRules {
@@ -103,4 +104,9 @@ public class GrouponRules {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
+    public void setDiscount(String discount) {
+        this.discount = BigDecimal.valueOf(Long.parseLong(discount));
+    }
+
 }

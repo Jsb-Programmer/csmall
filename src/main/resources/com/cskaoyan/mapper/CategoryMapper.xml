@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, keywords, `desc`, pid, icon_url, pic_url, level, sort_order, add_time, update_time,
+    id, name, keywords, `desc`, pid, icon_url, pic_url, `level`, sort_order, add_time, update_time,
     deleted
   </sql>
   <select id="selectByExample" parameterType="com.cskaoyan.bean.pojo.CategoryExample" resultMap="BaseResultMap">
@@ -324,4 +324,5 @@
   <select id="selectALL" resultType="com.cskaoyan.bean.vo.market.CategoryL1VO">
     select id as value,name as label from cskaoyanmall_category where level = 'L1'
   </select>
+
 </mapper>

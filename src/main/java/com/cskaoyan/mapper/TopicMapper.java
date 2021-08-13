@@ -40,5 +40,4 @@ public interface TopicMapper {
 
     List<Topic> select(BaseParam baseParam);
 
-    CreateTopicVO selectCreateTopic(Topic topic);
 }

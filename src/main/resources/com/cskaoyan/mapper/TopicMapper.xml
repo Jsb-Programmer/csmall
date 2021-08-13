@@ -130,7 +130,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Topic">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.cskaoyan.bean.pojo.Topic">
     insert into cskaoyanmall_topic (id, title, subtitle, 
       price, read_count, pic_url, 
       sort_order, goods, add_time, 
@@ -379,7 +379,4 @@
     select * from cskaoyanmall_topic
   </select>
 
-  <select id="selectCreateTopic" resultType="com.cskaoyan.bean.vo.topic.CreateTopicVO">
-    select id,add_time as addTime,update_time as updateTime from cskaoyanmall_topic where title = #{title}
-  </select>
 </mapper>

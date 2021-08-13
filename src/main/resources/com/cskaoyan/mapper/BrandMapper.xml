@@ -104,7 +104,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Brand">
-    insert into cskaoyanmall_brand (id, name, desc, 
+
+    insert into cskaoyanmall_brand (id, name, `desc`,
       pic_url, sort_order, floor_price, 
       add_time, update_time, deleted
       )
@@ -113,6 +114,7 @@
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
+
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Brand" useGeneratedKeys="true" keyProperty="id">
     insert into cskaoyanmall_brand
     <trim prefix="(" suffix=")" suffixOverrides=",">

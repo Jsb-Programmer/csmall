@@ -5,7 +5,6 @@ import com.cskaoyan.bean.bo.market.CategoryDeleteBO;
 import com.cskaoyan.bean.bo.market.CategoryUpdateBO;
 import com.cskaoyan.bean.pojo.Category;
 import com.cskaoyan.bean.pojo.CategoryExample;
-import com.cskaoyan.bean.pojo.UserExample;
 import com.cskaoyan.bean.vo.market.CategoryCreateVO;
 import com.cskaoyan.bean.vo.market.CategoryL1VO;
 import com.cskaoyan.bean.vo.market.CategoryListChildrenVO;
