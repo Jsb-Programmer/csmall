@@ -3,7 +3,6 @@ package com.cskaoyan.service;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
-import com.cskaoyan.bean.bo.CreateCouponBo;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.coupon.ListUserDataVo;
 import com.cskaoyan.mapper.CouponMapper;
@@ -12,14 +11,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
 import java.util.List;
 
 /**
  * @program: mall
- * @description:
+ * @description: 优惠券接口
  * @author: Liu
  * @create: 2021-08-11 20:28
  **/
@@ -33,7 +31,14 @@ public class CouponServiceImpl implements CouponService {
     @Autowired
     CouponUserMapper couponUserMapper;
 
-    // 优惠券首页+多条件查询
+    /**
+     * 优惠券首页+多条件查询
+     * @param name 优惠券名字
+     * @param type 优惠券类型
+     * @param status 优惠券状态
+     * @param baseParam 排序+分页
+     * @return BaseRespData
+     */
     @Override
     public BaseRespData couponList(String name, Short type, Short status, BaseParam baseParam) {
         // 分页
@@ -71,7 +76,11 @@ public class CouponServiceImpl implements CouponService {
         return BaseRespData.create(item, total);
     }
 
-    // 优惠券详情
+    /**
+     * 优惠券详情
+     * @param id 优惠券id
+     * @return Coupon
+     */
     @Override
     public Coupon readCoupon(Integer id) {
         // 根据id查找
@@ -79,7 +88,13 @@ public class CouponServiceImpl implements CouponService {
         return coupon;
     }
 
-    // 显示领取优惠券的用户
+    /**
+     * 显示领取优惠券的用户
+     * @param couponId couponId
+     * @param userId userId
+     * @param status status
+     * @return ListUserDataVo
+     */
     @Override
     public ListUserDataVo listuser(Integer couponId, Integer userId, Short status) {
         // 根据couponId查找Coupon
@@ -140,26 +155,13 @@ public class CouponServiceImpl implements CouponService {
         return listUserDataVo;
     }
 
-    // 添加优惠券
+    /**
+     * 添加优惠券
+     * @param coupon Coupon
+     * @return affectRows
+     */
     @Override
-    public int createCoupon(CreateCouponBo createCouponBo) {
-        createCouponBo.setGoodsValue(null);
-        Coupon coupon = new Coupon();
-        coupon.setName(createCouponBo.getName());
-        coupon.setDesc(createCouponBo.getName());
-        coupon.setTag(createCouponBo.getName());
-        coupon.setTotal(createCouponBo.getTotal());
-        coupon.setDiscount(createCouponBo.getDiscount());
-        coupon.setMin(createCouponBo.getMin());
-        coupon.setLimit(createCouponBo.getLimit());
-        coupon.setType(createCouponBo.getType());
-        coupon.setStatus(createCouponBo.getStatus());
-        coupon.setGoodsType(createCouponBo.getGoodsType());
-        coupon.setGoodsValue(null);
-        coupon.setTimeType(createCouponBo.getTimeType());
-        coupon.setDays(createCouponBo.getDays());
-        coupon.setStartTime(createCouponBo.getStartTime());
-        coupon.setEndTime(createCouponBo.getEndTime());
+    public int createCoupon(Coupon coupon) {
         coupon.setAddTime(new Date());
         coupon.setUpdateTime(new Date());
         coupon.setDeleted(false);
@@ -167,34 +169,25 @@ public class CouponServiceImpl implements CouponService {
         return insertSelective;
     }
 
-    // 删除优惠券
+    /**
+     * 删除优惠券
+     * @param coupon Coupon
+     * @return AFFECTROWS
+     */
     @Override
     public int deleteCoupon(Coupon coupon) {
-//        Coupon coupon = new Coupon();
-//        coupon.setName(createCouponBo.getName());
-//        coupon.setDesc(createCouponBo.getName());
-//        coupon.setTag(createCouponBo.getName());
-//        coupon.setTotal(createCouponBo.getTotal());
-//        coupon.setDiscount(createCouponBo.getDiscount());
-//        coupon.setMin(createCouponBo.getMin());
-//        coupon.setLimit(createCouponBo.getLimit());
-//        coupon.setType(createCouponBo.getType());
-//        coupon.setStatus(createCouponBo.getStatus());
-//        coupon.setGoodsType(createCouponBo.getGoodsType());
-//        coupon.setGoodsValue(null);
-//        coupon.setTimeType(createCouponBo.getTimeType());
-//        coupon.setDays(createCouponBo.getDays());
-//        coupon.setStartTime(createCouponBo.getStartTime());
-//        coupon.setEndTime(createCouponBo.getEndTime());
-//        coupon.setAddTime(createCouponBo.getAddTime());
-//        coupon.setUpdateTime(createCouponBo.getUpdateTime());
+
         coupon.setDeleted(true);
 
         int i = mapper.updateByPrimaryKeySelective(coupon);
         return i;
     }
 
-    // 更新优惠券
+    /**
+     * 更新优惠券
+     * @param coupon Coupon
+     * @return Coupon
+     */
     @Override
     public Coupon  updateCoupon(Coupon coupon) {
         // 更新到数据库中

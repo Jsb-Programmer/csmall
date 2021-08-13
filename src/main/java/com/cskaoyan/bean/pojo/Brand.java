@@ -1,9 +1,10 @@
 package com.cskaoyan.bean.pojo;
 
-import lombok.Data;
 
+import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
+
 
 @Data
 public class Brand {
@@ -24,4 +25,5 @@ public class Brand {
     private Date updateTime;
 
     private Boolean deleted;
+
 }

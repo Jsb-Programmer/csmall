@@ -1,5 +1,6 @@
 package com.cskaoyan.bean.pojo;
 
+
 import lombok.Data;
 
 import java.util.Date;

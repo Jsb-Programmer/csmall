@@ -26,7 +26,8 @@ public class StorageServiceImpl implements StorageService {
         storageMapper.addStorage(storage);
 
         ImgUploadVO imgUploadVO = new ImgUploadVO();
-        BeanUtils.copyProperties(storage, imgUploadVO);
+        BeanUtils.copyProperties(storage,imgUploadVO);
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String addTime = simpleDateFormat.format(storage.getAddTime());
         String updateTime = simpleDateFormat.format(storage.getUpdateTime());

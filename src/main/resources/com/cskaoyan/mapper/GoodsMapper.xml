@@ -532,4 +532,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectGoodsForGroupon" resultType="com.cskaoyan.bean.pojo.Goods">
+    select `name`,pic_url as picUrl from cskaoyanmall_goods where id = #{goodsId}
+  </select>
 </mapper>

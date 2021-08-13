@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (goodsSn != null && goodsSn.length() != 0)
             criteria.andGoodsSnEqualTo(goodsSn);
         if (name != null && name.length() != 0)
-            criteria.andNameEqualTo(name);
+            criteria.andNameLike("%" + name + "%");
         goodsExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         List<Goods> goodsList = goodsMapper.selectByExampleWithBLOBs(goodsExample);
         PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);

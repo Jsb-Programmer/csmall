@@ -13,6 +13,7 @@ public class CategoryExample {
 
     public CategoryExample() {
         oredCriteria = new ArrayList<>();
+        oredCriteria = new ArrayList<Criteria>();
     }
 
     public void setOrderByClause(String orderByClause) {

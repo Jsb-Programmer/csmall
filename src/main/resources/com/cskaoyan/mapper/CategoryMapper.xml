@@ -320,4 +320,9 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectALL" resultType="com.cskaoyan.bean.vo.market.CategoryL1VO">
+    select id as value,name as label from cskaoyanmall_category where level = 'L1'
+  </select>
+
 </mapper>
