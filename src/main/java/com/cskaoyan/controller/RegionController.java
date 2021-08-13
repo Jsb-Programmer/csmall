@@ -4,6 +4,7 @@ import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.vo.market.Province;
 import com.cskaoyan.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class RegionController {
      * 回显全部行政区域
      * @return
      */
-    @RequestMapping("list")
+    @GetMapping("list")
     public BaseRespVo regionList(){
         List<Province> list = regionService.regionList();
         return BaseRespVo.ok(list);
