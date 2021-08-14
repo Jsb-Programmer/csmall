@@ -6,6 +6,7 @@ import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 import com.cskaoyan.service.admin.TopicService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class TopicController {
     /**
      * 查看全部专题信息
      */
+    @RequiresPermissions("admin:topic:list")
     @GetMapping("/list")
     public BaseRespVo list(BaseParam baseParam){
 
@@ -34,6 +36,7 @@ public class TopicController {
     /**
      * 增加新的专题
      */
+    @RequiresPermissions("admin:topic:create")
      @PostMapping("create")
     public BaseRespVo create(@RequestBody Topic topic){
 
@@ -44,6 +47,7 @@ public class TopicController {
     /**
      * 更新专题
      */
+    @RequiresPermissions("admin:topic:update")
     @PostMapping("update")
     public BaseRespVo update(@RequestBody Topic topic){
 
@@ -54,6 +58,7 @@ public class TopicController {
     /**
      * 删除专题
      */
+    @RequiresPermissions("admin:topic:delete")
     @PostMapping("delete")
     public BaseRespVo delete(@RequestBody Topic topic){
         int code = topicService.deleteTopic(topic);

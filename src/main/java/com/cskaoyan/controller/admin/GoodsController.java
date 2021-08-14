@@ -10,6 +10,7 @@ import com.cskaoyan.bean.vo.goods.CatAndBrandVO;
 import com.cskaoyan.bean.vo.goods.GoodDetailVO;
 import com.cskaoyan.service.admin.GoodsService;
 import com.cskaoyan.utils.ValidationUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -31,12 +32,14 @@ public class GoodsController {
      * @param baseParam
      * @return
      */
+    @RequiresPermissions("admin:goods:list")
     @GetMapping("list")
     public BaseRespVo list(String goodsSn, String name, BaseParam baseParam) {
         BaseRespData baseRespData = goodsService.query(goodsSn, name, baseParam);
         return BaseRespVo.ok(baseRespData);
     }
 
+    @RequiresPermissions("admin:goods:create")
     @PostMapping("create")
     public BaseRespVo create(@Valid @RequestBody CreateGoodBO createGoodBO, BindingResult bindingResult) {
         String message = ValidationUtil.dealWithFieldError(bindingResult);
@@ -54,12 +57,14 @@ public class GoodsController {
         return BaseRespVo.ok(catAndBrandVO);
     }
 
+    @RequiresPermissions("admin:goods:read")
     @GetMapping("detail")
     public BaseRespVo detail(int id) {
         GoodDetailVO goodDetailVO = goodsService.detail(id);
         return BaseRespVo.ok(goodDetailVO);
     }
 
+    @RequiresPermissions("admin:goods:update")
     @PostMapping("update")
     public BaseRespVo update(@Validated @RequestBody UpdateGoodBO updateGoodBO, BindingResult bindingResult) {
         String message = ValidationUtil.dealWithFieldError(bindingResult);
@@ -70,6 +75,7 @@ public class GoodsController {
         return BaseRespVo.ok();
     }
 
+    @RequiresPermissions("admin:goods:delete")
     @PostMapping("delete")
     public BaseRespVo delete(@RequestBody Goods goods) {
         goodsService.delete(goods);

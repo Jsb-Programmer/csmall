@@ -382,4 +382,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByName" resultType="com.cskaoyan.bean.pojo.User">
+    select * from cskaoyanmall_user where username = #{username}
+    </select>
 </mapper>

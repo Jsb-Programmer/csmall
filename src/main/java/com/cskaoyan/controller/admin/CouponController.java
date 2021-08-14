@@ -6,6 +6,7 @@ import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Coupon;
 import com.cskaoyan.bean.vo.coupon.ListUserDataVo;
 import com.cskaoyan.service.admin.CouponService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class CouponController {
      * @param baseParam 排序+分页
      * @return BaseRespVo
      */
+    @RequiresPermissions("admin:coupon:list")
     @RequestMapping("list")
     public BaseRespVo couponList(String name, Short type, Short status, BaseParam baseParam) {
         BaseRespData data = couponService.couponList(name, type, status, baseParam);
@@ -44,6 +46,7 @@ public class CouponController {
      * @param id 优惠券id
      * @return BaseRespVo
      */
+    @RequiresPermissions("admin:coupon:read")
     @RequestMapping("read")
     public BaseRespVo readCoupon(Integer id) {
         Coupon data = couponService.readCoupon(id);
@@ -57,6 +60,7 @@ public class CouponController {
      * @param status status
      * @return BaseRespVo
      */
+    @RequiresPermissions("admin:coupon:listuser")
     @RequestMapping("listuser")
     public BaseRespVo listuser(Integer couponId, Integer userId, Short status) {
         ListUserDataVo data = couponService.listuser(couponId, userId, status);
@@ -68,6 +72,7 @@ public class CouponController {
      * @param coupon createCouponBo
      * @return affectRows
      */
+    @RequiresPermissions("admin:coupon:create")
     @RequestMapping("create")
     public BaseRespVo createCoupon(@RequestBody Coupon coupon) {
         int affectRows = couponService.createCoupon(coupon);
@@ -82,6 +87,7 @@ public class CouponController {
      * @param coupon Coupon
      * @return BaseRespVo
      */
+    @RequiresPermissions("admin:coupon:delete")
     @RequestMapping("delete")
     public BaseRespVo deleteCoupon(@RequestBody Coupon coupon) {
         int affectRows = couponService.deleteCoupon(coupon);
@@ -96,6 +102,7 @@ public class CouponController {
      * @param coupon Coupon
      * @return BaseRespVo
      */
+    @RequiresPermissions("admin:coupon:update")
     @RequestMapping("update")
     public BaseRespVo updateCoupon(@RequestBody Coupon coupon) {
         Coupon data = couponService.updateCoupon(coupon);
