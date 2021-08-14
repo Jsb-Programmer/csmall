@@ -31,5 +31,5 @@ public interface GrouponRulesMapper {
 
     int updateByPrimaryKey(GrouponRules record);
 
-    List<GrouponRules> select(BaseParam baseParam);
+    List<GrouponRules> select();
 }

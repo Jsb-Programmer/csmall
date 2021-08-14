@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.cskaoyan.mapper")
 @EnableTransactionManagement
 @SpringBootApplication
+/**
+ *
+ */
 public class MallApplication {
 
     public static void main(String[] args) {

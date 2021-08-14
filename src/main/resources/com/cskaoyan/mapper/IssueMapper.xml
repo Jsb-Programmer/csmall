@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cskaoyan.mapper.GrouponMapper">
-  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.pojo.Groupon">
+<mapper namespace="com.cskaoyan.mapper.IssueMapper">
+  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.pojo.Issue">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="order_id" jdbcType="INTEGER" property="orderId" />
-    <result column="groupon_id" jdbcType="INTEGER" property="grouponId" />
-    <result column="rules_id" jdbcType="INTEGER" property="rulesId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="creator_user_id" jdbcType="INTEGER" property="creatorUserId" />
+    <result column="question" jdbcType="VARCHAR" property="question" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="share_url" jdbcType="VARCHAR" property="shareUrl" />
-    <result column="payed" jdbcType="BIT" property="payed" />
     <result column="deleted" jdbcType="BIT" property="deleted" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -73,16 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_id, groupon_id, rules_id, user_id, creator_user_id, add_time, update_time, 
-    share_url, payed, deleted
+    id, question, answer, add_time, update_time, deleted
   </sql>
-  <select id="selectByExample" parameterType="com.cskaoyan.bean.pojo.GrouponExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cskaoyan.bean.pojo.IssueExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from cskaoyanmall_groupon
+    from cskaoyanmall_issue
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,61 +87,44 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from cskaoyanmall_groupon
+    from cskaoyanmall_issue
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cskaoyanmall_groupon
+    delete from cskaoyanmall_issue
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.pojo.GrouponExample">
-    delete from cskaoyanmall_groupon
+  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.pojo.IssueExample">
+    delete from cskaoyanmall_issue
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Groupon">
-    insert into cskaoyanmall_groupon (id, order_id, groupon_id, 
-      rules_id, user_id, creator_user_id, 
-      add_time, update_time, share_url, 
-      payed, deleted)
-    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{grouponId,jdbcType=INTEGER}, 
-      #{rulesId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{creatorUserId,jdbcType=INTEGER}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{shareUrl,jdbcType=VARCHAR}, 
-      #{payed,jdbcType=BIT}, #{deleted,jdbcType=BIT})
+  <insert id="insert" parameterType="com.cskaoyan.bean.pojo.Issue">
+    insert into cskaoyanmall_issue (id, question, answer, 
+      add_time, update_time, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Groupon">
-    insert into cskaoyanmall_groupon
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Issue">
+    insert into cskaoyanmall_issue
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="orderId != null">
-        order_id,
+      <if test="question != null">
+        question,
       </if>
-      <if test="grouponId != null">
-        groupon_id,
-      </if>
-      <if test="rulesId != null">
-        rules_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="creatorUserId != null">
-        creator_user_id,
+      <if test="answer != null">
+        answer,
       </if>
       <if test="addTime != null">
         add_time,
       </if>
       <if test="updateTime != null">
         update_time,
-      </if>
-      <if test="shareUrl != null">
-        share_url,
-      </if>
-      <if test="payed != null">
-        payed,
       </if>
       <if test="deleted != null">
         deleted,
@@ -157,20 +134,11 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=INTEGER},
+      <if test="question != null">
+        #{question,jdbcType=VARCHAR},
       </if>
-      <if test="grouponId != null">
-        #{grouponId,jdbcType=INTEGER},
-      </if>
-      <if test="rulesId != null">
-        #{rulesId,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="creatorUserId != null">
-        #{creatorUserId,jdbcType=INTEGER},
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -178,55 +146,34 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="shareUrl != null">
-        #{shareUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="payed != null">
-        #{payed,jdbcType=BIT},
-      </if>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cskaoyan.bean.pojo.GrouponExample" resultType="java.lang.Long">
-    select count(*) from cskaoyanmall_groupon
+  <select id="countByExample" parameterType="com.cskaoyan.bean.pojo.IssueExample" resultType="java.lang.Long">
+    select count(*) from cskaoyanmall_issue
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cskaoyanmall_groupon
+    update cskaoyanmall_issue
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="record.question != null">
+        question = #{record.question,jdbcType=VARCHAR},
       </if>
-      <if test="record.grouponId != null">
-        groupon_id = #{record.grouponId,jdbcType=INTEGER},
-      </if>
-      <if test="record.rulesId != null">
-        rules_id = #{record.rulesId,jdbcType=INTEGER},
-      </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
-      </if>
-      <if test="record.creatorUserId != null">
-        creator_user_id = #{record.creatorUserId,jdbcType=INTEGER},
+      <if test="record.answer != null">
+        answer = #{record.answer,jdbcType=VARCHAR},
       </if>
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.shareUrl != null">
-        share_url = #{record.shareUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payed != null">
-        payed = #{record.payed,jdbcType=BIT},
       </if>
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
@@ -237,39 +184,25 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cskaoyanmall_groupon
+    update cskaoyanmall_issue
     set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
-      groupon_id = #{record.grouponId,jdbcType=INTEGER},
-      rules_id = #{record.rulesId,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      creator_user_id = #{record.creatorUserId,jdbcType=INTEGER},
+      question = #{record.question,jdbcType=VARCHAR},
+      answer = #{record.answer,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      share_url = #{record.shareUrl,jdbcType=VARCHAR},
-      payed = #{record.payed,jdbcType=BIT},
       deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.pojo.Groupon">
-    update cskaoyanmall_groupon
+  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.pojo.Issue">
+    update cskaoyanmall_issue
     <set>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=INTEGER},
+      <if test="question != null">
+        question = #{question,jdbcType=VARCHAR},
       </if>
-      <if test="grouponId != null">
-        groupon_id = #{grouponId,jdbcType=INTEGER},
-      </if>
-      <if test="rulesId != null">
-        rules_id = #{rulesId,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="creatorUserId != null">
-        creator_user_id = #{creatorUserId,jdbcType=INTEGER},
+      <if test="answer != null">
+        answer = #{answer,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -277,34 +210,19 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="shareUrl != null">
-        share_url = #{shareUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="payed != null">
-        payed = #{payed,jdbcType=BIT},
-      </if>
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.pojo.Groupon">
-    update cskaoyanmall_groupon
-    set order_id = #{orderId,jdbcType=INTEGER},
-      groupon_id = #{grouponId,jdbcType=INTEGER},
-      rules_id = #{rulesId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      creator_user_id = #{creatorUserId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.pojo.Issue">
+    update cskaoyanmall_issue
+    set question = #{question,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      share_url = #{shareUrl,jdbcType=VARCHAR},
-      payed = #{payed,jdbcType=BIT},
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="select" resultMap="BaseResultMap">
-    select * from cskaoyanmall_groupon
-    </select>
 </mapper>
