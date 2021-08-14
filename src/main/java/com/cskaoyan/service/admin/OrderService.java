@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
- * @ClassName OrderService
+ * @ClassName WxOrderService
  * @Description TODO
  * @Author Programmer
  * @Date 2021/8/11 21:34

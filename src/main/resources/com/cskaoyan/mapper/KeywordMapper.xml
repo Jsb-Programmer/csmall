@@ -113,7 +113,7 @@
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Keyword">
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Keyword" useGeneratedKeys="true" keyProperty="id">
     insert into cskaoyanmall_keyword
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
