@@ -1,4 +1,4 @@
-package com.cskaoyan.controller;
+package com.cskaoyan.controller.admin;
 
 import com.cskaoyan.bean.bo.market.CategoryCreateBO;
 import com.cskaoyan.bean.bo.market.CategoryDeleteBO;

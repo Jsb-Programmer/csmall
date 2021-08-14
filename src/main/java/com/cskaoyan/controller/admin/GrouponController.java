@@ -1,4 +1,4 @@
-package com.cskaoyan.controller;
+package com.cskaoyan.controller.admin;
 
 /**
  * @author yangbo

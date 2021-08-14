@@ -1,4 +1,4 @@
-package com.cskaoyan.controller;
+package com.cskaoyan.controller.admin;
 
 import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.vo.market.Province;

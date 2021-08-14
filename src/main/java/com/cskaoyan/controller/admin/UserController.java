@@ -1,5 +1,5 @@
 
-package com.cskaoyan.controller;
+package com.cskaoyan.controller.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
