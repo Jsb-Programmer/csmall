@@ -2,6 +2,7 @@ package com.cskaoyan.service.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.WxListBaseParam;
 import com.cskaoyan.bean.bo.goods.*;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.goods.*;
@@ -327,5 +328,106 @@ public class GoodsServiceImpl implements GoodsService {
         goodsAttribute.setDeleted(true);
         goodsAttributeExample.createCriteria().andGoodsIdEqualTo(goods.getId());
         goodsAttributeMapper.updateByExampleSelective(goodsAttribute, goodsAttributeExample);
+    }
+
+    /**
+     * 未被逻辑删除的商品数
+     * @return 商品数量
+     */
+    @Override
+    public Integer count() {
+        GoodsExample goodsExample = new GoodsExample();
+        goodsExample.createCriteria().andDeletedEqualTo(false);
+        List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
+        return goodsList.size();
+    }
+
+    /**
+     * 显示L2级别的categoryID的商品
+     * @param wxListBaseParam 从前端获取的数据
+     * @return 响应
+     */
+    @Override
+    public WxGoodsListVO list(WxListBaseParam wxListBaseParam) {
+        WxGoodsListVO wxGoodsListVO = new WxGoodsListVO();
+        // 获取goodsList
+        PageHelper.startPage(wxListBaseParam.getPage(), wxListBaseParam.getSize());
+
+        GoodsExample goodsExample = new GoodsExample();
+        GoodsExample.Criteria criteria = goodsExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        if (wxListBaseParam.getCategoryId() != null && wxListBaseParam.getCategoryId() != 0)
+            criteria.andCategoryIdEqualTo(wxListBaseParam.getCategoryId());
+        if (wxListBaseParam.getKeyword() != null && wxListBaseParam.getKeyword().length() != 0)
+            criteria.andNameLike("%" + wxListBaseParam.getKeyword() + "%");
+        if (wxListBaseParam.getOrder() != null && wxListBaseParam.getOrder().length() != 0
+            && wxListBaseParam.getSort() != null && wxListBaseParam.getSort().length() != 0)
+            goodsExample.setOrderByClause(wxListBaseParam.getSort() + " " + wxListBaseParam.getOrder());
+        List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
+        wxGoodsListVO.setGoodsList(goodsList);
+        // 获取count
+        PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);
+        long count = pageInfo.getTotal();
+        wxGoodsListVO.setCount(count);
+        // 获取filterCategoryList;
+        List<Category> filterCategoryList = new ArrayList<>();
+        for (Goods goods : goodsList) {
+            CategoryExample categoryExample = new CategoryExample();
+            categoryExample.createCriteria().andDeletedEqualTo(false);
+            Category category = categoryMapper.selectByPrimaryKey(goods.getCategoryId());
+            filterCategoryList.add(category);
+        }
+        wxGoodsListVO.setFilterCategoryList(filterCategoryList);
+        return wxGoodsListVO;
+    }
+
+    /**
+     * 根据L1级别的categoryId获取到从属category
+     * @param id L1级别的categoryID
+     * @return 响应
+     */
+    @Transactional
+    @Override
+    public WxCategoryVO category(Integer id) {
+        WxCategoryVO wxCategoryVO = new WxCategoryVO();
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        // 如果不是L1级category则category就是currentCategory
+        CategoryExample brotherCategoryExample = new CategoryExample();
+        CategoryExample.Criteria criteria = brotherCategoryExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        if (category.getPid() != 0) {
+            wxCategoryVO.setCurrentCategory(category);
+            // 查询brotherCategory
+            criteria.andPidEqualTo(category.getPid());
+            List<Category> brotherCategory = categoryMapper.selectByExample(brotherCategoryExample);
+            wxCategoryVO.setBrotherCategory(brotherCategory);
+            // 查询parentCategory
+            Category parentCategory = categoryMapper.selectByPrimaryKey(category.getPid());
+            wxCategoryVO.setParentCategory(parentCategory);
+        } else {
+            //此时category为parentCategory
+            wxCategoryVO.setParentCategory(category);
+            // 查询brotherCategory
+            criteria.andPidEqualTo(category.getId());
+            List<Category> brotherCategory = categoryMapper.selectByExample(brotherCategoryExample);
+            wxCategoryVO.setBrotherCategory(brotherCategory);
+            // 查询currentCategory
+            // 判断是否存在
+            if (brotherCategory.size() != 0)
+                wxCategoryVO.setCurrentCategory(brotherCategory.get(0));
+        }
+        return wxCategoryVO;
+    }
+
+    /**
+     * 获取商品详情
+     * @param id 要查询的商品id
+     * @return 详情
+     */
+    @Transactional
+    @Override
+    public WxDetailVO detailForWx(Integer id) {
+        WxDetailVO wxDetailVO = new WxDetailVO();
+        return wxDetailVO;
     }
 }

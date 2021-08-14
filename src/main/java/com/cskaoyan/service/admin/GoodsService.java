@@ -2,11 +2,11 @@ package com.cskaoyan.service.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.WxListBaseParam;
 import com.cskaoyan.bean.bo.goods.CreateGoodBO;
 import com.cskaoyan.bean.bo.goods.UpdateGoodBO;
 import com.cskaoyan.bean.pojo.Goods;
-import com.cskaoyan.bean.vo.goods.CatAndBrandVO;
-import com.cskaoyan.bean.vo.goods.GoodDetailVO;
+import com.cskaoyan.bean.vo.goods.*;
 
 public interface GoodsService {
     BaseRespData query(String goodsSn, String name, BaseParam baseParam);
@@ -20,4 +20,12 @@ public interface GoodsService {
     void update(UpdateGoodBO updateGoodBO);
 
     void delete(Goods goods);
+
+    Integer count();
+
+    WxGoodsListVO list(WxListBaseParam wxListBaseParam);
+
+    WxCategoryVO category(Integer id);
+
+    WxDetailVO detailForWx(Integer id);
 }

@@ -27,7 +27,9 @@ public class AdServiceImpl implements AdService{
     AdMapper mapper;
 
 
-    // 广告首页+多条件查询
+    /**
+     * 广告首页+多条件查询
+     */
     @Override
     public BaseRespData queryList(String name, String content, BaseParam baseParam) {
         // 分页
@@ -59,7 +61,9 @@ public class AdServiceImpl implements AdService{
         return BaseRespData.create(item, total);
     }
 
-    // 新增广告
+    /**
+     * 新增广告
+     */
     @Override
     public Ad createAd(Ad ad) {
         // 补充ad的成员变量值
