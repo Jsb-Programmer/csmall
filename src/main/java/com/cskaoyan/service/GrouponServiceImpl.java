@@ -2,10 +2,7 @@ package com.cskaoyan.service;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
-import com.cskaoyan.bean.pojo.Goods;
-import com.cskaoyan.bean.pojo.Groupon;
-import com.cskaoyan.bean.pojo.GrouponExample;
-import com.cskaoyan.bean.pojo.GrouponRules;
+import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.groupon.GrouponListRecordVO;
 import com.cskaoyan.mapper.GoodsMapper;
 import com.cskaoyan.mapper.GrouponMapper;
@@ -41,13 +38,14 @@ public class GrouponServiceImpl implements GrouponService {
     public BaseRespData queryList(BaseParam baseParam) {
         PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
 
-        GrouponExample example = new GrouponExample();
+        GrouponRulesExample example = new GrouponRulesExample();
 
         //构造排序
         example.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
 
-
-        List<GrouponRules> grouponList = grouponRulesMapper.select();
+        GrouponRulesExample.Criteria criteria = example.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        List<GrouponRules> grouponList = grouponRulesMapper.selectByExample(example);
 
         //可以获得分页信息,在PageInfo中放入查询结果
         PageInfo<GrouponRules> pageInfo = new PageInfo<>(grouponList);
