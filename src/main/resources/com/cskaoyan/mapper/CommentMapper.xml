@@ -303,4 +303,23 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCommentWithUserByGoodsId" resultType="com.cskaoyan.bean.vo.goods.CommentDataVO">
+      SELECT
+          c.add_time as addTime,
+          c.pic_urls as picList,
+          u.nickname as nickname,
+          c.id as id,
+          u.avatar as avatar,
+          c.content as content
+      FROM
+          cskaoyanmall_comment AS c
+          LEFT JOIN cskaoyanmall_user AS u ON c.user_id = u.id
+      WHERE
+          c.value_id = ${id}
+          AND c.type = 0
+          AND c.deleted = FALSE
+          and u.deleted = false
+      limit 0, 3
+  </select>
 </mapper>

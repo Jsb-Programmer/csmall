@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.System;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -35,6 +33,15 @@ public class GoodsServiceImpl implements GoodsService {
     CategoryMapper categoryMapper;
     @Autowired
     BrandMapper brandMapper;
+    @Autowired
+    GrouponRulesMapper grouponRulesMapper;
+    @Autowired
+    IssueMapper issueMapper;
+    @Autowired
+    CollectMapper collectMapper;
+    @Autowired
+    CommentMapper commentMapper;
+
     @Value("${img.failUrl}")
     String failUrl;
     /**
@@ -428,6 +435,94 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public WxDetailVO detailForWx(Integer id) {
         WxDetailVO wxDetailVO = new WxDetailVO();
+        //获取info
+        Goods goods = goodsMapper.selectByPrimaryKey(id);
+        wxDetailVO.setInfo(goods);
+        // 获取specificationList
+        GoodsSpecificationExample goodsSpecificationExample = new GoodsSpecificationExample();
+        GoodsSpecificationExample.Criteria goodsSpecificationExampleCriteria = goodsSpecificationExample.createCriteria();
+        goodsSpecificationExampleCriteria.andDeletedEqualTo(false);
+        goodsSpecificationExampleCriteria.andGoodsIdEqualTo(id);
+        List<GoodsSpecification> goodsSpecificationList = goodsSpecificationMapper.selectByExample(goodsSpecificationExample);
+        List<SpecificationVO> specificationList = new ArrayList<>();
+        Set<String> specificationNames = new HashSet<>();
+        for (GoodsSpecification goodsSpecification : goodsSpecificationList) {
+            if (specificationNames.add(goodsSpecification.getSpecification())) {
+                SpecificationVO specificationVO = new SpecificationVO();
+                specificationVO.setName(goodsSpecification.getSpecification());
+                List<GoodsSpecification> valueList = new ArrayList<>();
+                for (GoodsSpecification specification : goodsSpecificationList) {
+                    if (specification.getSpecification().equals(goodsSpecification.getSpecification())) {
+                        valueList.add(specification);
+                    }
+                }
+                specificationVO.setValueList(valueList);
+                specificationList.add(specificationVO);
+            }
+        }
+        wxDetailVO.setSpecificationList(specificationList);
+        // 获取groupon
+        GrouponRulesExample grouponRulesExample = new GrouponRulesExample();
+        GrouponRulesExample.Criteria grouponRulesExampleCriteria = grouponRulesExample.createCriteria();
+        grouponRulesExampleCriteria.andDeletedEqualTo(false);
+        grouponRulesExampleCriteria.andGoodsIdEqualTo(id);
+        List<GrouponRules> groupon = grouponRulesMapper.selectByExample(grouponRulesExample);
+        wxDetailVO.setGroupon(groupon);
+        // 获取issue
+        IssueExample issueExample = new IssueExample();
+        issueExample.createCriteria().andDeletedEqualTo(false);
+        List<Issue> issue = issueMapper.selectByExample(issueExample);
+        wxDetailVO.setIssue(issue);
+        // 获取 userHasCollect
+        CollectExample collectExample = new CollectExample();
+        CollectExample.Criteria collectExampleCriteria = collectExample.createCriteria();
+        collectExampleCriteria.andDeletedEqualTo(false);
+        collectExampleCriteria.andTypeEqualTo((byte) 0);    // 收藏的是商品
+        collectExampleCriteria.andValueIdEqualTo(id);       // 收藏的商品id
+        List<Collect> collects = collectMapper.selectByExample(collectExample);
+        wxDetailVO.setUserHasCollect(collects.size());
+        // 获取shareImage
+        wxDetailVO.setShareImage(goods.getShareUrl());
+        // 获取comment
+        CommentVO commentVO = new CommentVO();
+        CommentExample commentExample = new CommentExample();
+        CommentExample.Criteria commentExampleCriteria = commentExample.createCriteria();
+        commentExampleCriteria.andDeletedEqualTo(false);
+        commentExampleCriteria.andTypeEqualTo((byte) 0);
+        commentExampleCriteria.andValueIdEqualTo(id);
+        List<Comment> commentList = commentMapper.selectByExample(commentExample);
+        commentVO.setCount(commentList.size());
+        List<CommentDataVO> data = commentMapper.selectCommentWithUserByGoodsId(id);
+        commentVO.setData(data);
+        wxDetailVO.setComment(commentVO);
+        // 获取attribute
+        GoodsAttributeExample goodsAttributeExample = new GoodsAttributeExample();
+        GoodsAttributeExample.Criteria goodsAttributeExampleCriteria = goodsAttributeExample.createCriteria();
+        goodsAttributeExampleCriteria.andDeletedEqualTo(false);
+        goodsAttributeExampleCriteria.andGoodsIdEqualTo(id);
+        List<GoodsAttribute> attribute = goodsAttributeMapper.selectByExample(goodsAttributeExample);
+        wxDetailVO.setAttribute(attribute);
+        // 获取brand
+        Brand brand = brandMapper.selectByPrimaryKey(goods.getBrandId());
+        wxDetailVO.setBrand(brand);
+        // 获取productList
+        GoodsProductExample goodsProductExample = new GoodsProductExample();
+        GoodsProductExample.Criteria goodsProductExampleCriteria = goodsProductExample.createCriteria();
+        goodsProductExampleCriteria.andDeletedEqualTo(false);
+        goodsProductExampleCriteria.andGoodsIdEqualTo(id);
+        List<GoodsProduct> productList = goodsProductMapper.selectByExample(goodsProductExample);
+        wxDetailVO.setProductList(productList);
         return wxDetailVO;
+    }
+
+    @Override
+    public List<Goods> related(Integer id) {
+        Goods goods = goodsMapper.selectByPrimaryKey(id);
+        GoodsExample goodsExample = new GoodsExample();
+        GoodsExample.Criteria goodsExampleCriteria = goodsExample.createCriteria();
+        goodsExampleCriteria.andDeletedEqualTo(false);
+        goodsExampleCriteria.andCategoryIdEqualTo(goods.getCategoryId());
+        List<Goods> relatedGoods = goodsMapper.selectByExample(goodsExample);
+        return relatedGoods;
     }
 }

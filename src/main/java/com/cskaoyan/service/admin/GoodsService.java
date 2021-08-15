@@ -8,6 +8,8 @@ import com.cskaoyan.bean.bo.goods.UpdateGoodBO;
 import com.cskaoyan.bean.pojo.Goods;
 import com.cskaoyan.bean.vo.goods.*;
 
+import java.util.List;
+
 public interface GoodsService {
     BaseRespData query(String goodsSn, String name, BaseParam baseParam);
 
@@ -28,4 +30,6 @@ public interface GoodsService {
     WxCategoryVO category(Integer id);
 
     WxDetailVO detailForWx(Integer id);
+
+    List<Goods> related(Integer id);
 }
