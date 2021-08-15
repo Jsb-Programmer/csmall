@@ -105,6 +105,14 @@ public class GrouponServiceImpl implements GrouponService {
             recordVO.setGroupon(groupon);
             recordVO.setRules(grouponRulesMapper.selectByPrimaryKey(groupon.getRulesId()));
             recordVO.setGoods(goodsMapper.selectByPrimaryKey(recordVO.getRules().getGoodsId()));
+
+//            GrouponExample example1 = new GrouponExample();
+//            GrouponExample.Criteria criteria1 = example1.createCriteria();
+//            criteria1.andOrderIdEqualTo(groupon.getUserId());
+//            List<Groupon> grouponList1 = grouponMapper.selectByExample(example1);
+
+            String[] strings = new String[grouponMapper.select(groupon)];
+            recordVO.setSubGroupons(strings);
             recordVOS.add(recordVO);
         }
 
