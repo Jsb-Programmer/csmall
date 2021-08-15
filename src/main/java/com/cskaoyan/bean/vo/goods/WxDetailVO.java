@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class WxDetailVO {
     private List<SpecificationVO> specificationList;
-    private List<Groupon> groupon;
+    private List<GrouponRules> groupon;
     private List<Issue> issue;
     private Integer userHasCollect;
     private String shareImage;
