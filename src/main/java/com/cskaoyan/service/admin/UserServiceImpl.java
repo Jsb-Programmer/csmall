@@ -296,7 +296,7 @@ public class UserServiceImpl implements UserService {
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setNickName(user.getNickname());
         userInfoVO.setAvatarUrl(user.getAvatar());
-        wxUserLoginBO.setToken(id.toString().replace("-",""));
+        wxUserLoginBO.setToken(id.toString());
         wxUserLoginBO.setTokenExpire(format);
         wxUserLoginBO.setUserInfo(userInfoVO);
         //update login time
