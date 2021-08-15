@@ -31,4 +31,9 @@ public class GlobalExceptionControllerAdvice {
     public BaseRespVo authorizationException(AuthorizationException exception) {
         return BaseRespVo.fail("没有权限");
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public BaseRespVo numberFormatException() {
+        return BaseRespVo.fail("参数格式不对，请重新输入");
+    }
 }

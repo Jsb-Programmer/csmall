@@ -22,6 +22,7 @@ public class ShiroConfiguration {
         //factoryBean.setLoginUrl();
 
         LinkedHashMap<String, String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/wx/storage/**","anon");
         filterMap.put("/hello", "anon");
         filterMap.put("/admin/auth/login", "anon");      //通常登录请求设置为匿名请求
         filterMap.put("/admin/dashboard", "authc");
