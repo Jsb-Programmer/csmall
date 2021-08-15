@@ -5,10 +5,8 @@ import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.CommentParam;
 import com.cskaoyan.bean.bo.comment.DeleteCommentBO;
 import com.cskaoyan.service.admin.CommentService;
-import com.cskaoyan.utils.ValidationUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,17 +19,12 @@ public class CommentController {
 
     /**
      * 评论获取
-     * @param commentParam 前段获取的数据
-     * @param bindingResult 参数校验
+     * @param commentParam 前端获取的数据
      * @return 评论
      */
     @RequiresPermissions("admin:comment:list")
     @GetMapping("list")
-    public BaseRespVo list(@Valid CommentParam commentParam, BindingResult bindingResult) {
-        String message = ValidationUtil.dealWithFieldError(bindingResult);
-        if (message != null)
-            return BaseRespVo.fail(message);
-
+    public BaseRespVo list(CommentParam commentParam) {
         BaseRespData baseRespData = commentService.query(commentParam);
         return BaseRespVo.ok(baseRespData);
     }
