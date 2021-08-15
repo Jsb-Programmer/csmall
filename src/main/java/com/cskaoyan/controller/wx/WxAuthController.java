@@ -2,7 +2,6 @@ package com.cskaoyan.controller.wx;
 
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.LoginUser;
-import com.cskaoyan.bean.bo.user.NullBO;
 import com.cskaoyan.bean.bo.user.WxLogoutMsg;
 import com.cskaoyan.bean.bo.user.WxUserLoginBO;
 import com.cskaoyan.realm.MallToken;
@@ -11,6 +10,7 @@ import com.cskaoyan.utils.MD5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,19 +44,17 @@ public class WxAuthController {
         }catch (Exception e){
             return BaseRespVo.fail("账号密码不对",700);
         }
-
         WxUserLoginBO wxUserLoginBO = userService.userLoginInfo(loginUser.getUsername(),loginUser.getPassword());
 
         return BaseRespVo.ok(wxUserLoginBO);
     }
 
     @RequestMapping("logout")
-    public WxLogoutMsg logout(@RequestBody NullBO nullBO){
+    public WxLogoutMsg logout(){
         Subject subject = SecurityUtils.getSubject();
         if(subject.isAuthenticated()){
             subject.logout();
             return WxLogoutMsg.logout();
-
         }
         return WxLogoutMsg.fail();
     }
