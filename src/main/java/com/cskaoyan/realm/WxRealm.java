@@ -11,6 +11,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,11 @@ public class WxRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("*");
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        simpleAuthorizationInfo.addStringPermissions(strings);
 
-        return new SimpleAuthorizationInfo();
+        return simpleAuthorizationInfo;
     }
 }

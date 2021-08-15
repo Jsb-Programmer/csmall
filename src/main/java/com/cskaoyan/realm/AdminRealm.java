@@ -57,11 +57,17 @@ public class AdminRealm extends AuthorizingRealm {
         String primaryPrincipal = (String) principalCollection.getPrimaryPrincipal();
         //根据principal信息可以查询对应的权限信息
         int i = adminMapper.selectIdByUsername(primaryPrincipal);
-
+        Admin admin = adminMapper.selectByPrimaryKey(i);
+        Integer[] roleIds = admin.getRoleIds();
         PermissionExample permissionExample = new PermissionExample();
-        PermissionExample.Criteria criteria = permissionExample.createCriteria();
-        criteria.andRoleIdEqualTo(i);
-        List<Permission> items = permissionMapper.selectByExample(permissionExample);
+        List<Permission> items = new ArrayList<>();
+
+        for (Integer roleId : roleIds) {
+            PermissionExample.Criteria criteria = permissionExample.createCriteria();
+            criteria.andRoleIdEqualTo(roleId);
+            items.addAll(permissionMapper.selectByExample(permissionExample));
+        }
+
 
         ArrayList<String> permissions = new ArrayList<>();
         for (Permission item : items) {
