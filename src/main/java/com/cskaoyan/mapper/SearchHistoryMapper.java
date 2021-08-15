@@ -2,6 +2,7 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.SearchHistory;
 import com.cskaoyan.bean.pojo.SearchHistoryExample;
+import com.cskaoyan.bean.vo.brandcs.SearchIndexChildVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface SearchHistoryMapper {
     int updateByPrimaryKeySelective(SearchHistory record);
 
     int updateByPrimaryKey(SearchHistory record);
+
+    List<SearchIndexChildVO> selectToKeyword();
 }

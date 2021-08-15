@@ -6,6 +6,7 @@ import com.cskaoyan.bean.bo.market.BrandDeleteBO;
 import com.cskaoyan.bean.bo.market.BrandUpdateBO;
 import com.cskaoyan.bean.pojo.Brand;
 import com.cskaoyan.bean.pojo.BrandExample;
+import com.cskaoyan.bean.vo.brandcs.WxBrandListVO;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
 import com.cskaoyan.bean.vo.market.BrandCreateVO;
 import com.cskaoyan.bean.vo.market.BrandUpdateVO;
@@ -42,6 +43,7 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public BaseRespDataVO brandList(Integer id, String name, BaseParamBO baseParamBO) {
+        //分页
         PageHelper.startPage(baseParamBO.getPage(), baseParamBO.getLimit());
         BrandExample example = new BrandExample();
         //构造排序
@@ -114,5 +116,33 @@ public class BrandServiceImpl implements BrandService {
         BeanUtils.copyProperties(brandDeleteBO, brand);
         brand.setDeleted(true);
         brandMapper.updateByPrimaryKeySelective(brand);
+    }
+
+    /**
+     * 微信端回显品牌制造商列表
+     * @param page
+     * @param size
+     * @return
+     */
+    @Override
+    public WxBrandListVO wxBrandList(Integer page, Integer size) {
+        //分页
+        PageHelper.startPage(page,size);
+
+        BrandExample example = new BrandExample();
+        BrandExample.Criteria criteria = example.createCriteria();
+        criteria.andDeletedEqualTo(false);
+
+        List<Brand> brandList = brandMapper.selectByExample(example);
+
+        PageInfo<Brand> brandPageInfo = new PageInfo<>(brandList);
+        long total = brandPageInfo.getTotal();
+        return WxBrandListVO.create(brandList,total);
+    }
+
+    @Override
+    public Brand brandDetail(Integer id) {
+        Brand brand = brandMapper.selectByPrimaryKey(id);
+        return brand;
     }
 }
