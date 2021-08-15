@@ -44,6 +44,7 @@ public class WxAuthController {
         }catch (Exception e){
             return BaseRespVo.fail("账号密码不对",700);
         }
+
         WxUserLoginBO wxUserLoginBO = userService.userLoginInfo(loginUser.getUsername(),loginUser.getPassword());
 
         return BaseRespVo.ok(wxUserLoginBO);
@@ -53,9 +54,11 @@ public class WxAuthController {
     public WxLogoutMsg logout(){
         Subject subject = SecurityUtils.getSubject();
         if(subject.isAuthenticated()){
+            System.out.println("lllll");
             subject.logout();
             return WxLogoutMsg.logout();
         }
+        System.out.println("22222");
         return WxLogoutMsg.fail();
     }
 

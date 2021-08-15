@@ -1,11 +1,13 @@
 package com.cskaoyan.config;
 
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+
 
 public class CustomSessionManager extends DefaultWebSessionManager {
 

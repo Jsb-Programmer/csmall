@@ -41,16 +41,13 @@ public class AdminRealm extends AuthorizingRealm {
             credentials = admin.getPassword();
         }
 
-        //-------
-        //第一个参数Principal：就是主角信息，在后面授权的时候可以获得这个值，Session中的principal信息
-        //                   你传入一个什么样的principal信息，认证成功之后就能够获得什么样的principal
-        //第二个参数credentials：会和token中的password做比对
         return new SimpleAuthenticationInfo(username,credentials,this.getName());
     }
 
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+
         //授权 → 提供权限
         //获得principal信息
         //获得doGetAuthen方法（上面这个方法），构造的authenticationInfo中的principal信息

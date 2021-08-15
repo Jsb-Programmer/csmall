@@ -570,4 +570,8 @@
   <insert id="insertMessagebyId">
   insert into  cskaoyanmall_order(shipChannel,shipSn) values (#{shipChannel},#{shipSn}) where id=#{orderId}
 </insert>
+
+  <select id="selectOrderStatus" resultType="com.cskaoyan.bean.bo.cart.Index">
+    select order_status, COUNT(1) as `count` FROM cskaoyanmall_order WHERE user_id = #{userId} GROUP BY order_status
+  </select>
 </mapper>

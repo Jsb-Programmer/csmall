@@ -38,7 +38,8 @@ public class WxRealm extends AuthorizingRealm {
             credentials = users.get(0).getPassword();
         }
         //存入id ， password 与token中比对认证
-        return new SimpleAuthenticationInfo(users.get(0).getId(),credentials,this.getName());
+        Integer id = users.get(0).getId();
+        return new SimpleAuthenticationInfo(id,credentials,this.getName());
     }
 
     @Override
