@@ -1,9 +1,9 @@
 package com.cskaoyan.controller.wx;
 
-import com.cskaoyan.bean.BaseRespData2;
+import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
 import com.cskaoyan.bean.BaseRespVo;
-import com.cskaoyan.bean.WxListBaseParam2;
 import com.cskaoyan.bean.vo.wxTopic.DetailTopicVO;
+import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
 import com.cskaoyan.service.wx.WxTopicService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class WxTopicController {
      */
     @RequiresPermissions("wx:topic:list")
     @GetMapping("/list")
-    public BaseRespVo list(WxListBaseParam2 topicBaseParam){
+    public BaseRespVo list(WxTopicBaseParam topicBaseParam){
 
-        BaseRespData2 data = wxTopicService.queryList(topicBaseParam);
+        TopicBaseRespData data = wxTopicService.queryList(topicBaseParam);
         return BaseRespVo.ok(data);
     }
 

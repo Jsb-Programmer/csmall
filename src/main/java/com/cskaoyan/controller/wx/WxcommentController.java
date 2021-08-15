@@ -1,8 +1,8 @@
 package com.cskaoyan.controller.wx;
 
-import com.cskaoyan.bean.BaseRespData2;
+import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
 import com.cskaoyan.bean.BaseRespVo;
-import com.cskaoyan.bean.WxListBaseParam2;
+import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
 import com.cskaoyan.service.wx.WxCommentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class WxcommentController {
      */
     @RequiresPermissions("wx:comment:list")
     @GetMapping("/list")
-    public BaseRespVo list(Integer valueId,WxListBaseParam2 commentBaseParam,Integer type,Integer showType){
+    public BaseRespVo list(Integer valueId, WxTopicBaseParam commentBaseParam, Integer type, Integer showType){
 
-        BaseRespData2 data = wxCommentService.queryList(valueId,commentBaseParam,type,showType);
+        TopicBaseRespData data = wxCommentService.queryList(valueId,commentBaseParam,type,showType);
         return BaseRespVo.ok(data);
     }
 

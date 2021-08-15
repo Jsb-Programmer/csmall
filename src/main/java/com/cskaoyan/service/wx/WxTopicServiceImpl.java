@@ -1,10 +1,10 @@
 package com.cskaoyan.service.wx;
 
-import com.cskaoyan.bean.BaseRespData2;
-import com.cskaoyan.bean.WxListBaseParam2;
+import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
 import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.pojo.TopicExample;
 import com.cskaoyan.bean.vo.wxTopic.DetailTopicVO;
+import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
 import com.cskaoyan.mapper.TopicMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,8 +26,8 @@ public class WxTopicServiceImpl implements WxTopicService {
 
     //查看全部专题信息
     @Override
-    public BaseRespData2 queryList(WxListBaseParam2 topicBaseParam) {
-        PageHelper.startPage(topicBaseParam.getPage(), topicBaseParam.getSize());
+    public TopicBaseRespData queryList(WxTopicBaseParam wxTopicBaseParam) {
+        PageHelper.startPage(wxTopicBaseParam.getPage(), wxTopicBaseParam.getSize());
 
         TopicExample example = new TopicExample();
 
@@ -39,7 +39,7 @@ public class WxTopicServiceImpl implements WxTopicService {
         PageInfo<Topic> pageInfo = new PageInfo<>(topicList);
         long total = pageInfo.getTotal();//select count(*) 根据上面执行的查询拼接后面的
 
-        return BaseRespData2.create(topicList, total,null);
+        return TopicBaseRespData.create(topicList, total,null);
     }
 
     //查看专题详情

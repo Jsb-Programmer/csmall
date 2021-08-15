@@ -1,15 +1,16 @@
 package com.cskaoyan.service.wx;
 
-import com.cskaoyan.bean.BaseRespData2;
-import com.cskaoyan.bean.WxListBaseParam2;
+import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
 import com.cskaoyan.bean.vo.wxTopic.DetailTopicVO;
+import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
+
 /**
  * @author yangbo
  * @description
  * @date 2021/8/15 14:36
  */
 public interface WxTopicService {
-    BaseRespData2 queryList(WxListBaseParam2 topicBaseParam);
+    TopicBaseRespData queryList(WxTopicBaseParam topicBaseParam);
 
     DetailTopicVO detail(Integer id);
 }

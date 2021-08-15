@@ -26,9 +26,9 @@ public class TopicController {
      */
     @RequiresPermissions("admin:topic:list")
     @GetMapping("/list")
-    public BaseRespVo list(BaseParam baseParam){
+    public BaseRespVo list(BaseParam baseParam,String title,String subtitle){
 
-        BaseRespData data = topicService.queryList(baseParam);
+        BaseRespData data = topicService.queryList(baseParam,title,subtitle);
         return BaseRespVo.ok(data);
     }
 
@@ -40,7 +40,7 @@ public class TopicController {
      @PostMapping("create")
     public BaseRespVo create(@RequestBody Topic topic){
 
-         CreateTopicVO topicVO = topicService.createTopic(topic);
+        Topic topicVO = topicService.createTopic(topic);
          return BaseRespVo.ok(topicVO);
      }
 

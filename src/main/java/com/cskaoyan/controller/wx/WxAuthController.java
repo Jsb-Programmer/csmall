@@ -54,11 +54,9 @@ public class WxAuthController {
     public WxLogoutMsg logout(){
         Subject subject = SecurityUtils.getSubject();
         if(subject.isAuthenticated()){
-            System.out.println("lllll");
             subject.logout();
             return WxLogoutMsg.logout();
         }
-        System.out.println("22222");
         return WxLogoutMsg.fail();
     }
 

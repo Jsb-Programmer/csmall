@@ -12,9 +12,9 @@ import com.cskaoyan.bean.vo.topic.CreateTopicVO;
  */
 public interface TopicService {
 
-    BaseRespData queryList(BaseParam baseParam);
+    BaseRespData queryList(BaseParam baseParam,String title,String subtitle);
 
-    CreateTopicVO createTopic(Topic topic);
+    Topic createTopic(Topic topic);
 
     Topic updateTopic(Topic topic);
 

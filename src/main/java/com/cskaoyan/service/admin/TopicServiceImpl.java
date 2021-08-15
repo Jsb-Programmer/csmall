@@ -27,7 +27,7 @@ public class TopicServiceImpl implements TopicService {
 
     //查看全部专题信息
     @Override
-    public BaseRespData queryList(BaseParam baseParam) {
+    public BaseRespData queryList(BaseParam baseParam,String title,String subtitle) {
 
         PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
 
@@ -37,6 +37,13 @@ public class TopicServiceImpl implements TopicService {
         example.setOrderByClause(baseParam.getSort()+" "+baseParam.getOrder());
 
         TopicExample.Criteria criteria = example.createCriteria();
+        if (title != null && !"".equals(title)) {
+            criteria.andTitleLike("%" + title + "%");
+        }
+        if (subtitle != null && !"".equals(subtitle)) {
+            criteria.andSubtitleLike("%" + subtitle + "%");
+        }
+
         criteria.andDeletedEqualTo(false);
         List<Topic> topicList = topicMapper.selectByExample(example);
 
@@ -49,27 +56,27 @@ public class TopicServiceImpl implements TopicService {
 
     //增加新的专题
     @Override
-    public CreateTopicVO createTopic(Topic topic) {
+    public Topic createTopic(Topic topic) {
 
         topic.setAddTime(new Date());
         topic.setUpdateTime(new Date());
         topic.setDeleted(false);
         //添加数据
         int code = topicMapper.insert(topic);
-
+//
         CreateTopicVO topicVO = new CreateTopicVO();
-            //查新专题自动生成数据
-            topicVO.setId(topic.getId());
-            topicVO.setAddTime(topic.getAddTime());
-            topicVO.setUpdateTime(topic.getUpdateTime());
-            topicVO.setSubtitle(topic.getSubtitle());
-            topicVO.setContent(topic.getContent());
-            topicVO.setPrice(topic.getPrice());
-            topicVO.setReadCount(topic.getReadCount());
-            topicVO.setGoods(topic.getGoods());
-            topicVO.setTitle(topic.getTitle());
+//            //查新专题自动生成数据
+//            topicVO.setId(topic.getId());
+//            topicVO.setAddTime(topic.getAddTime());
+//            topicVO.setUpdateTime(topic.getUpdateTime());
+//            topicVO.setSubtitle(topic.getSubtitle());
+//            topicVO.setContent(topic.getContent());
+//            topicVO.setPrice(topic.getPrice());
+//            topicVO.setReadCount(topic.getReadCount());
+//            topicVO.setGoods(topic.getGoods());
+//            topicVO.setTitle(topic.getTitle());
 
-        return topicVO;
+        return topic;
     }
 
     //更新专题

@@ -1,7 +1,8 @@
 package com.cskaoyan.service.wx;
 
-import com.cskaoyan.bean.BaseRespData2;
-import com.cskaoyan.bean.WxListBaseParam2;
+import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
+import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
+
 /**
  * @author yangbo
  * @description
@@ -9,5 +10,5 @@ import com.cskaoyan.bean.WxListBaseParam2;
  */
 public interface WxCommentService {
 
-    BaseRespData2 queryList(Integer valueId, WxListBaseParam2 commentBaseParam, Integer type, Integer showType);
+    TopicBaseRespData queryList(Integer valueId, WxTopicBaseParam commentBaseParam, Integer type, Integer showType);
 }
