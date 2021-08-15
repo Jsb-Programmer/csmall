@@ -3,6 +3,7 @@ package com.cskaoyan.service.admin;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
+import com.cskaoyan.bean.bo.user.WxUserLoginBO;
 import com.cskaoyan.bean.pojo.*;
 
 public interface UserService {
@@ -17,4 +18,6 @@ public interface UserService {
     BaseRespData<Feedback> queryFeedbacks(String username, String id, BaseParam baseParam);
 
     BaseRespData<ReceivedAddressBO> queryAddress(String name, String userId, BaseParam baseParam);
+
+    WxUserLoginBO userLoginInfo(String username, String password) throws Exception;
 }

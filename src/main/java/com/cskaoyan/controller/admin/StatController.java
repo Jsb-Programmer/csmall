@@ -5,6 +5,7 @@ import com.cskaoyan.bean.vo.stat.StatGoodsVO;
 import com.cskaoyan.bean.vo.stat.StatOrderVO;
 import com.cskaoyan.bean.vo.stat.StatUserVO;
 import com.cskaoyan.service.admin.StatService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class StatController {
      * 用户统计
      * @return
      */
+    @RequiresPermissions("admin:stat:user")
     @RequestMapping("user")
     public BaseRespVo statUser() {
         StatUserVO statUserVO = statService.statUser();
@@ -37,6 +39,7 @@ public class StatController {
      * 订单统计
      * @return
      */
+    @RequiresPermissions("admin:stat:order")
     @RequestMapping("order")
     public BaseRespVo statOrder() {
         StatOrderVO statOrderVO = statService.statOrder();
@@ -47,6 +50,7 @@ public class StatController {
      * 商品统计
      * @return
      */
+    @RequiresPermissions("admin:stat:goods")
     @RequestMapping("goods")
     public BaseRespVo statGoods() {
         StatGoodsVO statGoodsVO = statService.statGoods();

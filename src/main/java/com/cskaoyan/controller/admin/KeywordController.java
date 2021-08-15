@@ -5,6 +5,7 @@ import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Keyword;
 import com.cskaoyan.service.admin.KeywordService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class KeywordController {
     /**
      * 显示关键词list
      */
+    @RequiresPermissions("admin:keyword:list")
     @RequestMapping("list")
     public BaseRespVo keywordList(BaseParam baseParam, String keyword, String url) {
         BaseRespData data = keywordService.getKeywordList(baseParam, keyword, url);
@@ -35,6 +37,7 @@ public class KeywordController {
     /**
      * 新增关键字
      */
+    @RequiresPermissions("admin:keyword:create")
     @RequestMapping("create")
     public BaseRespVo createKeyword (@RequestBody Keyword keyword) {
         Keyword respKeyword = keywordService.createKeyword(keyword);
@@ -45,6 +48,7 @@ public class KeywordController {
     /**
      * 修改关键字
      */
+    @RequiresPermissions("admin:keyword:update")
     @RequestMapping("update")
     public BaseRespVo updateKeyword (@RequestBody Keyword keyword) {
         Keyword respKeyword = keywordService.updateKeyword(keyword);
@@ -54,6 +58,7 @@ public class KeywordController {
     /**
      * 删除关键字
      */
+    @RequiresPermissions("admin:keyword:delete")
     @RequestMapping("delete")
     public BaseRespVo deleteKeyword (@RequestBody Keyword keyword) {
         int affectRows = keywordService.deleteKeyword(keyword);

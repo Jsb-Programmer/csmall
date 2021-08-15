@@ -116,7 +116,7 @@
       #{picUrls,jdbcType=VARCHAR}, #{star,jdbcType=SMALLINT}, #{addTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Comment">
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.pojo.Comment" useGeneratedKeys="true" keyProperty="id">
     insert into cskaoyanmall_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
