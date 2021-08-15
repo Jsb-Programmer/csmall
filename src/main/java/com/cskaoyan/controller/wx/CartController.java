@@ -3,9 +3,11 @@ package com.cskaoyan.controller.wx;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.bo.cart.*;
 import com.cskaoyan.bean.vo.cart.CartIndex;
+import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.cart.Index;
 import com.cskaoyan.bean.vo.cart.Order;
 import com.cskaoyan.service.wx.CartService;
+import com.cskaoyan.utils.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +75,7 @@ public class CartController {
         // TODO: 2021/8/14  userId 暂时指定为 1
         Integer userId = 1;
         int i = cartService.add(addBO,userId);
-        return BaseRespVo.ok(10);
+        return BaseRespVo.ok(i);
     }
 
 
@@ -86,8 +88,8 @@ public class CartController {
     public BaseRespVo checkout(@RequestBody CheckoutBO checkoutBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Integer userId = 1;
-//        cartService.checkout(checkoutBO,userId);
-        return BaseRespVo.ok(10);
+        CheckoutVO checkoutVO = cartService.checkout(checkoutBO,userId);
+        return BaseRespVo.ok(checkoutVO);
     }
 
 
@@ -140,9 +142,11 @@ public class CartController {
     @RequestMapping("cart/goodscount")
     public BaseRespVo goodscount(){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
-        return BaseRespVo.ok();
+        Integer userId = ShiroUtil.getUserId();
+        int goodscount = cartService.goodscount(userId);
+        return BaseRespVo.ok(goodscount);
     }
+
 
 
 }

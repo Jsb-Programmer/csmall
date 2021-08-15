@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create: 2021-08-14 14:46
  **/
 
-//@RestController
+@RestController
 @RequestMapping("wx/auth")
 public class WxAuthController {
 

@@ -1,22 +1,15 @@
 package com.cskaoyan.service.wx;
 
-import com.cskaoyan.bean.bo.cart.AddBO;
-import com.cskaoyan.bean.bo.cart.Checked;
-import com.cskaoyan.bean.bo.cart.Index;
-import com.cskaoyan.bean.bo.cart.UpdateBO;
-import com.cskaoyan.bean.pojo.Cart;
-import com.cskaoyan.bean.pojo.CartExample;
-import com.cskaoyan.bean.pojo.Goods;
-import com.cskaoyan.bean.pojo.Product;
+import com.cskaoyan.bean.bo.cart.*;
+import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.cart.CartIndex;
 import com.cskaoyan.bean.vo.cart.CartTotal;
-import com.cskaoyan.mapper.CartMapper;
-import com.cskaoyan.mapper.GoodsMapper;
-import com.cskaoyan.mapper.OrderMapper;
-import com.cskaoyan.mapper.ProductMapper;
+import com.cskaoyan.bean.vo.cart.CheckoutVO;
+import com.cskaoyan.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.System;
 import java.util.*;
 
 @Service
@@ -30,7 +23,8 @@ public class CartServiceImpl implements CartService {
     GoodsMapper goodsMapper;
     @Autowired
     ProductMapper productMapper;
-
+    @Autowired
+    AddressMapper addressMapper;
     /**
      * 根据传入的id查询用户不同订单状态的数量  (wx/user/index)
      * @param userId
@@ -72,6 +66,12 @@ public class CartServiceImpl implements CartService {
         return order;
     }
 
+
+    /**
+     * 查询客户购物车中的商品,并做相关的计算
+     * @param userId
+     * @return
+     */
     @Override
     public CartIndex index(Integer userId) {
         CartExample cartExample = new CartExample();
@@ -144,7 +144,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public int add(AddBO addBO, Integer userId) {
-        //判断该用户购物车中是否存在改商品,存在则加,不存在则创建
+        //判断该用户购物车中是否存在同规格的商品,存在则加,不存在则创建
         CartExample cartExample = new CartExample();
         CartExample.Criteria criteria = cartExample.createCriteria();
         criteria.andGoodsIdEqualTo(addBO.getGoodsId());
@@ -190,7 +190,8 @@ public class CartServiceImpl implements CartService {
             affectRows = cartMapper.insert(cart);
 
         }
-        return affectRows;
+        //返回购物车中商品的数量
+        return goodscount(userId);
     }
 
 
@@ -249,5 +250,43 @@ public class CartServiceImpl implements CartService {
         // TODO: 2021/8/15 商品添加之后的数量 
         int add = add(addBO, userId);
         return add;
+    }
+
+
+    /**
+     * 购物车内商品总数量
+     * @param userId
+     * @return
+     */
+    @Override
+    public int goodscount(Integer userId) {
+        CartExample cartExample = new CartExample();
+        cartExample.createCriteria().andUserIdEqualTo(userId);
+        List<Cart> carts = cartMapper.selectByExample(cartExample);
+        return carts.size();
+    }
+
+    @Override
+    public CheckoutVO checkout(CheckoutBO checkoutBO, Integer userId) {
+        CheckoutVO checkoutVO = new CheckoutVO();
+        //查询客户cart 中check的商品
+        CartExample cartExample = new CartExample();
+        CartExample.Criteria criteria = cartExample.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        criteria.andUserIdEqualTo(userId);
+        criteria.andCheckedEqualTo(true);
+        List<Cart> carts = cartMapper.selectByExample(cartExample);
+        checkoutVO.setCheckedGoodsList(carts);
+
+        //查询客户的默认收获地址
+        AddressExample addressExample = new AddressExample();
+        AddressExample.Criteria exampleCriteria = addressExample.createCriteria();
+        exampleCriteria.andIsDefaultEqualTo(true);
+        exampleCriteria.andUserIdEqualTo(userId);
+        Address address = addressMapper.selectByExample(addressExample).get(0);
+        checkoutVO.setCheckedAddress(address);
+
+        //计算
+        return null;
     }
 }

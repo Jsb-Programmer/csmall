@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Authenticate
  */
-//@RestController
+@RestController
 @RequestMapping("admin")
 public class AuthController {
 
