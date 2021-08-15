@@ -1,4 +1,3 @@
-
 package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.User;
@@ -30,4 +29,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    User selectByName(@Param("username") String username);
 }

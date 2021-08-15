@@ -20,4 +20,7 @@ public interface CartService {
     CartIndex delete(List<Integer> productIds, Integer userId);
 
     int update(UpdateBO updateBO);
+
+    int fastadd(AddBO addBO, Integer userId);
+
 }

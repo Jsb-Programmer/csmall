@@ -304,7 +304,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="select" resultMap="BaseResultMap">
-    select * from cskaoyanmall_groupon
+  <select id="select" resultType="java.lang.Integer">
+    select count(*) from cskaoyanmall_groupon where order_id = #{orderId} and creator_user_id= #{creatorUserId} and groupon_id = #{grouponId}
     </select>
 </mapper>

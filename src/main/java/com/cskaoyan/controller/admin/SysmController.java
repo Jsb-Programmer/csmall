@@ -12,6 +12,7 @@ import com.cskaoyan.bean.pojo.Storage;
 import com.cskaoyan.bean.vo.system.RolePermission;
 import com.cskaoyan.service.admin.SystemService;
 import com.google.gson.Gson;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class SysmController {
      * @param param
      * @return
      */
+    @RequiresPermissions("admin:admin:list")
     @RequestMapping("admin/list")
     public BaseRespVo adminList(String username, BaseParam param){
         BaseRespData baseRespData = systemService.adminList(username, param);
@@ -48,6 +50,7 @@ public class SysmController {
      *
      *     {"errno":601,"errmsg":"管理员名称不符合规定"}
      */
+    @RequiresPermissions("admin:admin:create")
     @RequestMapping("admin/create")
     public BaseRespVo adminCreate(@RequestBody Admin admin){
         Object o = systemService.adminCreate(admin);
@@ -74,6 +77,7 @@ public class SysmController {
      * @param admin
      * @return
      */
+    @RequiresPermissions("admin:admin:update")
     @RequestMapping("admin/update")
     public BaseRespVo adminUpdate(@RequestBody Admin admin){
 //        Admin adminCreate = systemService.adminUpdate(admin);
@@ -102,6 +106,7 @@ public class SysmController {
      * @param admin
      * @return
      */
+    @RequiresPermissions("admin:admin:delete")
     @RequestMapping("admin/delete")
     public BaseRespVo adminDelete(@RequestBody Admin admin){
         Integer affectedRows = systemService.adminDelete(admin);
@@ -123,6 +128,7 @@ public class SysmController {
      * @param param
      * @return
      */
+    @RequiresPermissions("admin:log:list")
     @RequestMapping("log/list")
     public BaseRespVo logList(String name, BaseParam param){
         BaseRespData baseRespData = systemService.logList(name, param);
@@ -135,6 +141,7 @@ public class SysmController {
      * @param param
      * @return
      */
+    @RequiresPermissions("admin:role:list")
     @RequestMapping("role/list")
     public BaseRespVo roleList(String name, BaseParam param){
         BaseRespData baseRespData = systemService.roleList(name, param);
@@ -146,6 +153,7 @@ public class SysmController {
      * @param map
      * @return
      */
+    @RequiresPermissions("admin:role:create")
     @RequestMapping("role/create")
     public BaseRespVo roleCreate(@RequestBody Map<String,String> map){
         Role role = systemService.roleCreate(map.get("name"), map.get("desc"));
@@ -171,6 +179,7 @@ public class SysmController {
      * @param role
      * @return
      */
+    @RequiresPermissions("admin:role:delete")
     @RequestMapping("role/delete")
     public BaseRespVo roleDelete(@RequestBody Role role){
         String s = systemService.roleDelete(role);
@@ -187,6 +196,7 @@ public class SysmController {
      * @param role
      * @return
      */
+    @RequiresPermissions("admin:role:update")
     @RequestMapping("role/update")
     public BaseRespVo roleUpdate(@RequestBody Role role){
         systemService.roleUpdate(role);
@@ -201,6 +211,7 @@ public class SysmController {
      * @param param
      * @return
      */
+    @RequiresPermissions("admin:storage:list")
     @RequestMapping("storage/list")
     public BaseRespVo storageList(String name, String key,BaseParam param){
         BaseRespData baseRespData = systemService.storageList(name,key, param);
@@ -212,13 +223,14 @@ public class SysmController {
      * @param storage
      * @return
      */
+    @RequiresPermissions("admin:storage:update")
     @RequestMapping("storage/update")
     public BaseRespVo storageUpdate(@RequestBody Storage storage){
         int i = systemService.storageUpdate(storage);
         return BaseRespVo.ok();
     }
 
-
+    @RequiresPermissions("admin:storage:delete")
     @RequestMapping("storage/delete")
     public BaseRespVo storageDelete(@RequestBody Storage storage){
         int i = systemService.storageDelete(storage);

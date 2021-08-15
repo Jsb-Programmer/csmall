@@ -342,6 +342,9 @@ public class SystemServiceImpl implements SystemService{
      */
     @Override
     public void rolePermissionsUpdate(RolePermissionsUpdate rolePermissionsUpdate) {
+        //判断是否是超级管理员
+
+
         //接收的权限总集合
         HashSet<String> reci = new HashSet<>(rolePermissionsUpdate.getPermissions());
         //原权限集合

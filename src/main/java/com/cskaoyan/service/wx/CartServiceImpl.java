@@ -132,6 +132,16 @@ public class CartServiceImpl implements CartService {
         return index(userId);
     }
 
+    /**
+     * 添加购物车中的商品
+     * 1.购物车中已存在
+     *      a.没有被删除的商品,更新number
+     *      b.被逻辑删除的商品,修改逻辑删除,并更新number
+     * 2.购物车中不存在的商品,直接insert新纪录
+     * @param addBO
+     * @param userId
+     * @return
+     */
     @Override
     public int add(AddBO addBO, Integer userId) {
         //判断该用户购物车中是否存在改商品,存在则加,不存在则创建
@@ -150,6 +160,7 @@ public class CartServiceImpl implements CartService {
 
             Cart cart = new Cart();
             cart.setNumber(number);
+            cart.setDeleted(false);
             cart.setUpdateTime(new Date(System.currentTimeMillis()));
             affectRows = cartMapper.updateByExampleSelective(cart, cartExample);
         }else {
@@ -184,7 +195,7 @@ public class CartServiceImpl implements CartService {
 
 
     /**
-     * 逻辑删除购物车中的商品
+     * 逻辑删除购物车中的商品 并将number设为0
      * @param productIds
      * @param userId
      * @return
@@ -199,12 +210,18 @@ public class CartServiceImpl implements CartService {
             criteria.andProductIdEqualTo(productId);
             Cart cart = new Cart();
             cart.setUpdateTime(new Date(System.currentTimeMillis()));
+            cart.setNumber((short) 0);
             cart.setDeleted(true);
             int i = cartMapper.updateByExampleSelective(cart, cartExample);
         }
         return index(userId);
     }
 
+    /**
+     * 修改购物车商品中的数量
+     * @param updateBO
+     * @return
+     */
     @Override
     public int update(UpdateBO updateBO) {
         Cart cart = new Cart();
@@ -214,5 +231,23 @@ public class CartServiceImpl implements CartService {
         cart.setId(updateBO.getId());
         int i = cartMapper.updateByPrimaryKeySelective(cart);
         return i;
+    }
+
+
+    /**
+     * 立即购买快速加入购物车,
+     * 1.商品已存在
+     *      a.没有被删除,更新number
+     *      b.已被逻辑删除,修改删除,并更新number
+     * 2.商品不存在,直接insert新纪录
+     * @param addBO
+     * @param userId
+     * @return
+     */
+    @Override
+    public int fastadd(AddBO addBO, Integer userId) {
+        // TODO: 2021/8/15 商品添加之后的数量 
+        int add = add(addBO, userId);
+        return add;
     }
 }

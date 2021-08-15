@@ -4,33 +4,66 @@ import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.InfoData;
 import com.cskaoyan.bean.LoginUser;
 import com.cskaoyan.bean.vo.dashbord.AllKindsTotals;
+import com.cskaoyan.realm.MallToken;
 import com.cskaoyan.service.admin.AuthService;
+import com.cskaoyan.utils.MD5Utils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 
 /**
  * Authenticate
  */
-@RestController
+//@RestController
 @RequestMapping("admin")
 public class AuthController {
 
     @Autowired
     AuthService authService;
 
-    //@RequestMapping("admin/auth/login")
     @PostMapping("auth/login")
-    public BaseRespVo login(@RequestBody LoginUser user) {
-        //业务留给大家自己这部分
-        //要学习完Shiro才能做这部分开发
-        return BaseRespVo.ok("643fb2d4-80f8-48a6-92b2-ccddce036057");
+    public BaseRespVo login(@RequestBody LoginUser user) throws Exception {
+        MallToken admin = new MallToken(user.getUsername(),
+                MD5Utils.encrypt(user.getPassword()), "admin");
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(admin);
+        } catch (Exception e) {
+            return BaseRespVo.fail(605,"用户帐号或密码不正确");
+        }
+        Session session = subject.getSession();
+        return BaseRespVo.ok(session.getId());
     }
 
-    @GetMapping("auth/info")//Get请求请求参数不可能是Json
-    public BaseRespVo info(String token) {
-        //查询用户信息的业务，大家自己来写 👉 需要自己来做
+    @GetMapping("auth/info")
+    public BaseRespVo info() {
+
+        String principal = (String) SecurityUtils.getSubject().getPrincipal();
+        InfoData admin = authService.queryAdminByName(principal);
+        return BaseRespVo.ok(admin);
+    }
+
+    @RequestMapping("dashboard")
+    public BaseRespVo dashboard() {
+        AllKindsTotals allKindsTotals = authService.queryTotals();
+        return BaseRespVo.ok(allKindsTotals);
+    }
+
+    @RequestMapping("auth/logout")
+    public BaseRespVo logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return BaseRespVo.ok();
+    }
+
+}
+
+/*
+
         InfoData infoData = new InfoData();
         infoData.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         infoData.setName("admin123");
@@ -40,14 +73,4 @@ public class AuthController {
         ArrayList<String> roles = new ArrayList<>();
         roles.add("超级管理员");
         infoData.setRoles(roles);
-
-        return BaseRespVo.ok(infoData);
-    }
-
-    @RequestMapping("dashboard")
-    public BaseRespVo dashboard(){
-        AllKindsTotals allKindsTotals = authService.queryTotals();
-        return BaseRespVo.ok(allKindsTotals);
-    }
-
-}
+ */

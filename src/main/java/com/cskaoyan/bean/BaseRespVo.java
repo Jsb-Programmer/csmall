@@ -9,9 +9,9 @@ import lombok.Data;
  */
 @Data
 public class BaseRespVo<T> {
+    long errno;//自己的前后端应用 ： 自定义的状态码 → 通常前端根据该状态码做不同的处理
     T data;
     String errmsg;//告诉前端请求的消息
-    long errno;//自己的前后端应用 ： 自定义的状态码 → 通常前端根据该状态码做不同的处理
 
     public static BaseRespVo ok(){
         BaseRespVo<Object> baseRespVo = new BaseRespVo<>();
@@ -48,7 +48,7 @@ public class BaseRespVo<T> {
     public static BaseRespVo fail(String msg,Integer errno){
         BaseRespVo<Object> baseRespVo = new BaseRespVo<>();
         baseRespVo.setErrno(errno);
-        baseRespVo.setErrmsg(msg);
+        baseRespVo.setErrmsg(msg);//{"errno":501,"errmsg":"请登录"}
         return baseRespVo;
     }
 }

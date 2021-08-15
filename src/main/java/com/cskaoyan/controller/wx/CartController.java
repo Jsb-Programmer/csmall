@@ -119,12 +119,29 @@ public class CartController {
     }
 
 
+    /**
+     * 购物车快速加入
+     * @param addBO
+     * @return
+     */
     @RequestMapping("cart/fastadd")
     public BaseRespVo fastadd(@RequestBody AddBO addBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Integer userId = 1;
-//        int update = cartService.fastadd(addBO,userId);
+        int fastadd = cartService.fastadd(addBO,userId);
         return BaseRespVo.ok(305);
+    }
+
+
+    /**
+     * 该请求不携带任何参数,,,不知道这个请求是干什么的
+     * @return
+     */
+    @RequestMapping("cart/goodscount")
+    public BaseRespVo goodscount(){
+        // TODO: 2021/8/14  userId 暂时指定为 1
+        Integer userId = 1;
+        return BaseRespVo.ok();
     }
 
 
