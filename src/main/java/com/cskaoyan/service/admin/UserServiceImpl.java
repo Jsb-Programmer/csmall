@@ -13,11 +13,14 @@ import com.cskaoyan.utils.MD5Utils;
 import com.cskaoyan.utils.NextDayUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -284,16 +287,22 @@ public class UserServiceImpl implements UserService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         String format = simpleDateFormat.format(nextDay);
 
-        //todo update user time
+        Subject subject = SecurityUtils.getSubject();
+        Serializable id = subject.getSession().getId();
+
         User user = userMapper.selectByName(username);
+
         WxUserLoginBO wxUserLoginBO = new WxUserLoginBO();
         UserInfoVO userInfoVO = new UserInfoVO();
         userInfoVO.setNickName(user.getNickname());
         userInfoVO.setAvatarUrl(user.getAvatar());
-        wxUserLoginBO.setToken(MD5Utils.encrypt(password));
+        wxUserLoginBO.setToken(id.toString());
         wxUserLoginBO.setTokenExpire(format);
         wxUserLoginBO.setUserInfo(userInfoVO);
-
+        //update login time
+        user.setLastLoginTime(new Date());
+        user.setLastLoginIp(subject.getSession().getHost());
+        userMapper.updateByPrimaryKeySelective(user);
         return wxUserLoginBO;
     }
 

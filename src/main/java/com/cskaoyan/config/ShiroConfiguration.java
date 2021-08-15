@@ -30,19 +30,27 @@ public class ShiroConfiguration {
         filterMap.put("/wx/auth/login","anon");
         filterMap.put("/wx/auth/logout","anon");
         filterMap.put("/wx/user/index","anon");
+        //
+        filterMap.put("/wx/home/index", "anon");
+        filterMap.put("/wx/goods/*", "anon");
+        filterMap.put("/wx/brand/*", "anon");
+        filterMap.put("/wx/catalog/*", "anon");
+        filterMap.put("/wx/search/*", "anon");
+        filterMap.put("/wx/topic/*", "anon");
+        //
 
-        filterMap.put("/wx/catalog/**","anon");
         filterMap.put("/**", "authc");        //访问请求，先要执行authc的filter，判断是否是认证状态
         factoryBean.setFilterChainDefinitionMap(filterMap);
         return factoryBean;
     }
 
     @Bean
-    public DefaultWebSecurityManager securityManager(
+    public DefaultWebSecurityManager securityManager(AdminRealm realm,
                                                      CustomSessionManager customSessionManager,
                                                      CustomAuthenticator authenticator) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //给默认的认证器和授权器提供realm
+        securityManager.setRealm(realm);
         securityManager.setSessionManager(customSessionManager);
         securityManager.setAuthenticator(authenticator);
         return securityManager;

@@ -63,8 +63,8 @@ public class AuthServiceImpl implements AuthService{
         ArrayList<String> perms = new ArrayList<>();
 
         PermissionExample permissionExample = new PermissionExample();
-        PermissionExample.Criteria criteria = permissionExample.createCriteria();
         for (Integer roleId : roleIds) {
+            PermissionExample.Criteria criteria = permissionExample.createCriteria();
             Role role = roleMapper.selectByPrimaryKey(roleId);
             roleNames.add(role.getName());
             criteria.andRoleIdEqualTo(roleId);

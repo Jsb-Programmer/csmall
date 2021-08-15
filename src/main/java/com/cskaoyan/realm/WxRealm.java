@@ -11,6 +11,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,12 +38,17 @@ public class WxRealm extends AuthorizingRealm {
             credentials = users.get(0).getPassword();
         }
         //存入id ， password 与token中比对认证
-        return new SimpleAuthenticationInfo(users.get(0).getId(),credentials,this.getName());
+        Integer id = users.get(0).getId();
+        return new SimpleAuthenticationInfo(id,credentials,this.getName());
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("*");
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        simpleAuthorizationInfo.addStringPermissions(strings);
 
-        return new SimpleAuthorizationInfo();
+        return simpleAuthorizationInfo;
     }
 }

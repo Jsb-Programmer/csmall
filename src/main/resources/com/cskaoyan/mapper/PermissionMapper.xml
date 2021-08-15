@@ -225,4 +225,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectPermissionByRoleId" resultType="java.lang.String">
+    select permission from cskaoyanmall_permission where role_id = #{roleId} and deleted = false
+  </select>
+
+  <select id="selectDeletedPermissionByRoleId" resultType="java.lang.String">
+    select permission from cskaoyanmall_permission where role_id = #{roleId} and deleted = true
+  </select>
 </mapper>
