@@ -20,4 +20,11 @@ public class WxLogoutMsg {
         wxLogoutMsg.setErrmsg("请登录");
         return wxLogoutMsg;
     }
+
+    public static WxLogoutMsg fail(){
+        WxLogoutMsg wxLogoutMsg = new WxLogoutMsg();
+        wxLogoutMsg.setErrno(500);
+        wxLogoutMsg.setErrmsg("登出失败");
+        return wxLogoutMsg;
+    }
 }

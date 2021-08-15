@@ -52,8 +52,13 @@ public class WxAuthController {
 
     @RequestMapping("logout")
     public WxLogoutMsg logout(@RequestBody NullBO nullBO){
-        SecurityUtils.getSubject().logout();
-        return WxLogoutMsg.logout();
+        Subject subject = SecurityUtils.getSubject();
+        if(subject.isAuthenticated()){
+            subject.logout();
+            return WxLogoutMsg.logout();
+
+        }
+        return WxLogoutMsg.fail();
     }
 
 }
