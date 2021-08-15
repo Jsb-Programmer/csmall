@@ -24,7 +24,7 @@ public class WxTopicController {
     /**
      * 查看全部专题信息
      */
-    @RequiresPermissions("wx:topic:list")
+//    @RequiresPermissions("wx:topic:list")
     @GetMapping("/list")
     public BaseRespVo list(WxTopicBaseParam topicBaseParam){
 
@@ -35,7 +35,7 @@ public class WxTopicController {
     /**
      * 查看专题详情
      */
-    @RequiresPermissions("wx:topic:list")
+//    @RequiresPermissions("wx:topic:list")
     @GetMapping("/detail")
     public BaseRespVo detail(Integer id){
 
