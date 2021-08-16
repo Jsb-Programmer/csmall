@@ -25,6 +25,15 @@ public class CartServiceImpl implements CartService {
     ProductMapper productMapper;
     @Autowired
     AddressMapper addressMapper;
+    @Autowired
+    GrouponMapper grouponMapper;
+    @Autowired
+    SystemMapper systemMapper;
+    @Autowired
+    CouponUserMapper couponUserMapper;
+    @Autowired
+    CouponMapper couponMapper;
+
     /**
      * 根据传入的id查询用户不同订单状态的数量  (wx/user/index)
      * @param userId
@@ -285,8 +294,80 @@ public class CartServiceImpl implements CartService {
         exampleCriteria.andUserIdEqualTo(userId);
         Address address = addressMapper.selectByExample(addressExample).get(0);
         checkoutVO.setCheckedAddress(address);
+        checkoutVO.setAddressId(address.getId());
 
         //计算
-        return null;
+//        //团购判断 通过集合计算购物车中参与团购的商品   todo
+//        //参与团购商品的id
+//        List<Integer> listGroupTotal = grouponMapper.selectGrouponGoodsId();
+//        //cart中团购的商品
+//        List<Integer> listGroupCart = cartMapper.selectGrouponGoodsId(userId);
+//        HashSet<Integer> setCart = new HashSet<Integer>(listGroupCart);
+//        //通过交集计算出购物车中参与团购的商品id
+//        listGroupCart.retainAll(listGroupTotal);
+//        //计算出购物车中不参加团购的商品id
+//        setCart.removeAll(listGroupTotal);
+//
+//        //团购减免金额的计算
+//
+        checkoutVO.setGrouponPrice(0);
+        checkoutVO.setGrouponRulesId(0);
+
+        //优惠券判断,通过查询该用户所有的优惠券,来选择一张优惠力度最大的优惠券
+        //使用过的优惠券要做处理
+        //通过传的优惠券id判断是否有没有优惠券
+        Integer couponId = checkoutBO.getCouponId();
+        checkoutVO.setCouponId(couponId);
+        if (couponId ==0){
+            //没有优惠券可用
+            checkoutVO.setCouponPrice(0.0);
+        }else {
+            //查询该优惠券,并使用
+            Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+            checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
+            CouponUserExample couponUserExample = new CouponUserExample();
+            CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
+            couponUserExampleCriteria.andUserIdEqualTo(userId);
+            couponUserExampleCriteria.andCouponIdEqualTo(couponId);
+            CouponUser couponUser = new CouponUser();
+            couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
+            couponUser.setStatus((short) 1);
+            int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
+        }
+        //可用的优惠券数量
+        // TODO: 2021/8/16
+        CouponUserExample example = new CouponUserExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        List<CouponUser> couponUsers = couponUserMapper.selectByExample(example);
+        checkoutVO.setAvailableCouponLength(couponUsers.size());
+        //商品总金额
+        double totalPrice = 0;
+        for (Cart cart : carts) {
+            //同种多个商品的价格总和
+            double price = cart.getPrice().doubleValue() * cart.getNumber().doubleValue();
+            totalPrice += price;
+        }
+        //运费计算 判断订单总金额是否达到 包邮标准
+        SystemExample exampleMax = new SystemExample();
+        exampleMax.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_min");
+        List<com.cskaoyan.bean.pojo.System> systemsMax = systemMapper.selectByExample(exampleMax);
+
+        SystemExample exampleFreight = new SystemExample();
+        exampleFreight.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_value");
+        List<com.cskaoyan.bean.pojo.System> systemsFreight = systemMapper.selectByExample(exampleFreight);
+
+        double keyValue = Double.parseDouble(systemsMax.get(0).getKeyValue());
+        if (totalPrice<keyValue){
+            checkoutVO.setFreightPrice(Integer.parseInt(systemsFreight.get(0).getKeyValue()));
+        }else {
+            checkoutVO.setFreightPrice(0);
+        }
+
+        checkoutVO.setGoodsTotalPrice(totalPrice);
+        checkoutVO.setActualPrice(totalPrice-checkoutVO.getGrouponPrice()-checkoutVO.getCouponPrice()+checkoutVO.getFreightPrice());
+        checkoutVO.setOrderTotalPrice(totalPrice-checkoutVO.getGrouponPrice()+checkoutVO.getFreightPrice());
+
+
+        return checkoutVO;
     }
 }
