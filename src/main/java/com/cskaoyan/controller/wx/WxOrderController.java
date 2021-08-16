@@ -2,11 +2,13 @@ package com.cskaoyan.controller.wx;
 
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.bo.wxOrder.OrderCommentBo;
+import com.cskaoyan.bean.bo.wxOrder.SubmitBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.Order;
 import com.cskaoyan.bean.pojo.OrderGoods;
 import com.cskaoyan.bean.pojo.WxOrderGoods;
 import com.cskaoyan.bean.vo.wxOrder.OrderDetailDataVo;
+import com.cskaoyan.bean.vo.wxOrder.SubmitVo;
 import com.cskaoyan.bean.vo.wxOrder.WxOrderBaseRespVo;
 import com.cskaoyan.service.wx.WxOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +116,24 @@ public class WxOrderController {
         wxOrderService.confirm(order);
         return BaseRespVo.ok();
     }
+
+    /**
+     * 购买
+     */
+    @RequestMapping("submit")
+    public BaseRespVo submit(@RequestBody SubmitBo submitBo) {
+        SubmitVo data = wxOrderService.submit(submitBo);
+        return BaseRespVo.ok(data);
+    }
+
+    /**
+     * 付款
+     */
+    @RequestMapping("prepay")
+    public BaseRespVo prepay(Integer orderId) {
+//        wxOrderService.submit(submitBo);
+        return BaseRespVo.ok();
+    }
+
 
 }
