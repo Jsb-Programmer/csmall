@@ -203,7 +203,7 @@ public class SystemServiceImpl implements SystemService{
         if (name != null && !"".equals(name)){
             criteria.andNameLike("%"+name+"%");
         }
-        if (name != null && !"".equals(name)){
+        if (key != null && !"".equals(key)){
             criteria.andKeyLike("%"+key+"%");
         }
         //只筛选没有被逻辑删除的

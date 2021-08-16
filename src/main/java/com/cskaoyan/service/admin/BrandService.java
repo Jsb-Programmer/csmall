@@ -5,6 +5,9 @@ import com.cskaoyan.bean.bo.market.BaseParamBO;
 import com.cskaoyan.bean.bo.market.BrandCreateBO;
 import com.cskaoyan.bean.bo.market.BrandDeleteBO;
 import com.cskaoyan.bean.bo.market.BrandUpdateBO;
+import com.cskaoyan.bean.pojo.Brand;
+import com.cskaoyan.bean.vo.brandcs.WxBrandListVO;
+import com.cskaoyan.bean.vo.brandcs.WxDrandDetailVO;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
 import com.cskaoyan.bean.vo.market.BrandCreateVO;
 import com.cskaoyan.bean.vo.market.BrandDeleteVO;
@@ -18,4 +21,8 @@ public interface BrandService {
     BrandUpdateVO brandUpdate(BrandUpdateBO brandUpdateBO);
 
     void brandDelete(BrandDeleteBO brandDeleteBO);
+
+    WxBrandListVO wxBrandList(Integer page, Integer size);
+
+    WxDrandDetailVO brandDetail(Integer id);
 }

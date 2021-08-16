@@ -350,4 +350,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectGrouponGoodsId" resultType="java.lang.Integer">
+    select goods_id from cskaoyanmall_cart where user_id = #{userId}
+    </select>
+
+  <select id="selectCartNewest" resultMap="BaseResultMap">
+    select * from cskaoyanmall_cart where user_id = #{userId} order by update_time desc limit 1
+  </select>
 </mapper>

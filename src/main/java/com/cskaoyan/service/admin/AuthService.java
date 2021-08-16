@@ -8,4 +8,8 @@ public interface AuthService {
     AllKindsTotals queryTotals();
 
     InfoData queryAdminByName(String principal);
+
+    void updateAdminLoginInfo(String username);
+
+    int changeAdminPwd(String oldPassword, String newPassword) throws Exception;
 }

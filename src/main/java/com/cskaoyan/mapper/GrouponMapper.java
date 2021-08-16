@@ -33,4 +33,6 @@ public interface GrouponMapper {
     int updateByPrimaryKey(Groupon record);
 
     int select(Groupon groupon);
+
+    List<Integer> selectGrouponGoodsId();
 }
