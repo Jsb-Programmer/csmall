@@ -9,6 +9,8 @@ import com.cskaoyan.bean.vo.goods.*;
 import com.cskaoyan.mapper.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +43,8 @@ public class GoodsServiceImpl implements GoodsService {
     CollectMapper collectMapper;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    SearchHistoryMapper searchHistoryMapper;
 
     @Value("${img.failUrl}")
     String failUrl;
@@ -354,9 +358,23 @@ public class GoodsServiceImpl implements GoodsService {
      * @param wxListBaseParam 从前端获取的数据
      * @return 响应
      */
+    @Transactional
     @Override
     public WxGoodsListVO list(WxListBaseParam wxListBaseParam) {
         WxGoodsListVO wxGoodsListVO = new WxGoodsListVO();
+        // 若是关键字查询，则将这次查询记录加入searchHistory表中
+        if (wxListBaseParam.getKeyword() != null) {
+            Subject subject = SecurityUtils.getSubject();
+            Integer userId = (Integer) subject.getPrincipal();
+            SearchHistory searchHistory = new SearchHistory();
+            searchHistory.setUserId(userId);
+            searchHistory.setKeyword(wxListBaseParam.getKeyword());
+            searchHistory.setAddTime(new Date());
+            searchHistory.setUpdateTime(new Date());
+            searchHistoryMapper.insert(searchHistory);
+        }
+
+
         // 获取goodsList
         PageHelper.startPage(wxListBaseParam.getPage(), wxListBaseParam.getSize());
 
