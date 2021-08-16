@@ -30,9 +30,9 @@ public class GrouponController {
      */
     @RequiresPermissions("admin:groupon:list")
     @GetMapping("/list")
-    public BaseRespVo list(BaseParam baseParam){
+    public BaseRespVo list(BaseParam baseParam,Integer goodsId){
 
-        BaseRespData data = grouponService.queryList(baseParam);
+        BaseRespData data = grouponService.queryList(baseParam,goodsId);
         return BaseRespVo.ok(data);
     }
 
@@ -44,6 +44,9 @@ public class GrouponController {
     public BaseRespVo create(@RequestBody GrouponRules grouponRules){
 
         grouponRules = grouponService.createGroupon(grouponRules);
+        if (grouponRules==null){
+            return BaseRespVo.fail("该id对应的商品不存在");
+        }
         return BaseRespVo.ok(grouponRules);
     }
 

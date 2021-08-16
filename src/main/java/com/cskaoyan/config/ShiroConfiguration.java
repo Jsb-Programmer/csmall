@@ -35,9 +35,10 @@ public class ShiroConfiguration {
         filterMap.put("/wx/catalog/*", "anon");
         filterMap.put("/wx/search/*", "anon");
         filterMap.put("/wx/topic/*", "anon");
-        //
 
-        filterMap.put("/**", "authc");        //访问请求，先要执行authc的filter，判断是否是认证状态
+
+//        filterMap.put("/**", "authc");        //访问请求，先要执行authc的filter，判断是否是认证状态
+//        filterMap.put("/**", "authc");        //访问请求，先要执行authc的filter，判断是否是认证状态
         factoryBean.setFilterChainDefinitionMap(filterMap);
         return factoryBean;
     }

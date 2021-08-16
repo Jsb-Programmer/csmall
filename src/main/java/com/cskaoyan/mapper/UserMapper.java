@@ -2,6 +2,7 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.User;
 import com.cskaoyan.bean.pojo.UserExample;
+import com.cskaoyan.bean.vo.wxComment.ListCommentVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -30,4 +31,5 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectByName(@Param("username") String username);
+
 }
