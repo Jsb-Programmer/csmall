@@ -13,6 +13,7 @@ import com.cskaoyan.utils.WxOrderUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,9 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Override
     public WxOrderBaseRespVo getOrderList(Integer showType, WxOrderBaseParamBO baseParamBO) {
         // 获取用户信息
-/*        Subject subject = SecurityUtils.getSubject();
-        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();*/
-        Integer userId = 3;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+//        Integer userId = 3;
 
         // 分页
         PageHelper.startPage(baseParamBO.getPage(), baseParamBO.getSize());
@@ -190,8 +191,6 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     /**
      * 显示商品评论界面
-     *
-     * @return
      */
     @Override
     public WxOrderGoods goods(Integer orderId, Integer goodsId) {
@@ -224,11 +223,9 @@ public class WxOrderServiceImpl implements WxOrderService {
         comment.setDeleted(false);
 
         // 获取用户id
-        //TODO
-//        Subject subject = SecurityUtils.getSubject();
-//        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();
-//        comment.setUserId(userId);
-        comment.setUserId(3);
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();
+        comment.setUserId(userId);
 
         // 添加到comment表
         int i = commentMapper.insertSelective(comment);
