@@ -7,6 +7,7 @@ import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.coupon.ListUserDataVo;
 import com.cskaoyan.mapper.CouponMapper;
 import com.cskaoyan.mapper.CouponUserMapper;
+import com.cskaoyan.service.wx.CartServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Autowired
     CouponUserMapper couponUserMapper;
+
+    @Autowired
+    CartServiceImpl cartService;
 
     /**
      * 优惠券首页+多条件查询
