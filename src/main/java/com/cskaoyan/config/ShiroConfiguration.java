@@ -19,7 +19,6 @@ public class ShiroConfiguration {
     public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager);
-        //factoryBean.setLoginUrl();
 
         LinkedHashMap<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/wx/storage/**","anon");          //放行静态资源
