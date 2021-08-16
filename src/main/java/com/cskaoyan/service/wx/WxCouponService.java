@@ -1,5 +1,6 @@
 package com.cskaoyan.service.wx;
 
+import com.cskaoyan.bean.bo.wxOrder.ReceiveCouponBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.Coupon;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
@@ -19,7 +20,7 @@ public interface WxCouponService {
 
     List<Coupon> getSelectCouponList(Integer cartId, Integer grouponRulesId);
 
-    void receiveCoupon(Integer couponId);
+    int receiveCoupon(ReceiveCouponBo couponBo);
 
     int exchangeCoupon(Coupon coupon);
 }

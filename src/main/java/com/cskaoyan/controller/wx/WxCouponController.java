@@ -1,6 +1,7 @@
 package com.cskaoyan.controller.wx;
 
 import com.cskaoyan.bean.BaseRespVo;
+import com.cskaoyan.bean.bo.wxOrder.ReceiveCouponBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.Coupon;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
@@ -58,9 +59,16 @@ public class WxCouponController {
      * 领取优惠券
      */
     @RequestMapping("receive")
-    public BaseRespVo receiveCoupon(Integer couponId) {
-        couponService.receiveCoupon(couponId);
-        return BaseRespVo.ok();
+    public BaseRespVo receiveCoupon(@RequestBody ReceiveCouponBo couponBo) {
+        int code = couponService.receiveCoupon(couponBo);
+        if (code == 0) {
+            return BaseRespVo.ok();
+        } else if (code == 750) {
+            return BaseRespVo.fail("领取数量超限", 742);
+        } else {
+            return BaseRespVo.fail("优惠券已下架", 404);
+
+        }
     }
 
     /**
@@ -75,7 +83,7 @@ public class WxCouponController {
             return BaseRespVo.fail("券码不正确", 742);
         } else if (respCode == 750) {
             return BaseRespVo.fail("领取数量超限", 742);
-        }else{
+        } else {
             return BaseRespVo.fail("优惠券已下架", 404);
 
         }
