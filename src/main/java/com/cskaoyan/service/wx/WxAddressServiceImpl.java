@@ -8,6 +8,7 @@ import com.cskaoyan.bean.vo.wxAddressVo.WxAddressDetailVo;
 import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.mapper.RegionMapper;
 import com.cskaoyan.mapper.UserMapper;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +33,10 @@ public class WxAddressServiceImpl implements WxAddressService{
     public List<Address> qurry(User user) {
 
         //根据use_id再去查用户对应的收货信息。
-        Integer userId = user.getId();
+
+        Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         //需要写死一个userId addressMapper.selectAddressByUserId(userId);
-        List<Address> addresses = addressMapper.selectAddressByUserId();
+        List<Address> addresses = addressMapper.selectAddressByUserId(userId);
         return addresses;
     }
     @Override

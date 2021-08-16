@@ -31,7 +31,7 @@ public interface AddressMapper {
     int updateByPrimaryKey(Address record);
 
     // 新加查询 wpb
-    List<Address> selectAddressByUserId();
+    List<Address> selectAddressByUserId(Integer userId);
 
     // 新加wx/address/detail
     WxAddressDetailVo selectAdDetailById(Integer id);

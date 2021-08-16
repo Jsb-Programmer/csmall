@@ -248,4 +248,10 @@
   <update id="updateStatusByValueId">
     update cskaoyanmall_collect as co set deleted = 1 where  co.value_id =#{valueId}
   </update>
+
+  <update id="updateStatusToZeroByValueId">
+    update cskaoyanmall_collect as co set deleted = 0 where  co.value_id =#{valueId}
+  </update>
+<!--new sql wpb -->
+
 </mapper>

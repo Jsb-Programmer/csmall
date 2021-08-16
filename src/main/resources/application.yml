@@ -30,14 +30,7 @@ file:
 img:
   #图片网络路径URL
   url: http://localhost:8083/wx/storage/fetch/
-<<<<<<< HEAD
-#mybatis:
-mybatis:
-
-  type-handlers-package: com.cskaoyan.typehandler
-=======
   #上传失败网络路径URL
   failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler
->>>>>>> 97f2b48818c9f9f2f2740d682ebf0445b0475ca0

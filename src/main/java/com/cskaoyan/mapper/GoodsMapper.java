@@ -39,7 +39,7 @@ public interface GoodsMapper {
 
     Goods selectGoodsForGroupon(Integer goodsId);
     // 新加sql 需要获取collect表里的userId 需要传一个userId.这里先写死
-    List<WxCollectListVo> selectCollectJoinGoods();
+    List<WxCollectListVo> selectCollectJoinGoods(Integer userId);
 
 
 }
