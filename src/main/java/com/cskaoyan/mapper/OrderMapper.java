@@ -28,8 +28,11 @@ public interface OrderMapper {
     int updateByExample(@Param("record") Order record, @Param("example") OrderExample example);
 
     int updateByPrimaryKeySelective(Order record);
+    //new sql admin/order/ship by wpb
+    int updateByPrimaryKeySelectiveNew(Order record);
 
     int updateByPrimaryKey(Order record);
+
 
 //1
     List<Order> selectByUserId(@Param("userId") Integer userId, @Param("orderSn") String orderSn, @Param("orderStatusArray") Integer[] orderStatusArray);

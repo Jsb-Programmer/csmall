@@ -21,6 +21,7 @@ public interface OrderGoodsMapper {
     List<OrderGoods> selectByExample(OrderGoodsExample example);
 
     OrderGoods selectByPrimaryKey(Integer id);
+
     List<OrderGoods> selectByOrderID(Integer id);
 
     int updateByExampleSelective(@Param("record") OrderGoods record, @Param("example") OrderGoodsExample example);

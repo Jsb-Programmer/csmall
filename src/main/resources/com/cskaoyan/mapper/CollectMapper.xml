@@ -240,4 +240,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByValueId" resultMap="BaseResultMap">
+    select * from cskaoyanmall_collect as co where  co.value_id = #{valueId}
+    </select>
+
+  <update id="updateStatusByValueId">
+    update cskaoyanmall_collect as co set deleted = 1 where  co.value_id =#{valueId}
+  </update>
 </mapper>

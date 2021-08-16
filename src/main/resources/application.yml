@@ -28,5 +28,7 @@ file:
 #图片网络路径URL
 img:
   url: http://localhost:8083/wx/storage/fetch/
+#mybatis:
 mybatis:
+
   type-handlers-package: com.cskaoyan.typehandler

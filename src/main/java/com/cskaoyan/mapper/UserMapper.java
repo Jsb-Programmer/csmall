@@ -29,5 +29,7 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+    // 新加sql wpb  (String username)
+    int selectIdByUsername();
 
 }

@@ -320,4 +320,23 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!--新加sql wpb-->
+  <select id="selectAddressByUserId" resultMap="BaseResultMap">
+    select * from cskaoyanmall_address where user_id = 1
+    </select>
+
+  <select id="selectAdDetailById" resultType="com.cskaoyan.bean.vo.wxAddressVo.WxAddressDetailVo">
+    select a1.is_default,a1.area_id,a1.address,a1.name,a1.mobile,a1.id,a1.city_id,a1.province_id,
+r1.name provinceName ,r2.name cityName,r3.name areaName
+from cskaoyanmall_address as a1
+join cskaoyanmall_region as r1
+on a1.province_id = r1.id
+join cskaoyanmall_region as r2
+on a1.city_id = r2.id
+join cskaoyanmall_region as r3
+on a1.area_id = r3.id
+where a1.id = #{id}
+  </select>
+
+
 </mapper>

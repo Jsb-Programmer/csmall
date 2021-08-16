@@ -1,6 +1,7 @@
 
 package com.cskaoyan.mapper;
 
+import com.cskaoyan.bean.pojo.Address;
 import com.cskaoyan.bean.pojo.Region;
 import com.cskaoyan.bean.pojo.RegionExample;
 import org.apache.ibatis.annotations.Param;
@@ -29,5 +30,7 @@ public interface RegionMapper {
     int updateByPrimaryKeySelective(Region record);
 
     int updateByPrimaryKey(Region record);
+
+
 
 }
