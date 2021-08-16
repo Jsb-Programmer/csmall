@@ -1,10 +1,12 @@
 package com.cskaoyan.service.wx;
 
 import com.cskaoyan.bean.bo.wxOrder.OrderCommentBo;
+import com.cskaoyan.bean.bo.wxOrder.SubmitBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.Order;
 import com.cskaoyan.bean.pojo.WxOrderGoods;
 import com.cskaoyan.bean.vo.wxOrder.OrderDetailDataVo;
+import com.cskaoyan.bean.vo.wxOrder.SubmitVo;
 import com.cskaoyan.bean.vo.wxOrder.WxOrderBaseRespVo;
 
 /**
@@ -29,4 +31,6 @@ public interface WxOrderService {
     void comment(OrderCommentBo orderCommentBo);
 
     void confirm(Order order);
+
+    SubmitVo submit(SubmitBo submitBo);
 }

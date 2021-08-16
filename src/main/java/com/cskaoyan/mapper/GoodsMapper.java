@@ -2,6 +2,8 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.Goods;
 import com.cskaoyan.bean.pojo.GoodsExample;
+import com.cskaoyan.bean.vo.wxCollectVo.WxCollectListVo;
+import com.cskaoyan.bean.vo.wxCollectVo.WxCollectVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -36,6 +38,8 @@ public interface GoodsMapper {
     int updateByPrimaryKey(Goods record);
 
     Goods selectGoodsForGroupon(Integer goodsId);
+    // 新加sql 需要获取collect表里的userId 需要传一个userId.这里先写死
+    List<WxCollectListVo> selectCollectJoinGoods(Integer userId);
 
 
 }

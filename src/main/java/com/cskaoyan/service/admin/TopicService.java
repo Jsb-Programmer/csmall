@@ -2,8 +2,8 @@ package com.cskaoyan.service.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.bo.topic.CreateTopicBO;
 import com.cskaoyan.bean.pojo.Topic;
-import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 
 /**
  * @author yangbo
@@ -12,9 +12,9 @@ import com.cskaoyan.bean.vo.topic.CreateTopicVO;
  */
 public interface TopicService {
 
-    BaseRespData queryList(BaseParam baseParam);
+    BaseRespData queryList(BaseParam baseParam,String title,String subtitle);
 
-    CreateTopicVO createTopic(Topic topic);
+    Topic createTopic(CreateTopicBO topic);
 
     Topic updateTopic(Topic topic);
 

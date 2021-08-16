@@ -35,7 +35,7 @@ public class GrouponServiceImpl implements GrouponService {
 
     //查看全部团购规则信息
     @Override
-    public BaseRespData queryList(BaseParam baseParam) {
+    public BaseRespData queryList(BaseParam baseParam, Integer goodsId) {
         PageHelper.startPage(baseParam.getPage(), baseParam.getLimit());
 
         GrouponRulesExample example = new GrouponRulesExample();
@@ -44,6 +44,11 @@ public class GrouponServiceImpl implements GrouponService {
         example.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
 
         GrouponRulesExample.Criteria criteria = example.createCriteria();
+
+        if (goodsId != null && !"".equals(goodsId)) {
+            criteria.andGoodsIdEqualTo(goodsId);
+        }
+
         criteria.andDeletedEqualTo(false);
         List<GrouponRules> grouponList = grouponRulesMapper.selectByExample(example);
 
@@ -60,6 +65,9 @@ public class GrouponServiceImpl implements GrouponService {
         grouponRules.setAddTime(new Date());
         grouponRules.setUpdateTime(new Date());
         Goods goods = goodsMapper.selectGoodsForGroupon(grouponRules.getGoodsId());
+        if (goods==null){
+            return null;
+        }
         grouponRules.setGoodsName(goods.getName());
         grouponRules.setPicUrl(goods.getPicUrl());
         grouponRules.setDeleted(false);

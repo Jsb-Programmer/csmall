@@ -1,8 +1,10 @@
 package com.cskaoyan.service.wx;
 
+import com.cskaoyan.bean.bo.cart.CheckoutBO;
 import com.cskaoyan.bean.bo.wxOrder.ReceiveCouponBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.*;
+import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
 import com.cskaoyan.mapper.CartMapper;
 import com.cskaoyan.mapper.CouponMapper;
@@ -15,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,9 @@ public class WxCouponServiceImpl implements WxCouponService {
 
     @Autowired
     CartMapper cartMapper;
+
+    @Autowired
+    CartService cartService;
 
     /**
      * 首页显示所有优惠券
@@ -103,8 +109,19 @@ public class WxCouponServiceImpl implements WxCouponService {
     @Override
     public List<Coupon> getSelectCouponList(Integer cartId, Integer grouponRulesId) {
         // 获取用户id
-        Cart cart = cartMapper.selectByPrimaryKey(cartId);
-        Integer userId = cart.getUserId();
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+
+
+        // 获得订单总价
+        CheckoutBO checkoutBO = new CheckoutBO();
+        checkoutBO.setCartId(cartId);
+        checkoutBO.setCouponId(0);
+
+        CheckoutVO checkout = cartService.checkout(checkoutBO, userId);
+        BigDecimal actualPrice = BigDecimal.valueOf(checkout.getActualPrice());
+
+
 
         // 获取优惠券列表
         // 从coupon-user表里查询对应的coupon
@@ -117,8 +134,15 @@ public class WxCouponServiceImpl implements WxCouponService {
         // 从coupon表里查询
         for (CouponUser couponUser : couponUserList) {
             Integer couponId = couponUser.getCouponId();
-            Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-            couponList.add(coupon);
+            CouponExample couponExample = new CouponExample();
+            CouponExample.Criteria criteria = couponExample.createCriteria();
+            criteria.andIdEqualTo(couponId);
+            criteria.andMinLessThan(actualPrice);
+
+            List<Coupon> coupons = couponMapper.selectByExample(couponExample);
+            for (Coupon coupon : coupons) {
+                couponList.add(coupon);
+            }
         }
         return couponList;
     }

@@ -17,6 +17,10 @@ spring:
       static-locations: file:d:/project2-f7/img/
   mvc:
     static-path-pattern: /**
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 50MB
 
   main:
     allow-bean-definition-overriding: true
@@ -37,5 +41,3 @@ img:
   failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler
-
-
