@@ -18,6 +18,9 @@ spring:
   mvc:
     static-path-pattern: /**
 
+  main:
+    allow-bean-definition-overriding: true
+
 logging:
   level:
     com.cskaoyan.mapper: debug
@@ -34,3 +37,5 @@ img:
   failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler
+
+
