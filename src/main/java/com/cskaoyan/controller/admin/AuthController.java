@@ -5,12 +5,10 @@ import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.InfoData;
 import com.cskaoyan.bean.LoginUser;
 import com.cskaoyan.bean.vo.dashbord.AllKindsTotals;
-import com.cskaoyan.mapper.AdminMapper;
 import com.cskaoyan.realm.MallToken;
 import com.cskaoyan.service.admin.AuthService;
 import com.cskaoyan.utils.MD5Utils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class AuthController {
         return BaseRespVo.ok(session.getId());
     }
 
-    @GetMapping("auth/info")
+    @RequestMapping("auth/info")
     public BaseRespVo info() {
 
         String principal = (String) SecurityUtils.getSubject().getPrincipal();

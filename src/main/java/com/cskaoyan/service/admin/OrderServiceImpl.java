@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
     public RespDetailData queryDetail(Integer id) {
         //GsonFormat 改过了
         Order order = orderMapper.selectByPrimaryKey(id);
-        List<OrderGoods> orderGoods = orderGoodsMapper.selectByOrderID(id);
+        List<OrderGoods> orderGoods  = orderGoodsMapper.selectByOrderID(id);
         User user =orderGoodsMapper.selectJoinUser(id);
         RespDetailData.UserBean userBean = new RespDetailData.UserBean();
         userBean.setNickname(user.getNickname());
@@ -75,25 +75,18 @@ public class OrderServiceImpl implements OrderService {
         respDetailData.setOrderGoods(orderGoods);
         return respDetailData;
     }
-
+    // refund不用做
     @Override
     public void deleteOrder(Integer id, BigDecimal goodsPrice) {
-        //这里写假删除 ，然后controller层返回ok refund不用做
+        //这里写假删除 ，然后controller层返回ok
     }
 
     @Override
     public BaseRespVo updateStatus(Order order) {
         //根据orderId 修改订单状态 然后插入 shipChannel shipSn 的信息
-        orderMapper.updateByPrimaryKeySelective(order);
+//        orderMapper.updateByPrimaryKeySelective(order);
+        orderMapper.updateByPrimaryKeySelectiveNew(order);
         return BaseRespVo.ok();
     }
-//
-//    @Override
-//    public BaseRespVo updateStatus(Integer orderId, String shipChannel, String shipSn) {
-//        //根据orderId 修改订单状态 然后插入 shipChannel shipSn 的信息
-//       orderMapper.updateStatusById(orderId);
-//       orderMapper.insertMessagebyId(orderId,shipChannel,shipSn);
-//       return BaseRespVo.ok();
-//
-//    }
+
 }

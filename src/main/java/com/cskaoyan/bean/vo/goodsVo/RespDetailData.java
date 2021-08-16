@@ -28,7 +28,7 @@ public class RespDetailData<T> {
 
     private UserBean user;
     private Order order;
-    private List<OrderGoodsBean> orderGoods;
+    private List<OrderGoods> orderGoods;
 
 
 
@@ -48,18 +48,18 @@ public class RespDetailData<T> {
         this.order = order;
     }
 
-    public List<OrderGoodsBean> getOrderGoods() {
+    public List<OrderGoods> getOrderGoods() {
         return orderGoods;
     }
 
-    public void setOrderGoods(List<OrderGoodsBean> orderGoods) {
+    public void setOrderGoods(List<OrderGoods> orderGoods) {
         this.orderGoods = orderGoods;
     }
 
     public RespDetailData() {
     }
 
-    public RespDetailData(UserBean user, Order order, List<OrderGoodsBean> orderGoods) {
+    public RespDetailData(UserBean user, Order order, List<OrderGoods> orderGoods) {
         this.user = user;
         this.order = order;
         this.orderGoods = orderGoods;
@@ -91,7 +91,7 @@ public class RespDetailData<T> {
         }
     }
 
-    public static class OrderGoodsBean {
+    public static class OrderGoods {
         /**
          * id : 45
          * orderId : 34
