@@ -325,4 +325,24 @@
     select id as value,name as label from cskaoyanmall_category where level = 'L1'
   </select>
 
+  <select id="selectById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cskaoyanmall_category
+    where id = #{id,jdbcType=INTEGER}
+    and deleted = false
+  </select>
+
+  <select id="selectToMinID" resultType="int">
+    select min(id) from cskaoyanmall_category
+    where deleted = false
+  </select>
+
+  <select id="selectToAllL1" resultType="com.cskaoyan.bean.pojo.Category">
+    select
+    *
+    from cskaoyanmall_category
+    where level = 'L1'
+    and deleted = false
+  </select>
 </mapper>
