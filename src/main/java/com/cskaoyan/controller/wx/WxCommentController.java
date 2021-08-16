@@ -2,6 +2,7 @@ package com.cskaoyan.controller.wx;
 
 import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
 import com.cskaoyan.bean.BaseRespVo;
+import com.cskaoyan.bean.vo.wxComment.CountCommentVO;
 import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
 import com.cskaoyan.service.wx.WxCommentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("wx/comment")
-public class WxcommentController {
+public class WxCommentController {
 
     @Autowired
     WxCommentService wxCommentService;
@@ -23,11 +24,21 @@ public class WxcommentController {
     /**
      * 查看该id全部信息
      */
-    @RequiresPermissions("wx:comment:list")
+//    @RequiresPermissions("wx:comment:list")
     @GetMapping("/list")
     public BaseRespVo list(Integer valueId, WxTopicBaseParam commentBaseParam, Integer type, Integer showType){
 
         TopicBaseRespData data = wxCommentService.queryList(valueId,commentBaseParam,type,showType);
+        return BaseRespVo.ok(data);
+    }
+
+    /**
+     * 查看评论数量
+     */
+    @GetMapping("/count")
+    public BaseRespVo count(Integer valueId, Integer type){
+
+        CountCommentVO data = wxCommentService.queryCount(valueId,type);
         return BaseRespVo.ok(data);
     }
 

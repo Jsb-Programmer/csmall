@@ -51,4 +51,19 @@ public class WxTopicServiceImpl implements WxTopicService {
         detailTopicVO.setGoods(detailTopicVO.getTopic().getGoods());
         return detailTopicVO;
     }
+
+    //查看相关专题内容
+    @Override
+    public List<Topic> related(Integer id) {
+        Topic topic = topicMapper.selectByPrimaryKey(id);
+
+        TopicExample example = new TopicExample();
+        TopicExample.Criteria criteria = example.createCriteria();
+        criteria.andDeletedEqualTo(false);
+        criteria.andTitleEqualTo(topic.getTitle());
+        criteria.andIdNotEqualTo(id);
+        List<Topic> topicList = topicMapper.selectByExample(example);
+
+        return topicList;
+    }
 }

@@ -2,6 +2,7 @@ package com.cskaoyan.bean.vo.wxComment;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @date 2021/8/15 19:10
  */
 @Data
-public class ListCommentVO<T> {
+public class ListCommentVO {
 
     /**
      * userInfo : {"nickName":"测试用户","avatarUrl":"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"}
@@ -20,9 +21,9 @@ public class ListCommentVO<T> {
      */
 
     private UserInfoBean userInfo;
-    private String addTime;
+    private Date addTime;
     private String content;
-    private List<T> picList;
+    private String[] picList;
 
     @Data
     public static class UserInfoBean {

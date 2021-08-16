@@ -1,8 +1,11 @@
 package com.cskaoyan.service.wx;
 
 import com.cskaoyan.bean.bo.wxTopic.WxTopicBaseParam;
+import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.vo.wxTopic.DetailTopicVO;
 import com.cskaoyan.bean.vo.wxTopic.TopicBaseRespData;
+
+import java.util.List;
 
 /**
  * @author yangbo
@@ -13,4 +16,6 @@ public interface WxTopicService {
     TopicBaseRespData queryList(WxTopicBaseParam topicBaseParam);
 
     DetailTopicVO detail(Integer id);
+
+    List<Topic> related(Integer id);
 }

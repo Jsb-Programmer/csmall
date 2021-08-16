@@ -125,4 +125,8 @@ public class Topic {
         this.content = content == null ? null : content.trim();
     }
 
+    public void setPrice(String price) {
+        BigDecimal decimal = new BigDecimal(price);
+        this.price = decimal;
+    }
 }

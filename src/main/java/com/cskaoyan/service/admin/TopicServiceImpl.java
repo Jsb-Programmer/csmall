@@ -2,9 +2,9 @@ package com.cskaoyan.service.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.bo.topic.CreateTopicBO;
 import com.cskaoyan.bean.pojo.Topic;
 import com.cskaoyan.bean.pojo.TopicExample;
-import com.cskaoyan.bean.vo.topic.CreateTopicVO;
 import com.cskaoyan.mapper.TopicMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,7 +25,7 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     TopicMapper topicMapper;
 
-    //查看全部专题信息
+    //查看专题信息
     @Override
     public BaseRespData queryList(BaseParam baseParam,String title,String subtitle) {
 
@@ -56,26 +56,23 @@ public class TopicServiceImpl implements TopicService {
 
     //增加新的专题
     @Override
-    public Topic createTopic(Topic topic) {
+    public Topic createTopic(CreateTopicBO topicBO) {
 
+        Topic topic = new Topic();
+        topic.setTitle(topicBO.getTitle());
+        topic.setSubtitle(topicBO.getSubtitle());
+        topic.setPrice(topicBO.getPrice());
+        topic.setGoods(topicBO.getGoods());
+        topic.setContent(topicBO.getContent());
         topic.setAddTime(new Date());
         topic.setUpdateTime(new Date());
         topic.setDeleted(false);
         //添加数据
         int code = topicMapper.insert(topic);
-//
-        CreateTopicVO topicVO = new CreateTopicVO();
-//            //查新专题自动生成数据
-//            topicVO.setId(topic.getId());
-//            topicVO.setAddTime(topic.getAddTime());
-//            topicVO.setUpdateTime(topic.getUpdateTime());
-//            topicVO.setSubtitle(topic.getSubtitle());
-//            topicVO.setContent(topic.getContent());
-//            topicVO.setPrice(topic.getPrice());
-//            topicVO.setReadCount(topic.getReadCount());
-//            topicVO.setGoods(topic.getGoods());
-//            topicVO.setTitle(topic.getTitle());
 
+        if (code==0){
+            return null;
+        }
         return topic;
     }
 
