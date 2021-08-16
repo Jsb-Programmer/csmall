@@ -1,9 +1,11 @@
 package com.cskaoyan.controller.admin;
 
+import com.cskaoyan.bean.bo.auth.ChangePwdBO;
 import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.InfoData;
 import com.cskaoyan.bean.LoginUser;
 import com.cskaoyan.bean.vo.dashbord.AllKindsTotals;
+import com.cskaoyan.mapper.AdminMapper;
 import com.cskaoyan.realm.MallToken;
 import com.cskaoyan.service.admin.AuthService;
 import com.cskaoyan.utils.MD5Utils;
@@ -33,8 +35,11 @@ public class AuthController {
         try {
             subject.login(admin);
         } catch (Exception e) {
-            return BaseRespVo.fail(605,"用户帐号或密码不正确");
+            return BaseRespVo.fail(605, "用户帐号或密码不正确");
         }
+
+        //update login info for admin
+        authService.updateAdminLoginInfo(user.getUsername());
         Session session = subject.getSession();
         return BaseRespVo.ok(session.getId());
     }
@@ -61,17 +66,25 @@ public class AuthController {
         return BaseRespVo.ok();
     }
 
+    @RequestMapping("profile/password")
+    public BaseRespVo changePwd(@RequestBody ChangePwdBO changePwdBO) throws Exception {
+        if (changePwdBO.getNewPassword().equals(" ")) {
+            return BaseRespVo.fail(605, "新密码不能包含空格");
+        }
+        if (changePwdBO.getNewPassword().length() < 6) {
+            return BaseRespVo.fail(605, "新密码少于6位");
+        }
+        if (!changePwdBO.getNewPassword().equals(changePwdBO.getNewPassword2())) {
+            return BaseRespVo.fail(605, "两次新密码不同");
+        }
+        int code = authService.changeAdminPwd(changePwdBO.getOldPassword(),changePwdBO.getNewPassword());
+        if (code == 400){
+            return BaseRespVo.fail(605,"账号密码不对");
+        }
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()){
+            subject.logout();//todo fe can be better
+        }
+        return BaseRespVo.ok();
+    }
 }
-
-/*
-
-        InfoData infoData = new InfoData();
-        infoData.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        infoData.setName("admin123");
-        ArrayList<String> perms = new ArrayList<>();
-        perms.add("*");
-        infoData.setPerms(perms);
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add("超级管理员");
-        infoData.setRoles(roles);
- */
