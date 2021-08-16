@@ -2,7 +2,7 @@ package com.cskaoyan.bean.pojo;
 
 import java.util.Date;
 
-public class Keyword {
+public class Keyword {//
     private Integer id;
 
     private String keyword;

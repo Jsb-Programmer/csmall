@@ -94,7 +94,7 @@ public class KeywordExample {
         protected void addCriterion(String condition, Object value, String property) {
             if (value == null) {
                 throw new RuntimeException("Value for " + property + " cannot be null");
-            }
+            }//
             criteria.add(new Criterion(condition, value));
         }
 
