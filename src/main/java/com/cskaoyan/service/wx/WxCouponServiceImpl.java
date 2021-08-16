@@ -1,5 +1,6 @@
 package com.cskaoyan.service.wx;
 
+import com.cskaoyan.bean.bo.wxOrder.ReceiveCouponBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
@@ -9,7 +10,6 @@ import com.cskaoyan.mapper.CouponUserMapper;
 import com.cskaoyan.utils.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.catalina.security.SecurityUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,29 +125,52 @@ public class WxCouponServiceImpl implements WxCouponService {
 
     /**
      * 领取优惠券
+     *
+     * @return
      */
     @Override
-    public void receiveCoupon(Integer couponId) {
+    public int receiveCoupon(ReceiveCouponBo couponBo) {
+        Integer couponId = couponBo.getCouponId();
         // 根据id查询优惠券
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
         // 获取用户信息
         Subject subject = SecurityUtils.getSubject();
         Integer userId = (Integer) subject.getPrincipal();
 
-        // 创建coupon-user
-        CouponUser couponUser = new CouponUser();
-        couponUser.setUserId(userId);
-        couponUser.setCouponId(couponId);
-        couponUser.setStatus((short) 0);
-        couponUser.setStartTime(coupon.getStartTime());
-        couponUser.setEndTime(coupon.getEndTime());
-        couponUser.setAddTime(new Date());
-        couponUser.setUpdateTime(new Date());
-        couponUser.setDeleted(false);
-        // 插入到数据库
-        couponUserMapper.insertSelective(couponUser);
-        return;
+        // 判断优惠券的状态
+        if (coupon.getStatus() == 0) {
 
+            // 判断是否limit
+            Short limit = coupon.getLimit();
+            if (limit > 0) {
+                // 判断目前该用户已经有几张该优惠券
+                CouponUserExample couponUserExample = new CouponUserExample();
+                CouponUserExample.Criteria criteria1 = couponUserExample.createCriteria();
+                criteria1.andUserIdEqualTo(userId);
+                criteria1.andCouponIdEqualTo(coupon.getId());
+                List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+                int receiveCount = couponUsers.size();
+                if (receiveCount >= limit) {
+                    return 750;
+                }
+
+                // 创建coupon-user
+                CouponUser couponUser = new CouponUser();
+                couponUser.setUserId(userId);
+                couponUser.setCouponId(couponId);
+                couponUser.setStatus((short) 0);
+                couponUser.setStartTime(coupon.getStartTime());
+                couponUser.setEndTime(coupon.getEndTime());
+                couponUser.setAddTime(new Date());
+                couponUser.setUpdateTime(new Date());
+                couponUser.setDeleted(false);
+                // 插入到数据库
+                couponUserMapper.insertSelective(couponUser);
+                return 0;
+
+            }
+        }
+        return 724;
     }
 
     /**
@@ -209,7 +232,6 @@ public class WxCouponServiceImpl implements WxCouponService {
                 couponUser.setAddTime(new Date());
                 couponUser.setUpdateTime(new Date());
                 couponUser.setDeleted(false);
-
 
 
                 // 存到数据库
