@@ -7,6 +7,7 @@ import com.cskaoyan.bean.vo.market.*;
 import com.cskaoyan.bean.bo.market.BaseParamBO;
 import com.cskaoyan.service.admin.BrandService;
 import com.cskaoyan.utils.ValidationUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,7 @@ public class BrandController {
      * @param baseParamBO
      * @return
      */
+    @RequiresPermissions("admin:brand:list")
     @GetMapping("list")
     public BaseRespVo brandList(Integer id,String name,BaseParamBO baseParamBO){
         BaseRespDataVO baseRespDataVO = brandService.brandList(id,name,baseParamBO);
@@ -44,6 +46,7 @@ public class BrandController {
      * @param brandCreateBO
      * @return
      */
+    @RequiresPermissions("admin:brand:create")
     @PostMapping("create")
     public BaseRespVo brandCreate(@RequestBody @Validated BrandCreateBO brandCreateBO, BindingResult bindingResult){
 //        //通过ExceptionHandler去处理异常
@@ -61,6 +64,7 @@ public class BrandController {
      * @param brandUpdateBO
      * @return
      */
+    @RequiresPermissions("admin:brand:update")
     @PostMapping("update")
     public BaseRespVo brandUpdate(@RequestBody BrandUpdateBO brandUpdateBO){
         BrandUpdateVO brandUpdateVO = brandService.brandUpdate(brandUpdateBO);
@@ -72,6 +76,7 @@ public class BrandController {
      * @param brandDeleteBO
      * @return
      */
+    @RequiresPermissions("admin:brand:delete")
     @PostMapping("delete")
     public BaseRespVo brandDelete(@RequestBody BrandDeleteBO brandDeleteBO){
         brandService.brandDelete(brandDeleteBO);

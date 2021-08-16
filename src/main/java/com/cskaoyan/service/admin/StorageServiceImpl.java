@@ -31,7 +31,7 @@ public class StorageServiceImpl implements StorageService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String addTime = simpleDateFormat.format(storage.getAddTime());
         String updateTime = simpleDateFormat.format(storage.getUpdateTime());
-        imgUploadVO.setUpdateTime(addTime);
+        imgUploadVO.setAddTime(addTime);
         imgUploadVO.setUpdateTime(updateTime);
 
         return imgUploadVO;

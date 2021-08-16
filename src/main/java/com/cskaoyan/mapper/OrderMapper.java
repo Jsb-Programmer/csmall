@@ -1,9 +1,11 @@
 package com.cskaoyan.mapper;
 
+import com.cskaoyan.bean.bo.cart.Index;
 import com.cskaoyan.bean.pojo.Order;
 import com.cskaoyan.bean.pojo.OrderExample;
 
 import java.util.List;
+import java.util.Map;
 
 
 import org.apache.ibatis.annotations.Param;
@@ -44,4 +46,5 @@ public interface OrderMapper {
 //3
     void insertMessagebyId(@Param("orderId") Integer orderId, @Param("shipChannel") String shipChannel, @Param("shipSn") String shipSn);
 
+    List<Index> selectOrderStatus(Integer userId);
 }

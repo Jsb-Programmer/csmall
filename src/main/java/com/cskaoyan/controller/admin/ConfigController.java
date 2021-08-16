@@ -6,6 +6,7 @@ import com.cskaoyan.bean.vo.config.MallConfigVO;
 import com.cskaoyan.bean.vo.config.OrderConfigVO;
 import com.cskaoyan.bean.vo.config.WxConfigVO;
 import com.cskaoyan.service.admin.ConfigService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ConfigController {
     /**
      * 商场配置回显(GET)
      */
+    @RequiresPermissions("admin:config:mall:list")
     @GetMapping("mall")
     public BaseRespVo configMallGet() {
         MallConfigVO mallConfigVO = configService.getMallConfig();
@@ -35,6 +37,7 @@ public class ConfigController {
     /**
      * 商场配置提交(POST)
      */
+    @RequiresPermissions("admin:config:mall:updateConfigs")
     @PostMapping("mall")
     public BaseRespVo configMallPOST(@RequestBody MallConfigVO mallConfigVO) {
         int affectRows = configService.postMallConfig(mallConfigVO);
@@ -47,6 +50,7 @@ public class ConfigController {
     /**
      * 运费配置回显(GET)
      */
+    @RequiresPermissions("admin:config:express:list")
     @GetMapping("express")
     public BaseRespVo configExpressGet() {
         ExpressConfigVO expressConfigVO = configService.getExpressConfig();
@@ -56,6 +60,7 @@ public class ConfigController {
     /**
      * 运费配置提交(POST)
      */
+    @RequiresPermissions("admin:config:express:updateConfigs")
     @PostMapping("express")
     public BaseRespVo configExpressPOST(@RequestBody ExpressConfigVO expressConfigVO) {
         int affectRows = configService.postExpressConfig(expressConfigVO);
@@ -68,6 +73,7 @@ public class ConfigController {
     /**
      * 订单配置回显(GET)
      */
+    @RequiresPermissions("admin:config:order:list")
     @GetMapping("order")
     public BaseRespVo configOrderGet() {
         OrderConfigVO orderConfigVO = configService.getOrderConfig();
@@ -77,6 +83,7 @@ public class ConfigController {
     /**
      * 订单配置提交(POST)
      */
+    @RequiresPermissions("admin:config:order:updateConfigs")
     @PostMapping("order")
     public BaseRespVo configOrderPOST(@RequestBody OrderConfigVO orderConfigVO) {
         int affectRows = configService.postOrderConfig(orderConfigVO);
@@ -89,6 +96,7 @@ public class ConfigController {
     /**
      * 小程序配置回显(GET)
      */
+    @RequiresPermissions("admin:config:wx:list")
     @GetMapping("wx")
     public BaseRespVo configWxGet() {
         WxConfigVO wxConfigVO = configService.getWxConfig();
@@ -98,6 +106,7 @@ public class ConfigController {
     /**
      * 小程序配置提交(POST)
      */
+    @RequiresPermissions("admin:config:wx:updateConfigs")
     @PostMapping("wx")
     public BaseRespVo configWxPOST(@RequestBody WxConfigVO wxConfigVO) {
         int affectRows = configService.postWxConfig(wxConfigVO);

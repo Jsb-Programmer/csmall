@@ -1,4 +1,3 @@
-
 package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.User;
@@ -32,4 +31,5 @@ public interface UserMapper {
     // 新加sql wpb  (String username)
     int selectIdByUsername();
 
+    User selectByName(@Param("username") String username);
 }

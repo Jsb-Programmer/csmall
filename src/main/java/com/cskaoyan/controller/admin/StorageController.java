@@ -6,6 +6,7 @@ import com.cskaoyan.bean.pojo.Storage;
 import com.cskaoyan.bean.vo.storage.ImgUploadVO;
 import com.cskaoyan.service.admin.StorageService;
 import lombok.SneakyThrows;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,14 +36,14 @@ public class StorageController {
      * @return
      */
     @SneakyThrows
+    @RequiresPermissions("admin:storage:create")
     @PostMapping("create")
     public BaseRespVo imgUpload(MultipartFile file) {
-        String uuid = UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
         String originalFilename = file.getOriginalFilename();
         int size = (int) file.getSize();
         String contentType = file.getContentType();
         Date date = new Date(System.currentTimeMillis());
-//        String key = uuid + originalFilename;
         int i = originalFilename.lastIndexOf(".");//用于截取文件尾缀
         String weizhui = originalFilename.substring(i, originalFilename.length());
 

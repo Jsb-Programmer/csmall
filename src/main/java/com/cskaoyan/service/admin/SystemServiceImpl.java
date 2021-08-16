@@ -3,11 +3,10 @@ package com.cskaoyan.service.admin;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.bo.system.RoleOptions;
+import com.cskaoyan.bean.bo.system.RolePermissionsUpdate;
 import com.cskaoyan.bean.pojo.*;
-import com.cskaoyan.mapper.AdminMapper;
-import com.cskaoyan.mapper.LogMapper;
-import com.cskaoyan.mapper.RoleMapper;
-import com.cskaoyan.mapper.StorageMapper;
+import com.cskaoyan.bean.vo.system.RolePermission;
+import com.cskaoyan.mapper.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.System;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -63,10 +63,19 @@ public class SystemServiceImpl implements SystemService{
     /**
      * create admin
      * @param admin
-     * @return
+     * @return  返回值为0   密码长度小于6    {"errno":602,"errmsg":"管理员密码长度不能小于6"}
+     *          返回值为1                 {"errno":601,"errmsg":"管理员名称不符合规定"}
      */
     @Override
-    public Admin adminCreate(Admin admin) {
+    public Object adminCreate(Admin admin) {
+        //管理员名称不符合规定
+        if (admin.getUsername().length()<6) {
+            return 1;
+        }
+        //管理员密码长度不能小于6
+        if (admin.getPassword().length()<6) {
+            return 0;
+        }
         Date time = new Date(System.currentTimeMillis());
         //第一次修改的时间默认为创建的时间
         admin.setAddTime(time);
@@ -88,7 +97,16 @@ public class SystemServiceImpl implements SystemService{
      * @return
      */
     @Override
-    public Admin adminUpdate(Admin admin) {
+    public Object adminUpdate(Admin admin) {
+        //管理员名称不符合规定
+        if (admin.getUsername().length()<6) {
+            return 1;
+        }
+        //管理员密码长度不能小于6
+        if (admin.getPassword().length()<6) {
+            return 0;
+        }
+
         admin.setUpdateTime(new Date(System.currentTimeMillis()));
         AdminExample adminExample = new AdminExample();
         AdminExample.Criteria criteria = adminExample.createCriteria();
@@ -185,7 +203,7 @@ public class SystemServiceImpl implements SystemService{
         if (name != null && !"".equals(name)){
             criteria.andNameLike("%"+name+"%");
         }
-        if (name != null && !"".equals(name)){
+        if (key != null && !"".equals(key)){
             criteria.andKeyLike("%"+key+"%");
         }
         //只筛选没有被逻辑删除的
@@ -218,12 +236,35 @@ public class SystemServiceImpl implements SystemService{
     /**
      * 根据id进项逻辑删除角色,但是需要判断该角色有无管理员正在使用
      * @param role
+     * @return
      */
     @Override
-    public void roleDelete(Role role) {
+    public String roleDelete(Role role) {
+        //判断role是否有管理员正在使用
+        // TODO: 2021/8/13
+        //每次从数据库中查询10管理员信息,判断改角色是否正在使用
+        int pageSize = 20;
+        for (int i = 1; true; i++) {
+            PageHelper.startPage(i,pageSize);
+            AdminExample adminExample = new AdminExample();
+            adminExample.setOrderByClause("id");
+            adminExample.createCriteria().andDeletedEqualTo(false);
+            List<Admin> admins = adminMapper.selectByExample(adminExample);
+            for (Admin admin : admins) {
+                Integer[] roleIds = admin.getRoleIds();
+                for (Integer roleId : roleIds) {
+                    if (roleId == role.getId()) {
+                        return "当前角色存在管理员:"+admin.getUsername()+"，不能删除";
+                    }
+                }
+            }
+
+            if (admins.size()<pageSize)break;
+        }
         //将deleted设置为true
         role.setDeleted(true);
         int i = roleMapper.updateByPrimaryKeySelective(role);
+        return null;
     }
 
     /**
@@ -263,6 +304,12 @@ public class SystemServiceImpl implements SystemService{
         return i;
     }
 
+
+    /**
+     * 逻辑删除对象
+     * @param storage
+     * @return
+     */
     @Override
     public int storageDelete(Storage storage) {
         //将deleted设置为true
@@ -271,5 +318,92 @@ public class SystemServiceImpl implements SystemService{
         return i;
     }
 
+    @Autowired
+    PermissionMapper permissionMapper;
+    /**
+     * 授权界面数据回显
+     * @param roleId
+     * @return
+     */
+    @Override
+    public RolePermission rolePermissions(Integer roleId) {
+        PermissionExample example = new PermissionExample();
+        PermissionExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(roleId);
+        List<String> list = permissionMapper.selectPermissionByRoleId(roleId);
+        RolePermission rolePermission = new RolePermission();
+        rolePermission.setAssignedPermissions(list);
+        return rolePermission;
+    }
 
+    /**
+     * 修改角色的权限
+     * @param rolePermissionsUpdate
+     */
+    @Override
+    public void rolePermissionsUpdate(RolePermissionsUpdate rolePermissionsUpdate) {
+        //判断是否是超级管理员
+
+
+        //接收的权限总集合
+        HashSet<String> reci = new HashSet<>(rolePermissionsUpdate.getPermissions());
+        //原权限集合
+        HashSet<String> old = new HashSet<>(permissionMapper.selectPermissionByRoleId(rolePermissionsUpdate.getRoleId()));
+        //保留的权限集合,先克隆reci
+        HashSet<String> retain = (HashSet<String>) reci.clone();
+        boolean b = retain.retainAll(old);
+        //需要被逻辑删除的权限集合
+        HashSet<String> deleted = (HashSet<String>) old.clone();
+        boolean b1 = deleted.removeAll(reci);
+        //被删除的历史权限
+        List<String> histroyDel= permissionMapper.selectDeletedPermissionByRoleId(rolePermissionsUpdate.getRoleId());
+        //增加的权限
+        HashSet<String> incre = (HashSet<String>) reci.clone();
+        incre.removeAll(old);
+        //增加权限中历史的删除权限
+        HashSet<String> increDel = (HashSet<String>) incre.clone();
+        increDel.retainAll(histroyDel);
+        //新增权限
+        HashSet<String> increNew = (HashSet<String>) incre.clone();
+        increNew.removeAll(histroyDel);
+
+
+        //逻辑删除
+        for (String s : deleted) {
+            Permission permission = new Permission();
+            Date date = new Date(System.currentTimeMillis());
+            permission.setUpdateTime(date);
+            permission.setDeleted(true);
+            PermissionExample permissionExample = new PermissionExample();
+            PermissionExample.Criteria criteria = permissionExample.createCriteria();
+            criteria.andRoleIdEqualTo(rolePermissionsUpdate.getRoleId());
+            criteria.andPermissionEqualTo(s);
+            int i = permissionMapper.updateByExampleSelective(permission, permissionExample);
+        }
+        //保留权限不需要操作
+
+        //新增权限
+        for (String s : increNew) {
+            Permission permission = new Permission();
+            permission.setPermission(s);
+            permission.setRoleId(rolePermissionsUpdate.getRoleId());
+            Date date = new Date(System.currentTimeMillis());
+            permission.setAddTime(date);
+            permission.setUpdateTime(date);
+            permission.setDeleted(false);
+            permissionMapper.insert(permission);
+        }
+        //恢复历史删除的权限
+        for (String s : increDel) {
+            Permission permission = new Permission();
+            Date date = new Date(System.currentTimeMillis());
+            permission.setUpdateTime(date);
+            permission.setDeleted(false);
+            PermissionExample permissionExample = new PermissionExample();
+            PermissionExample.Criteria criteria = permissionExample.createCriteria();
+            criteria.andRoleIdEqualTo(rolePermissionsUpdate.getRoleId());
+            criteria.andPermissionEqualTo(s);
+            int i = permissionMapper.updateByExampleSelective(permission, permissionExample);
+        }
+    }
 }

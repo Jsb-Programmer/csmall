@@ -33,4 +33,9 @@ public interface CategoryMapper {
 
     List<CategoryL1VO> selectALL();
 
+    Category selectById(Integer id);
+
+    int selectToMinID();
+
+    List<Category> selectToAllL1();
 }

@@ -383,7 +383,13 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+<<<<<<< HEAD
   <select id="selectIdByUsername" resultType="int">
     select id from cskaoyanmall_user where username='test1'
   </select>
+=======
+  <select id="selectByName" resultType="com.cskaoyan.bean.pojo.User">
+    select * from cskaoyanmall_user where username = #{username}
+    </select>
+>>>>>>> 97f2b48818c9f9f2f2740d682ebf0445b0475ca0
 </mapper>

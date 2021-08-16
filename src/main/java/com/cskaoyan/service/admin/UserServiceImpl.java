@@ -4,17 +4,26 @@ import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 
 import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
+import com.cskaoyan.bean.bo.user.WxUserLoginBO;
 import com.cskaoyan.bean.pojo.*;
+import com.cskaoyan.bean.vo.user.UserInfoVO;
 import com.cskaoyan.mapper.*;
 
+import com.cskaoyan.utils.MD5Utils;
+import com.cskaoyan.utils.NextDayUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -264,5 +273,48 @@ public class UserServiceImpl implements UserService {
 
         return new BaseRespData<>(receivedAddressBOS,total);
     }
+
+    /**
+     * for wechat login
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    @Transactional
+    public WxUserLoginBO userLoginInfo(String username, String password) throws Exception {
+        Date nextDay = NextDayUtils.getNextDay(new Date());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        String format = simpleDateFormat.format(nextDay);
+
+        Subject subject = SecurityUtils.getSubject();
+        Serializable id = subject.getSession().getId();
+
+        User user = userMapper.selectByName(username);
+
+        WxUserLoginBO wxUserLoginBO = new WxUserLoginBO();
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setNickName(user.getNickname());
+        userInfoVO.setAvatarUrl(user.getAvatar());
+        wxUserLoginBO.setToken(id.toString());
+        wxUserLoginBO.setTokenExpire(format);
+        wxUserLoginBO.setUserInfo(userInfoVO);
+        //update login time
+        user.setLastLoginTime(new Date());
+        user.setLastLoginIp(subject.getSession().getHost());
+        userMapper.updateByPrimaryKeySelective(user);
+        return wxUserLoginBO;
+    }
+
 }
 
+/*
+            {
+        "userInfo": {
+            "nickName": "test1",
+            "avatarUrl": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
+        },
+        "tokenExpire": "2021-08-15T14:50:40.482",
+        "token": "253suyngg3aoys84txj1qvc3k87ih4ry"
+    }
+         */

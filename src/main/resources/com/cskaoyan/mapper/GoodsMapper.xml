@@ -537,7 +537,11 @@
     select `name`,pic_url as picUrl from cskaoyanmall_goods where id = #{goodsId}
   </select>
 
+<<<<<<< HEAD
   <select id="selectCollectJoinGoods" resultType="com.cskaoyan.bean.vo.wxCollectVo.WxCollectListVo" >
     	 select goods.brief as brief,co.id as id,goods.name as name,goods.pic_url as picUrl,goods.retail_price as retailPrice,co.type as type,co.value_id as valueId   from cskaoyanmall_goods as goods  JOIN cskaoyanmall_collect as co ON goods.id = co.value_id where co.user_id = 1 and co.deleted = 0
   </select>
+=======
+
+>>>>>>> 97f2b48818c9f9f2f2740d682ebf0445b0475ca0
 </mapper>

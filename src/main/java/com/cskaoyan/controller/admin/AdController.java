@@ -5,6 +5,9 @@ import com.cskaoyan.bean.BaseRespData;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Ad;
 import com.cskaoyan.service.admin.AdService;
+
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,7 @@ public class AdController {
 
 
     // 广告首页+多条件查询
+    @RequiresPermissions("admin:ad:list")
     @RequestMapping("list")
     public BaseRespVo adList(String name, String content, BaseParam baseParam) {
         BaseRespData data = adService.queryList(name, content, baseParam);
@@ -33,6 +37,7 @@ public class AdController {
     }
 
     // 新增广告
+    @RequiresPermissions("admin:ad:create")
     @RequestMapping("create")
     public BaseRespVo createAd (@RequestBody Ad ad) {
         Ad respAd = adService.createAd(ad);
@@ -40,6 +45,7 @@ public class AdController {
     }
 
     // 更新广告
+    @RequiresPermissions("admin:ad:update")
     @RequestMapping("update")
     public BaseRespVo updateAd (@RequestBody Ad ad) {
         Ad respAd = adService.updateAd(ad);
@@ -47,6 +53,7 @@ public class AdController {
     }
 
     // 删除广告
+    @RequiresPermissions("admin:ad:delete")
     @RequestMapping("delete")
     public BaseRespVo deleteAd (@RequestBody Ad ad) {
         int affectRows = adService.deleteAd(ad);
