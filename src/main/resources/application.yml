@@ -17,6 +17,10 @@ spring:
       static-locations: file:d:/project2-f7/img/
   mvc:
     static-path-pattern: /**
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 50MB
 
 logging:
   level:
@@ -30,7 +34,5 @@ file:
 img:
   #图片网络路径URL
   url: http://localhost:8083/wx/storage/fetch/
-  #上传失败网络路径URL
-  failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler

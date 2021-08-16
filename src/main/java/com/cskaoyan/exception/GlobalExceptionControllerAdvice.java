@@ -18,13 +18,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  **/
 @RestControllerAdvice
 public class GlobalExceptionControllerAdvice {
-    @Value("${img.failUrl}")
-    String url;
     @ExceptionHandler(FileSizeLimitExceededException.class)
-    public BaseRespVo fileUploadExceptionHandler() {
-        ImgUploadVO imgUploadVO = new ImgUploadVO();
-        imgUploadVO.setUrl(url);
-        return BaseRespVo.ok(imgUploadVO);
+    public BaseRespVo fileSizeLimitExceededException() {
+        return BaseRespVo.fail("请上传5MB以内的图片");
     }
 
     @ExceptionHandler(AuthorizationException.class)
