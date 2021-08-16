@@ -240,4 +240,10 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectToKeyword" resultType="com.cskaoyan.bean.vo.brandcs.SearchIndexChildVO">
+    select keyword from cskaoyanmall_search_history
+    where user_id = #{id}
+    and deleted = false
+  </select>
 </mapper>
