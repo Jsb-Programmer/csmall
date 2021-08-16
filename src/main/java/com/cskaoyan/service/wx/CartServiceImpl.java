@@ -279,12 +279,20 @@ public class CartServiceImpl implements CartService {
     public CheckoutVO checkout(CheckoutBO checkoutBO, Integer userId) {
         CheckoutVO checkoutVO = new CheckoutVO();
         //查询客户cart 中check的商品
+        List<Cart> carts ;
         CartExample cartExample = new CartExample();
         CartExample.Criteria criteria = cartExample.createCriteria();
-        criteria.andDeletedEqualTo(false);
-        criteria.andUserIdEqualTo(userId);
-        criteria.andCheckedEqualTo(true);
-        List<Cart> carts = cartMapper.selectByExample(cartExample);
+        //判断下单的位置
+        if (checkoutBO.getCartId() != 0) {
+            Cart cart = cartMapper.selectCartNewest(userId);
+            carts = new ArrayList<>();
+            carts.add(cart);
+        }else {
+            criteria.andDeletedEqualTo(false);
+            criteria.andUserIdEqualTo(userId);
+            criteria.andCheckedEqualTo(true);
+            carts = cartMapper.selectByExample(cartExample);
+        }
         checkoutVO.setCheckedGoodsList(carts);
 
         //查询客户的默认收获地址

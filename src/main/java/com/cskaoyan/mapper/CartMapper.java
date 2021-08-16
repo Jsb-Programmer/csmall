@@ -30,4 +30,6 @@ public interface CartMapper {
     int updateByPrimaryKey(Cart record);
 
     List<Integer> selectGrouponGoodsId(Integer userId);
+
+    Cart selectCartNewest(Integer userId);
 }
