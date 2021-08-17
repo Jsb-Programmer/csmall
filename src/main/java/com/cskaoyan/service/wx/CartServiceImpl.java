@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.System;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -33,6 +34,8 @@ public class CartServiceImpl implements CartService {
     CouponUserMapper couponUserMapper;
     @Autowired
     CouponMapper couponMapper;
+    @Autowired
+    WxCouponService wxCouponService;
 
     /**
      * 根据传入的id查询用户不同订单状态的数量  (wx/user/index)
@@ -258,7 +261,19 @@ public class CartServiceImpl implements CartService {
     public int fastadd(AddBO addBO, Integer userId) {
         // TODO: 2021/8/15 商品添加之后的数量 
         int add = add(addBO, userId);
-        return add;
+        //更新购物车中的数量
+        int number = addBO.getNumber();
+        CartExample cartExample = new CartExample();
+        CartExample.Criteria criteria = cartExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        criteria.andGoodsIdEqualTo(addBO.getGoodsId());
+        criteria.andProductIdEqualTo(addBO.getProductId());
+
+        Cart cart = new Cart();
+        cart.setNumber((short) number);
+        cart.setUpdateTime(new Date());
+        int i = cartMapper.updateByExampleSelective(cart, cartExample);
+        return i;
     }
 
 
@@ -270,7 +285,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public int goodscount(Integer userId) {
         CartExample cartExample = new CartExample();
-        cartExample.createCriteria().andUserIdEqualTo(userId);
+        CartExample.Criteria criteria = cartExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        criteria.andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
         int total = 0;
         for (Cart cart : carts) {
@@ -302,8 +319,9 @@ public class CartServiceImpl implements CartService {
         //查询客户的默认收获地址
         AddressExample addressExample = new AddressExample();
         AddressExample.Criteria exampleCriteria = addressExample.createCriteria();
-        exampleCriteria.andIsDefaultEqualTo(true);
+//        exampleCriteria.andIsDefaultEqualTo(true);
         exampleCriteria.andUserIdEqualTo(userId);
+        exampleCriteria.andIdEqualTo(checkoutBO.getAddressId());
         Address address = addressMapper.selectByExample(addressExample).get(0);
         checkoutVO.setCheckedAddress(address);
         checkoutVO.setAddressId(address.getId());
@@ -330,28 +348,43 @@ public class CartServiceImpl implements CartService {
         //通过传的优惠券id判断是否有没有优惠券
         Integer couponId = checkoutBO.getCouponId();
         checkoutVO.setCouponId(couponId);
-        if (couponId ==0){
+        checkoutVO.setCouponPrice(0.0);
+        if (couponId ==0 || couponId == -1){
             //没有优惠券可用
             checkoutVO.setCouponPrice(0.0);
+            checkoutVO.setAvailableCouponLength(0);
         }else {
+            //
+            //可用的优惠券数量
+
+            List<Coupon> couponUsers = wxCouponService.getSelectCouponList(checkoutBO.getCouponId(), userId);
+            if (couponUsers != null){
+                checkoutVO.setAvailableCouponLength(couponUsers.size());
+            }
+
+            Coupon coupon = couponMapper.selectByPrimaryKey(checkoutBO.getCouponId());
+            BigDecimal discount = coupon.getDiscount();
+            checkoutVO.setCouponPrice(discount.doubleValue());
+
+            //
             //查询该优惠券,并使用
-            Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-            checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
-            CouponUserExample couponUserExample = new CouponUserExample();
-            CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
-            couponUserExampleCriteria.andUserIdEqualTo(userId);
-            couponUserExampleCriteria.andCouponIdEqualTo(couponId);
-            CouponUser couponUser = new CouponUser();
-            couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
-            couponUser.setStatus((short) 1);
-            int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
+//            Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+//            checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
+//            CouponUserExample couponUserExample = new CouponUserExample();
+//            CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
+//            couponUserExampleCriteria.andUserIdEqualTo(userId);
+//            couponUserExampleCriteria.andCouponIdEqualTo(couponId);
+//            CouponUser couponUser = new CouponUser();
+//            couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
+//            couponUser.setStatus((short) 1);
+//            int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
         }
         //可用的优惠券数量
         // TODO: 2021/8/16
-        CouponUserExample example = new CouponUserExample();
-        example.createCriteria().andUserIdEqualTo(userId);
-        List<CouponUser> couponUsers = couponUserMapper.selectByExample(example);
-        checkoutVO.setAvailableCouponLength(couponUsers.size());
+//        CouponUserExample example = new CouponUserExample();
+//        example.createCriteria().andUserIdEqualTo(userId);
+//        List<CouponUser> couponUsers = couponUserMapper.selectByExample(example);
+//        checkoutVO.setAvailableCouponLength(0);
         //商品总金额
         double totalPrice = 0;
         for (Cart cart : carts) {
@@ -376,8 +409,11 @@ public class CartServiceImpl implements CartService {
         }
 
         checkoutVO.setGoodsTotalPrice(totalPrice);
-        checkoutVO.setActualPrice(totalPrice-checkoutVO.getGrouponPrice()-checkoutVO.getCouponPrice()+checkoutVO.getFreightPrice());
-        checkoutVO.setOrderTotalPrice(totalPrice-checkoutVO.getGrouponPrice()+checkoutVO.getFreightPrice());
+        int grouponPrice = checkoutVO.getGrouponPrice();
+        double couponPrice = checkoutVO.getCouponPrice();
+        int freightPrice = checkoutVO.getFreightPrice();
+        checkoutVO.setActualPrice(totalPrice- grouponPrice - couponPrice + freightPrice);
+        checkoutVO.setOrderTotalPrice(totalPrice- grouponPrice + freightPrice);
 
 
         return checkoutVO;
