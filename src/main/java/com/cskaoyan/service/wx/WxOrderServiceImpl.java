@@ -66,6 +66,9 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Autowired
     CartService cartService;
 
+    @Autowired
+    CouponUserMapper couponUserMapper;
+
     /**
      * 显示订单list
      */
@@ -291,21 +294,32 @@ public class WxOrderServiceImpl implements WxOrderService {
      */
     @Override
     public SubmitVo submit(SubmitBo submitBo) {
+
+        // 获取用户
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+        User user = userMapper.selectByPrimaryKey(userId);
+
         // 获得优惠钱数
         int couponId = submitBo.getCouponId();
 
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
         BigDecimal discount;
         if (coupon == null) {
-             discount = BigDecimal.valueOf(0);
+            discount = BigDecimal.valueOf(0);
         } else {
-             discount = coupon.getDiscount();
+            discount = coupon.getDiscount();
+            // 获取coupon-user
+            CouponUserExample couponUserExample = new CouponUserExample();
+            CouponUserExample.Criteria criteria = couponUserExample.createCriteria();
+            criteria.andCouponIdEqualTo(couponId);
+            criteria.andUserIdEqualTo(userId);
+            List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+            CouponUser couponUser = couponUsers.get(0);
+            couponUser.setStatus((short) 0);
+            couponUserMapper.updateByPrimaryKeySelective(couponUser);
         }
 
-        // 获取用户
-        Subject subject = SecurityUtils.getSubject();
-        Integer userId = (Integer) subject.getPrincipal();
-        User user = userMapper.selectByPrimaryKey(userId);
 
         // 获得地址
         int addressId = submitBo.getAddressId();
@@ -340,7 +354,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String format = simpleDateFormat.format(new Date());
         order.setOrderSn(format);
-        order.setOrderStatus((short) 201);
+        order.setOrderStatus((short) 101);
         order.setConsignee(user.getUsername());
         order.setMobile(user.getMobile());
         order.setAddress(address.getAddress());
