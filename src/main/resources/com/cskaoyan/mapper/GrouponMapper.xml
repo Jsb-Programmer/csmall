@@ -307,4 +307,8 @@
   <select id="select" resultType="java.lang.Integer">
     select count(*) from cskaoyanmall_groupon where order_id = #{orderId} and creator_user_id= #{creatorUserId} and groupon_id = #{grouponId}
     </select>
+
+  <select id="selectGrouponGoodsId" resultType="java.lang.Integer">
+    select goods_id from cskaoyanmall_groupon_rules
+    </select>
 </mapper>

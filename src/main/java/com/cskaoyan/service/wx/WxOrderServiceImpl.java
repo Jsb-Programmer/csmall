@@ -1,23 +1,29 @@
 package com.cskaoyan.service.wx;
 
+import com.cskaoyan.bean.bo.cart.CheckoutBO;
 import com.cskaoyan.bean.bo.wxOrder.OrderCommentBo;
+import com.cskaoyan.bean.bo.wxOrder.SubmitBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.*;
+import com.cskaoyan.bean.pojo.System;
+import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.wxOrder.OrderDetailDataVo;
 import com.cskaoyan.bean.vo.wxOrder.OrderListDataVo;
+import com.cskaoyan.bean.vo.wxOrder.SubmitVo;
 import com.cskaoyan.bean.vo.wxOrder.WxOrderBaseRespVo;
-import com.cskaoyan.mapper.CommentMapper;
-import com.cskaoyan.mapper.OrderMapper;
-import com.cskaoyan.mapper.WxOrderGoodsMapper;
+import com.cskaoyan.mapper.*;
 import com.cskaoyan.utils.WxOrderUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -42,15 +48,33 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Autowired
     CommentMapper commentMapper;
 
+    @Autowired
+    CouponMapper couponMapper;
+
+    @Autowired
+    CartMapper cartMapper;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    AddressMapper addressMapper;
+
+    @Autowired
+    SystemMapper systemMapper;
+
+    @Autowired
+    CartService cartService;
+
     /**
      * 显示订单list
      */
     @Override
     public WxOrderBaseRespVo getOrderList(Integer showType, WxOrderBaseParamBO baseParamBO) {
         // 获取用户信息
-/*        Subject subject = SecurityUtils.getSubject();
-        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();*/
-        Integer userId = 3;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+//        Integer userId = 3;
 
         // 分页
         PageHelper.startPage(baseParamBO.getPage(), baseParamBO.getSize());
@@ -190,8 +214,6 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     /**
      * 显示商品评论界面
-     *
-     * @return
      */
     @Override
     public WxOrderGoods goods(Integer orderId, Integer goodsId) {
@@ -224,11 +246,9 @@ public class WxOrderServiceImpl implements WxOrderService {
         comment.setDeleted(false);
 
         // 获取用户id
-        //TODO
-//        Subject subject = SecurityUtils.getSubject();
-//        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();
-//        comment.setUserId(userId);
-        comment.setUserId(3);
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipals().getPrimaryPrincipal();
+        comment.setUserId(userId);
 
         // 添加到comment表
         int i = commentMapper.insertSelective(comment);
@@ -263,6 +283,82 @@ public class WxOrderServiceImpl implements WxOrderService {
         // 更新订单
         order.setOrderStatus((short) 401);
         int i = orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 购买
+     */
+    @Override
+    public SubmitVo submit(SubmitBo submitBo) {
+        // 获得优惠钱数
+        int couponId = submitBo.getCouponId();
+
+        Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+        BigDecimal discount;
+        if (coupon == null) {
+             discount = BigDecimal.valueOf(0);
+        } else {
+             discount = coupon.getDiscount();
+        }
+
+        // 获取用户
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+        User user = userMapper.selectByPrimaryKey(userId);
+
+        // 获得地址
+        int addressId = submitBo.getAddressId();
+        Address address = addressMapper.selectByPrimaryKey(addressId);
+
+        // 获得配送费
+        SystemExample systemExample = new SystemExample();
+        SystemExample.Criteria criteria = systemExample.createCriteria();
+        criteria.andKeyNameEqualTo("cskaoyan_mall_express_freight_value");
+        List<System> systems = systemMapper.selectByExample(systemExample);
+        System system = systems.get(0);
+        String keyValue = system.getKeyValue();
+        double freight1 = Double.valueOf(keyValue);
+        BigDecimal freight = BigDecimal.valueOf(freight1);
+
+        // 获得订单总价
+        CheckoutBO checkoutBO = new CheckoutBO();
+        checkoutBO.setCartId(submitBo.getCartId());
+        checkoutBO.setCouponId(submitBo.getCouponId());
+
+        CheckoutVO checkout = cartService.checkout(checkoutBO, userId);
+        BigDecimal actualPrice = BigDecimal.valueOf(checkout.getActualPrice());
+
+
+        // cart
+        int cartId = submitBo.getCartId();
+        Cart cart = cartMapper.selectByPrimaryKey(cartId);
+
+        // 创建order对象
+        Order order = new Order();
+        order.setUserId(userId);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = simpleDateFormat.format(new Date());
+        order.setOrderSn(format);
+        order.setOrderStatus((short) 201);
+        order.setConsignee(user.getUsername());
+        order.setMobile(user.getMobile());
+        order.setAddress(address.getAddress());
+        order.setMessage(submitBo.getMessage());
+        order.setGoodsPrice(BigDecimal.valueOf(checkout.getGoodsTotalPrice()));
+        order.setFreightPrice(freight);
+        order.setCouponPrice(discount);
+        order.setOrderPrice(actualPrice);
+        order.setActualPrice(actualPrice);
+        order.setAddTime(new Date());
+        order.setUpdateTime(new Date());
+        order.setIntegralPrice(BigDecimal.valueOf(0));
+        order.setGrouponPrice(BigDecimal.valueOf(0));
+        int i = orderMapper.insertSelective(order);
+        Integer id = order.getId();
+        SubmitVo submitVo = new SubmitVo();
+        submitVo.setOrderId(id);
+
+        return submitVo;
     }
 
 

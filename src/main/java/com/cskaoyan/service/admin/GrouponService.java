@@ -10,7 +10,7 @@ import com.cskaoyan.bean.pojo.GrouponRules;
  * @date 2021/8/12 20:53
  */
 public interface GrouponService {
-    BaseRespData queryList(BaseParam baseParam);
+    BaseRespData queryList(BaseParam baseParam, Integer goodsId);
 
     GrouponRules createGroupon(GrouponRules grouponRules);
 

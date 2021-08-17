@@ -31,7 +31,6 @@ public class StorageController {
 
     /**
      * 图片上传
-     *
      * @param file 从页面获取到的文件
      * @return
      */

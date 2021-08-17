@@ -7,7 +7,8 @@ import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.cart.Index;
 import com.cskaoyan.bean.vo.cart.Order;
 import com.cskaoyan.service.wx.CartService;
-import com.cskaoyan.utils.ShiroUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,8 @@ public class CartController {
     @RequestMapping("user/index")
     public BaseRespVo userIndex(){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         Index index = cartService.userIndex(userId);
         Order order = new Order();
         order.setOrder(index);
@@ -46,7 +48,8 @@ public class CartController {
     @RequestMapping("cart/index")
     public BaseRespVo index(){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         CartIndex cartIndex = cartService.index(userId);
         return BaseRespVo.ok(cartIndex);
     }
@@ -59,7 +62,8 @@ public class CartController {
     @RequestMapping("cart/checked")
     public BaseRespVo checked(@RequestBody Checked checked){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         CartIndex cartIndex = cartService.checked(checked,userId);
         return BaseRespVo.ok(cartIndex);
     }
@@ -73,7 +77,8 @@ public class CartController {
     @RequestMapping("cart/add")
     public BaseRespVo add(@RequestBody AddBO addBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         int i = cartService.add(addBO,userId);
         return BaseRespVo.ok(i);
     }
@@ -85,9 +90,10 @@ public class CartController {
      * @return
      */
     @RequestMapping("cart/checkout")
-    public BaseRespVo checkout(@RequestBody CheckoutBO checkoutBO){
+    public BaseRespVo checkout( CheckoutBO checkoutBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         CheckoutVO checkoutVO = cartService.checkout(checkoutBO,userId);
         return BaseRespVo.ok(checkoutVO);
     }
@@ -101,7 +107,8 @@ public class CartController {
     @RequestMapping("cart/delete")
     public BaseRespVo delete(@RequestBody DeleteBo deleteBo){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         CartIndex delete = cartService.delete(deleteBo.getProductIds(), userId);
         return BaseRespVo.ok(delete);
     }
@@ -115,7 +122,8 @@ public class CartController {
     @RequestMapping("cart/update")
     public BaseRespVo update(@RequestBody UpdateBO updateBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         int update = cartService.update(updateBO);
         return BaseRespVo.ok();
     }
@@ -129,7 +137,8 @@ public class CartController {
     @RequestMapping("cart/fastadd")
     public BaseRespVo fastadd(@RequestBody AddBO addBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         int fastadd = cartService.fastadd(addBO,userId);
         return BaseRespVo.ok(305);
     }
@@ -142,11 +151,10 @@ public class CartController {
     @RequestMapping("cart/goodscount")
     public BaseRespVo goodscount(){
         // TODO: 2021/8/14  userId 暂时指定为 1
-        Integer userId = ShiroUtil.getUserId();
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = ((Integer) subject.getPrincipal());
         int goodscount = cartService.goodscount(userId);
         return BaseRespVo.ok(goodscount);
     }
-
-
 
 }

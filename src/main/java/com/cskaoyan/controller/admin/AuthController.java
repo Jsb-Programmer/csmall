@@ -1,5 +1,6 @@
 package com.cskaoyan.controller.admin;
 
+import com.cskaoyan.bean.bo.auth.ChangePwdBO;
 import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.bean.InfoData;
 import com.cskaoyan.bean.LoginUser;
@@ -9,7 +10,6 @@ import com.cskaoyan.service.admin.AuthService;
 import com.cskaoyan.service.admin.SystemService;
 import com.cskaoyan.utils.MD5Utils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,35 +56,21 @@ public class AuthController {
         try {
             subject.login(admin);
         } catch (Exception e) {
+
 //        ------------------------------------新增代码-------------------------------------------------
             i++;
             String index = String.valueOf(3 - i);
             date = systemService.notLogin(user.getUsername());
             return BaseRespVo.fail(605,"用户帐号或密码不正确,你还可以输入" + index + "次");
+
         }
+
+        //update login info for admin
+        authService.updateAdminLoginInfo(user.getUsername());
         Session session = subject.getSession();
         return BaseRespVo.ok(session.getId());
 //        ------------------------------------------------------------------------------------------
 
-    }
-
-    /**
-     *判断当前时间与给定时间差是否大于5分钟
-     * @param date
-     * @return 大于5分钟返回true
-     * @throws Exception
-     */
-    public static boolean localdateLtDate(String date) throws Exception{
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-
-        Date date1=sdf.parse(date);
-        Date now=sdf.parse(sdf.format(new Date()));
-        if(now.getTime()-date1.getTime()>5*60*1000){
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
 
@@ -110,17 +96,25 @@ public class AuthController {
         return BaseRespVo.ok();
     }
 
+    @RequestMapping("profile/password")
+    public BaseRespVo changePwd(@RequestBody ChangePwdBO changePwdBO) throws Exception {
+        if (changePwdBO.getNewPassword().equals(" ")) {
+            return BaseRespVo.fail(605, "新密码不能包含空格");
+        }
+        if (changePwdBO.getNewPassword().length() < 6) {
+            return BaseRespVo.fail(605, "新密码少于6位");
+        }
+        if (!changePwdBO.getNewPassword().equals(changePwdBO.getNewPassword2())) {
+            return BaseRespVo.fail(605, "两次新密码不同");
+        }
+        int code = authService.changeAdminPwd(changePwdBO.getOldPassword(),changePwdBO.getNewPassword());
+        if (code == 400){
+            return BaseRespVo.fail(605,"账号密码不对");
+        }
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()){
+            subject.logout();//todo fe can be better
+        }
+        return BaseRespVo.ok();
+    }
 }
-
-/*
-
-        InfoData infoData = new InfoData();
-        infoData.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        infoData.setName("admin123");
-        ArrayList<String> perms = new ArrayList<>();
-        perms.add("*");
-        infoData.setPerms(perms);
-        ArrayList<String> roles = new ArrayList<>();
-        roles.add("超级管理员");
-        infoData.setRoles(roles);
- */

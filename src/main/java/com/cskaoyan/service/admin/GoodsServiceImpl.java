@@ -9,9 +9,10 @@ import com.cskaoyan.bean.vo.goods.*;
 import com.cskaoyan.mapper.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +42,9 @@ public class GoodsServiceImpl implements GoodsService {
     CollectMapper collectMapper;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    SearchHistoryMapper searchHistoryMapper;
 
-    @Value("${img.failUrl}")
-    String failUrl;
     /**
      * 查询商品列表service层
      * @param goodsSn 商品编号
@@ -79,7 +80,6 @@ public class GoodsServiceImpl implements GoodsService {
         //插入cskaoyanmall_goods表
         Goods goods = new Goods();
         BeanUtils.copyProperties(createGoodBO.getGoods(), goods);
-        if (goods.getPicUrl() != null && failUrl.equals(goods.getPicUrl())) goods.setPicUrl(null);
         Date date = new Date(System.currentTimeMillis());
         // 将字符串类型的price装换为BigDecimal
         BigDecimal counterPrice = new BigDecimal(createGoodBO.getGoods().getCounterPrice());
@@ -231,7 +231,6 @@ public class GoodsServiceImpl implements GoodsService {
         UpdateGoodBeanBO updateGoodBeanBO = updateGoodBO.getGoods();
         Goods goods = new Goods();
         BeanUtils.copyProperties(updateGoodBeanBO, goods);
-        if (goods.getPicUrl() != null && failUrl.equals(goods.getPicUrl())) goods.setPicUrl(null);
         // 将字符串类型的price装换为BigDecimal
         BigDecimal counterPrice = new BigDecimal(updateGoodBO.getGoods().getCounterPrice());
         BigDecimal retailPrice = new BigDecimal(updateGoodBO.getGoods().getRetailPrice());
@@ -354,9 +353,24 @@ public class GoodsServiceImpl implements GoodsService {
      * @param wxListBaseParam 从前端获取的数据
      * @return 响应
      */
+    @Transactional
     @Override
     public WxGoodsListVO list(WxListBaseParam wxListBaseParam) {
         WxGoodsListVO wxGoodsListVO = new WxGoodsListVO();
+        // 若是关键字查询，则将这次查询记录加入searchHistory表中
+        if (wxListBaseParam.getKeyword() != null) {
+            Subject subject = SecurityUtils.getSubject();
+            Integer userId = (Integer) subject.getPrincipal();
+            if (userId == null) userId = 0;
+            SearchHistory searchHistory = new SearchHistory();
+            searchHistory.setUserId(userId);
+            searchHistory.setKeyword(wxListBaseParam.getKeyword());
+            searchHistory.setAddTime(new Date());
+            searchHistory.setUpdateTime(new Date());
+            searchHistoryMapper.insertSelective(searchHistory);
+        }
+
+
         // 获取goodsList
         PageHelper.startPage(wxListBaseParam.getPage(), wxListBaseParam.getSize());
 
