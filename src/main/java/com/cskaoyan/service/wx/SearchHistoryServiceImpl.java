@@ -6,9 +6,16 @@ import com.cskaoyan.bean.vo.brandcs.SearchIndexVO;
 import com.cskaoyan.mapper.KeyFestivalMapper;
 import com.cskaoyan.mapper.KeywordMapper;
 import com.cskaoyan.mapper.SearchHistoryMapper;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -31,18 +38,46 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
 
     /**
      * 搜索索引
+     * @param
      * @return
      */
     @Override
-    public SearchIndexVO searchIndex() {
+    public SearchIndexVO searchIndex(HttpServletRequest request) {
         SearchIndexVO searchIndexVO = new SearchIndexVO();
         //历史关键字列表
         //TODO
         // 需要获取 userId
-//        Subject subject = SecurityUtils.getSubject();
-//        Integer id = (Integer) subject.getPrincipal();
-        List<SearchIndexChildVO> searchIndexChild2VOList = searchHistoryMapper.selectToKeyword(1);
+        Subject subject = SecurityUtils.getSubject();
+        Integer id = null;
+        if (subject.isAuthenticated()) {
+            id = (Integer) subject.getPrincipal();
+        }
+        List<SearchIndexChildVO> searchIndexChild2VOList = searchHistoryMapper.selectToKeyword(id);
         searchIndexVO.setHistoryKeywordList(searchIndexChild2VOList);
+//        ------------------------------------------------------------
+//        if (!subject.isAuthenticated()){
+//            Cookie[] cookies = request.getCookies();
+//            List<String> list = new ArrayList<>();
+//            if (cookies != null){
+//                for (Cookie cookie : cookies) {
+//                    list.add(cookie.getValue());
+//                }
+//            }
+//            List<Keyword> keywordList = new ArrayList<>();
+//            if (list != null) {
+//                for (String s : list) {
+//                    Keyword keyword = new Keyword();
+//                    keyword.setKeyword(s);
+//                    keywordList.add(keyword);
+//                }
+//            }
+//            searchIndexVO.setHotKeywordList(keywordList);
+//        }else {
+//            Integer id = (Integer) subject.getPrincipal();
+//            List<SearchIndexChildVO> searchIndexChild2VOList = searchHistoryMapper.selectToKeyword(id);
+//            searchIndexVO.setHistoryKeywordList(searchIndexChild2VOList);
+//        }
+//        -------------------------------------------------------------------------------------------------
 
         //热门关键词列表
         //付费商家显示的内容
@@ -59,6 +94,7 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         searchIndexVO.setHotKeywordList(keywordList);
 
         //热门关键词列表第一条
+
 
         searchIndexVO.setDefaultKeyword(keywordList.get(0));
 
@@ -77,9 +113,9 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         SearchHistoryExample.Criteria criteria = example.createCriteria();
         //TODO
         // 需要获取 userId
-//        Subject subject = SecurityUtils.getSubject();
-//        Integer primaryPrincipal = (Integer) subject.getPrincipal();
-        criteria.andUserIdEqualTo(1);
+        Subject subject = SecurityUtils.getSubject();
+        Integer primaryPrincipal = (Integer) subject.getPrincipal();
+        criteria.andUserIdEqualTo(primaryPrincipal);
         searchHistoryMapper.updateByExampleSelective(searchHistory,example);
     }
 
