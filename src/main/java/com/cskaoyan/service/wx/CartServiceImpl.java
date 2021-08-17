@@ -302,8 +302,9 @@ public class CartServiceImpl implements CartService {
         //查询客户的默认收获地址
         AddressExample addressExample = new AddressExample();
         AddressExample.Criteria exampleCriteria = addressExample.createCriteria();
-        exampleCriteria.andIsDefaultEqualTo(true);
+//        exampleCriteria.andIsDefaultEqualTo(true);
         exampleCriteria.andUserIdEqualTo(userId);
+        exampleCriteria.andIdEqualTo(checkoutBO.getAddressId());
         Address address = addressMapper.selectByExample(addressExample).get(0);
         checkoutVO.setCheckedAddress(address);
         checkoutVO.setAddressId(address.getId());
@@ -330,24 +331,25 @@ public class CartServiceImpl implements CartService {
         //通过传的优惠券id判断是否有没有优惠券
         Integer couponId = checkoutBO.getCouponId();
         checkoutVO.setCouponId(couponId);
-        if (couponId ==0){
+        if (couponId ==0 || couponId == -1){
             //没有优惠券可用
             checkoutVO.setCouponPrice(0.0);
         }else {
             //查询该优惠券,并使用
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
             if (coupon == null) {
-
+                checkoutVO.setCouponPrice(0.0);
+            }else {
+                checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
+//                CouponUserExample couponUserExample = new CouponUserExample();
+//                CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
+//                couponUserExampleCriteria.andUserIdEqualTo(userId);
+//                couponUserExampleCriteria.andCouponIdEqualTo(couponId);
+//                CouponUser couponUser = new CouponUser();
+//                couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
+//                couponUser.setStatus((short) 1);
+//                int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
             }
-            checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
-            CouponUserExample couponUserExample = new CouponUserExample();
-            CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
-            couponUserExampleCriteria.andUserIdEqualTo(userId);
-            couponUserExampleCriteria.andCouponIdEqualTo(couponId);
-            CouponUser couponUser = new CouponUser();
-            couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
-            couponUser.setStatus((short) 1);
-            int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
         }
         //可用的优惠券数量
         // TODO: 2021/8/16
