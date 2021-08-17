@@ -7,6 +7,8 @@ import com.cskaoyan.bean.pojo.Coupon;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
 import com.cskaoyan.service.wx.WxCouponService;
 import lombok.Data;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +44,12 @@ public class WxCouponController {
      */
     @RequestMapping("mylist")
     public BaseRespVo myCouponList(WxOrderBaseParamBO baseParam, Short status) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         CouponBaseVo data = couponService.getMyCouponList(baseParam, status);
         return BaseRespVo.ok(data);
     }
@@ -51,6 +59,12 @@ public class WxCouponController {
      */
     @RequestMapping("selectlist")
     public BaseRespVo selectCouponList(Integer cartId, Integer grouponRulesId) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         List<Coupon> data = couponService.getSelectCouponList(cartId, grouponRulesId);
         return BaseRespVo.ok(data);
     }
@@ -60,6 +74,12 @@ public class WxCouponController {
      */
     @RequestMapping("receive")
     public BaseRespVo receiveCoupon(@RequestBody ReceiveCouponBo couponBo) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         int code = couponService.receiveCoupon(couponBo);
         if (code == 0) {
             return BaseRespVo.ok();
@@ -76,6 +96,12 @@ public class WxCouponController {
      */
     @RequestMapping("exchange")
     public BaseRespVo exchangeCoupon(@RequestBody Coupon coupon) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         int respCode = couponService.exchangeCoupon(coupon);
         if (respCode == 0) {
             return BaseRespVo.ok();

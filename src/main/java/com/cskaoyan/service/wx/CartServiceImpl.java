@@ -272,7 +272,11 @@ public class CartServiceImpl implements CartService {
         CartExample cartExample = new CartExample();
         cartExample.createCriteria().andUserIdEqualTo(userId);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
-        return carts.size();
+        int total = 0;
+        for (Cart cart : carts) {
+            total += cart.getNumber();
+        }
+        return total;
     }
 
     @Override

@@ -28,4 +28,12 @@ public interface CollectMapper {
     int updateByPrimaryKeySelective(Collect record);
 
     int updateByPrimaryKey(Collect record);
+    //新加sql wpb
+    Collect selectByValueId(Integer valueId);
+    // wpb
+    int updateStatusByValueId(Integer valueId);
+   //wpb
+    int updateStatusToZeroByValueId(Integer valueId);
+//    //wpb 插入的时候识别不同用户(userId)
+//    int   insertIntoCollectByUserId(Collect collect,Integer userId);
 }
