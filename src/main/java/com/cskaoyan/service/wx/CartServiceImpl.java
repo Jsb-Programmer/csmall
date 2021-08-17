@@ -44,29 +44,54 @@ public class CartServiceImpl implements CartService {
     public com.cskaoyan.bean.vo.cart.Index userIndex(Integer userId) {
         //接收数据的map
         List<Index> list = orderMapper.selectOrderStatus(userId);
-        //返回数据的map
         HashMap<String, Integer> mapV = new HashMap<>();
-        mapV.put("unrecv",0);       //前缀为3
-        mapV.put("uncomment",0);    //前缀为4
-        mapV.put("unpaid",0);       //前缀为1
-        mapV.put("unship",0);       //前缀为2
-        //key值转换的map
-        HashMap<Integer, String> mapTemp = new HashMap<>();
-        mapTemp.put(3,"unrecv");
-        mapTemp.put(4,"uncomment");
-        mapTemp.put(1,"unpaid");
-        mapTemp.put(2,"unship");
-        //遍历mapB
+        mapV.put("unrecv",0);
+        mapV.put("uncomment",0);
+        mapV.put("unpaid",0);
+        mapV.put("unship",0);
+        //
         for (Index index : list) {
-            //查询增加的数值
-            Integer count = index.getCount();
-            //查询对应的key
-            String key = mapTemp.get(index.getOrder_status() / 100);
-            //更新的数量
-            int update = mapV.get(key) + count;
-            mapV.put(key,update);
-
+            if (index.getOrder_status() == 101){
+                Integer unpaid = mapV.get("unpaid");
+                mapV.put("unpaid",unpaid+index.getCount());
+            }else if (index.getOrder_status() == 201){
+                Integer unship = mapV.get("unship");
+                mapV.put("unship",unship+index.getCount());
+            }else if (index.getOrder_status() == 301){
+                Integer unrecv = mapV.get("unrecv");
+                mapV.put("unrecv",unrecv+index.getCount());
+            }else if (index.getOrder_status() == 401 || index.getOrder_status() == 402){
+                Integer uncomment = mapV.get("uncomment");
+                mapV.put("uncomment",uncomment+index.getCount());
+            }
         }
+
+
+
+
+//        //
+//        //返回数据的map
+//        mapV.put("unrecv",0);       //前缀为3
+//        mapV.put("uncomment",0);    //前缀为4
+//        mapV.put("unpaid",0);       //前缀为1
+//        mapV.put("unship",0);       //前缀为2
+//        //key值转换的map
+//        HashMap<Integer, String> mapTemp = new HashMap<>();
+//        mapTemp.put(3,"unrecv");
+//        mapTemp.put(4,"uncomment");
+//        mapTemp.put(1,"unpaid");
+//        mapTemp.put(2,"unship");
+//        //遍历mapB
+//        for (Index index : list) {
+//            //查询增加的数值
+//            Integer count = index.getCount();
+//            //查询对应的key
+//            String key = mapTemp.get(index.getOrder_status() / 100);
+//            //更新的数量
+//            int update = mapV.get(key) + count;
+//            mapV.put(key,update);
+//
+//        }
         com.cskaoyan.bean.vo.cart.Index order = new com.cskaoyan.bean.vo.cart.Index();
         order.setUncomment(mapV.get("uncomment"));
         order.setUnpaid(mapV.get("unpaid"));
@@ -259,6 +284,9 @@ public class CartServiceImpl implements CartService {
     public int fastadd(AddBO addBO, Integer userId) {
         // TODO: 2021/8/15 商品添加之后的数量 
         int add = add(addBO, userId);
+
+        //更新数量
+        int i = cartMapper.updateNumber(addBO.getNumber(),userId,addBO,new Date());
         return add;
     }
 
@@ -271,7 +299,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public int goodscount(Integer userId) {
         CartExample cartExample = new CartExample();
-        cartExample.createCriteria().andUserIdEqualTo(userId);
+        CartExample.Criteria criteria = cartExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        criteria.andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
         int total = 0;
         for (Cart cart : carts) {
@@ -300,11 +330,12 @@ public class CartServiceImpl implements CartService {
         }
         checkoutVO.setCheckedGoodsList(carts);
 
-        //查询客户的默认收获地址
+        //查询客户的收获地址
         AddressExample addressExample = new AddressExample();
         AddressExample.Criteria exampleCriteria = addressExample.createCriteria();
-        exampleCriteria.andIsDefaultEqualTo(true);
+//        exampleCriteria.andIsDefaultEqualTo(true);
         exampleCriteria.andUserIdEqualTo(userId);
+        exampleCriteria.andIdEqualTo(checkoutBO.getAddressId());
         Address address = addressMapper.selectByExample(addressExample).get(0);
         checkoutVO.setCheckedAddress(address);
         checkoutVO.setAddressId(address.getId());
@@ -337,15 +368,19 @@ public class CartServiceImpl implements CartService {
         }else {
             //查询该优惠券,并使用
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-            checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
-            CouponUserExample couponUserExample = new CouponUserExample();
-            CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
-            couponUserExampleCriteria.andUserIdEqualTo(userId);
-            couponUserExampleCriteria.andCouponIdEqualTo(couponId);
-            CouponUser couponUser = new CouponUser();
-            couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
-            couponUser.setStatus((short) 1);
-            int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
+            if (coupon == null) {
+                checkoutVO.setCouponPrice(0.0);
+            }else {
+                checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
+//                CouponUserExample couponUserExample = new CouponUserExample();
+//                CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
+//                couponUserExampleCriteria.andUserIdEqualTo(userId);
+//                couponUserExampleCriteria.andCouponIdEqualTo(couponId);
+//                CouponUser couponUser = new CouponUser();
+//                couponUser.setUpdateTime(new Date(System.currentTimeMillis()));
+//                couponUser.setStatus((short) 1);
+//                int update = couponUserMapper.updateByExampleSelective(couponUser, couponUserExample);
+            }
         }
         //可用的优惠券数量
         // TODO: 2021/8/16

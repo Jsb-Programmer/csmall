@@ -358,4 +358,8 @@
   <select id="selectCartNewest" resultMap="BaseResultMap">
     select * from cskaoyanmall_cart where user_id = #{userId} order by update_time desc limit 1
   </select>
+
+  <update id="updateNumber">
+    update cskaoyanmall_cart set number = #{addBO.number} , update_time = #{date} where user_id = #{userId} and goods_id = #{addBO.goodsId} and product_id = #{addBO.productId}
+  </update>
 </mapper>

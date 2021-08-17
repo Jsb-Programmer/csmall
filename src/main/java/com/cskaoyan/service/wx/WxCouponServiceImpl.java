@@ -6,6 +6,7 @@ import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.wxCoupon.CouponBaseVo;
+import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.mapper.CartMapper;
 import com.cskaoyan.mapper.CouponMapper;
 import com.cskaoyan.mapper.CouponUserMapper;
@@ -43,6 +44,9 @@ public class WxCouponServiceImpl implements WxCouponService {
 
     @Autowired
     CartService cartService;
+
+    @Autowired
+    AddressMapper addressMapper;
 
     /**
      * 首页显示所有优惠券
@@ -121,7 +125,13 @@ public class WxCouponServiceImpl implements WxCouponService {
         CheckoutBO checkoutBO = new CheckoutBO();
         checkoutBO.setCartId(cartId);
         checkoutBO.setCouponId(0);
+        AddressExample addressExample = new AddressExample();
+        AddressExample.Criteria criteria2 = addressExample.createCriteria();
+        criteria2.andUserIdEqualTo(userId);
+        List<Address> addresses = addressMapper.selectByExample(addressExample);
+        Address address = addresses.get(0);
 
+        checkoutBO.setAddressId(address.getId());
         CheckoutVO checkout = cartService.checkout(checkoutBO, userId);
         BigDecimal actualPrice = BigDecimal.valueOf(checkout.getActualPrice());
 
