@@ -7,11 +7,21 @@ import com.cskaoyan.bean.vo.goods.WxCategoryVO;
 import com.cskaoyan.bean.vo.goods.WxDetailVO;
 import com.cskaoyan.bean.vo.goods.WxGoodsListVO;
 import com.cskaoyan.service.admin.GoodsService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +45,11 @@ public class WxGoodsController {
     }
 
     @GetMapping("list")
-    public BaseRespVo list(WxListBaseParam wxListBaseParam) {
+    public BaseRespVo list(WxListBaseParam wxListBaseParam, HttpServletResponse response) {
+//        ----------------------------------------------------------------------------
+//        Cookie cookie = new Cookie("keyword",wxListBaseParam.getKeyword());
+//        response.addCookie(cookie);
+//        ---------------------------------------------------------------------------------
         WxGoodsListVO wxGoodsListVO = goodsService.list(wxListBaseParam);
         return BaseRespVo.ok(wxGoodsListVO);
     }

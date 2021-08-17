@@ -1,14 +1,17 @@
 package com.cskaoyan.service.wx;
 
+import com.cskaoyan.bean.bo.cart.CheckoutBO;
 import com.cskaoyan.bean.bo.wxOrder.OrderCommentBo;
+import com.cskaoyan.bean.bo.wxOrder.SubmitBo;
 import com.cskaoyan.bean.bo.wxOrder.WxOrderBaseParamBO;
 import com.cskaoyan.bean.pojo.*;
+import com.cskaoyan.bean.pojo.System;
+import com.cskaoyan.bean.vo.cart.CheckoutVO;
 import com.cskaoyan.bean.vo.wxOrder.OrderDetailDataVo;
 import com.cskaoyan.bean.vo.wxOrder.OrderListDataVo;
+import com.cskaoyan.bean.vo.wxOrder.SubmitVo;
 import com.cskaoyan.bean.vo.wxOrder.WxOrderBaseRespVo;
-import com.cskaoyan.mapper.CommentMapper;
-import com.cskaoyan.mapper.OrderMapper;
-import com.cskaoyan.mapper.WxOrderGoodsMapper;
+import com.cskaoyan.mapper.*;
 import com.cskaoyan.utils.WxOrderUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -19,6 +22,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -42,6 +47,27 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     @Autowired
     CommentMapper commentMapper;
+
+    @Autowired
+    CouponMapper couponMapper;
+
+    @Autowired
+    CartMapper cartMapper;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    AddressMapper addressMapper;
+
+    @Autowired
+    SystemMapper systemMapper;
+
+    @Autowired
+    CartService cartService;
+
+    @Autowired
+    CouponUserMapper couponUserMapper;
 
     /**
      * 显示订单list
@@ -247,6 +273,7 @@ public class WxOrderServiceImpl implements WxOrderService {
             commentsNum = (short) (commentsNum - 1);
         }
         order.setComments(commentsNum);
+        order.setOrderStatus((short) 800);
         order.setUpdateTime(new Date());
         orderMapper.updateByPrimaryKey(order);
 
@@ -260,6 +287,116 @@ public class WxOrderServiceImpl implements WxOrderService {
         // 更新订单
         order.setOrderStatus((short) 401);
         int i = orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 购买
+     */
+    @Override
+    public SubmitVo submit(SubmitBo submitBo) {
+
+        // 获取用户
+        Subject subject = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject.getPrincipal();
+        User user = userMapper.selectByPrimaryKey(userId);
+
+        // 获得优惠钱数
+        int couponId = submitBo.getCouponId();
+
+        Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+        BigDecimal discount;
+        if (coupon == null) {
+            discount = BigDecimal.valueOf(0);
+        } else {
+            discount = coupon.getDiscount();
+            // 获取coupon-user
+            CouponUserExample couponUserExample = new CouponUserExample();
+            CouponUserExample.Criteria criteria = couponUserExample.createCriteria();
+            criteria.andCouponIdEqualTo(couponId);
+            criteria.andUserIdEqualTo(userId);
+            List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+            CouponUser couponUser = couponUsers.get(0);
+            couponUser.setStatus((short) 0);
+            couponUserMapper.updateByPrimaryKeySelective(couponUser);
+        }
+
+
+        // 获得地址
+        int addressId = submitBo.getAddressId();
+        Address address = addressMapper.selectByPrimaryKey(addressId);
+
+        // 获得配送费
+        SystemExample systemExample = new SystemExample();
+        SystemExample.Criteria criteria = systemExample.createCriteria();
+        criteria.andKeyNameEqualTo("cskaoyan_mall_express_freight_value");
+        List<System> systems = systemMapper.selectByExample(systemExample);
+        System system = systems.get(0);
+        String keyValue = system.getKeyValue();
+        double freight1 = Double.valueOf(keyValue);
+        BigDecimal freight = BigDecimal.valueOf(freight1);
+
+        // 获得订单总价
+        CheckoutBO checkoutBO = new CheckoutBO();
+        checkoutBO.setCartId(submitBo.getCartId());
+        checkoutBO.setCouponId(submitBo.getCouponId());
+
+        CheckoutVO checkout = cartService.checkout(checkoutBO, userId);
+        BigDecimal actualPrice = BigDecimal.valueOf(checkout.getActualPrice());
+
+
+        // cart
+        int cartId = submitBo.getCartId();
+        Cart cart = cartMapper.selectByPrimaryKey(cartId);
+
+        // 创建order对象
+        Order order = new Order();
+        order.setUserId(userId);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String format = simpleDateFormat.format(new Date());
+        order.setOrderSn(format);
+        order.setOrderStatus((short) 101);
+        order.setConsignee(user.getUsername());
+        order.setMobile(user.getMobile());
+        order.setAddress(address.getAddress());
+        order.setMessage(submitBo.getMessage());
+        order.setGoodsPrice(BigDecimal.valueOf(checkout.getGoodsTotalPrice()));
+        order.setFreightPrice(freight);
+        order.setCouponPrice(discount);
+        order.setOrderPrice(actualPrice);
+        order.setActualPrice(actualPrice);
+        order.setAddTime(new Date());
+        order.setUpdateTime(new Date());
+        order.setIntegralPrice(BigDecimal.valueOf(0));
+        order.setGrouponPrice(BigDecimal.valueOf(0));
+        int i = orderMapper.insertSelective(order);
+        Integer id = order.getId();
+        SubmitVo submitVo = new SubmitVo();
+        submitVo.setOrderId(id);
+
+        // 创建一个orderGoodsList
+
+        // 获得order-goods
+        List<Cart> checkedGoodsList = checkout.getCheckedGoodsList();
+        for (Cart cart1 : checkedGoodsList) {
+            WxOrderGoods orderGoods = new WxOrderGoods();
+            orderGoods.setOrderId(id);
+            orderGoods.setGoodsId(cart1.getGoodsId());
+            orderGoods.setGoodsName(cart1.getGoodsName());
+            orderGoods.setGoodsSn(cart1.getGoodsSn());
+            orderGoods.setProductId(cart1.getProductId());
+            orderGoods.setNumber(cart1.getNumber());
+            orderGoods.setPrice(cart1.getPrice());
+            orderGoods.setSpecifications(cart1.getSpecifications());
+            orderGoods.setPicUrl(cart1.getPicUrl());
+            orderGoods.setComment(0);
+            orderGoods.setAddTime(new Date());
+            orderGoods.setUpdateTime(new Date());
+            orderGoods.setDeleted(false);
+            orderGoodsMapper.insertSelective(orderGoods);
+        }
+
+
+        return submitVo;
     }
 
 

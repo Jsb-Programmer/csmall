@@ -1,0 +1,6 @@
+aliyun:
+  accessKeyId: LTAI5t8gpxPTCR6W58RnZq4u
+  accessKeySecret: mVPbpbxia0JQotb7HyJAREV8QUuq8h
+  sms:
+    signName: stone4j
+    templateCode: SMS_173765187

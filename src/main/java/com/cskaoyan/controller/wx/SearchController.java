@@ -5,11 +5,16 @@ import com.cskaoyan.bean.pojo.SearchHistory;
 import com.cskaoyan.bean.vo.brandcs.SearchIndexVO;
 import com.cskaoyan.service.wx.SearchHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @ClassName SearchController
@@ -25,8 +30,8 @@ public class SearchController {
     SearchHistoryService searchHistoryService;
 
     @RequestMapping("index")
-    public BaseRespVo searchIndex(){
-        SearchIndexVO searchIndexVO = searchHistoryService.searchIndex();
+    public BaseRespVo searchIndex(HttpServletRequest request){
+        SearchIndexVO searchIndexVO = searchHistoryService.searchIndex(request);
         return BaseRespVo.ok(searchIndexVO);
     }
 

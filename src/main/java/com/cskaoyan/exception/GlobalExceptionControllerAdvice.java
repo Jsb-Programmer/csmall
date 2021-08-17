@@ -4,6 +4,7 @@ import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.vo.storage.ImgUploadVO;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,11 +20,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionControllerAdvice {
     @Value("${img.failUrl}")
-    String url;
+    private String failUrl;
+
     @ExceptionHandler(FileSizeLimitExceededException.class)
-    public BaseRespVo fileUploadExceptionHandler() {
+    public BaseRespVo fileSizeLimitExceededException() {
         ImgUploadVO imgUploadVO = new ImgUploadVO();
-        imgUploadVO.setUrl(url);
+        imgUploadVO.setUrl(failUrl);
         return BaseRespVo.ok(imgUploadVO);
     }
 

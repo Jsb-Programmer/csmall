@@ -11,6 +11,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,9 +44,12 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public BaseRespVo insertInto(Issue issue) {
-        issueMapper.insertSelective(issue);
-        return BaseRespVo.ok();
+    public Issue insertInto(Issue issue) {
+        int i = issueMapper.insertSelective(issue);
+        issue.setId(i);
+        issue.setAddTime(new Date());
+        issue.setUpdateTime(new Date());
+        return issue;
     }
 
     @Override

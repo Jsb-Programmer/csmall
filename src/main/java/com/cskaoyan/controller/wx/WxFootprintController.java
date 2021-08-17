@@ -5,6 +5,7 @@ import com.cskaoyan.bean.vo.market.BaseRespVo;
 import com.cskaoyan.service.wx.WxFeedbackService;
 import com.cskaoyan.service.wx.WxFootprintService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +31,7 @@ public class WxFootprintController {
     }
 
     @RequestMapping("delete")
-    public BaseRespVo footprintDelete(Map<String,Integer> map){
+    public BaseRespVo footprintDelete(@RequestBody Map<String,Integer> map){
         wxFootprintService.deleteFootprintById(map.get("id"));
         return BaseRespVo.ok();
     }

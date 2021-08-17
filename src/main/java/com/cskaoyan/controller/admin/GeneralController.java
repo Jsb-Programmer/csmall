@@ -28,7 +28,7 @@ public BaseRespVo list(BaseParam param,String question){
 }
 @RequestMapping("create")
     public BaseRespVo create(@RequestBody Issue issue){
-    BaseRespVo data = issueService.insertInto(issue);
+    Issue data = issueService.insertInto(issue);
     return BaseRespVo.ok(data);
 }
 @RequestMapping("update")

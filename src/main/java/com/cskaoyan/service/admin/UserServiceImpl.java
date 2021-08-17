@@ -3,6 +3,8 @@ package com.cskaoyan.service.admin;
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
 
+import com.cskaoyan.bean.bo.auth.RegisterUserBO;
+import com.cskaoyan.bean.bo.auth.ResetBO;
 import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
 import com.cskaoyan.bean.bo.user.WxUserLoginBO;
 import com.cskaoyan.bean.pojo.*;
@@ -17,6 +19,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +58,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RegionMapper regionMapper;
+
+    @Value("${img.avatorImg}")
+    String imgUrl;
 
     /**
      * Todo   criteria.andDeletedEqualTo(false);
@@ -227,7 +233,6 @@ public class UserServiceImpl implements UserService {
         long total = new PageInfo<>(feedbacks).getTotal();
 
 
-
         return new BaseRespData<>(feedbacks, total);
     }
 
@@ -244,23 +249,23 @@ public class UserServiceImpl implements UserService {
         AddressExample addressExample = new AddressExample();
         addressExample.setOrderByClause(baseParam.getSort() + " " + baseParam.getOrder());
         AddressExample.Criteria criteria = addressExample.createCriteria();
-        if (name!=null&&!"".equals(name.trim())){
+        if (name != null && !"".equals(name.trim())) {
             criteria.andNameEqualTo(name);
         }
         int userid;
         try {
-            if (userId!=null&&!"".equals(userId.trim())){
+            if (userId != null && !"".equals(userId.trim())) {
                 userid = Integer.parseInt(userId);
                 criteria.andUserIdEqualTo(userid);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
         List<ReceivedAddressBO> receivedAddressBOS = new ArrayList<>();
         List<Address> addresses = addressMapper.selectByExample(addressExample);
         for (Address address : addresses) {
             ReceivedAddressBO receivedAddressBO = new ReceivedAddressBO();
-            BeanUtils.copyProperties(address,receivedAddressBO);
+            BeanUtils.copyProperties(address, receivedAddressBO);
             Region area = regionMapper.selectByPrimaryKey(address.getAreaId());
             Region city = regionMapper.selectByPrimaryKey(address.getCityId());
             Region province = regionMapper.selectByPrimaryKey(address.getProvinceId());
@@ -271,11 +276,12 @@ public class UserServiceImpl implements UserService {
         }
         long total = new PageInfo<>(addresses).getTotal();
 
-        return new BaseRespData<>(receivedAddressBOS,total);
+        return new BaseRespData<>(receivedAddressBOS, total);
     }
 
     /**
      * for wechat login
+     *
      * @param username
      * @param password
      * @return
@@ -304,6 +310,52 @@ public class UserServiceImpl implements UserService {
         user.setLastLoginIp(subject.getSession().getHost());
         userMapper.updateByPrimaryKeySelective(user);
         return wxUserLoginBO;
+    }
+
+    /**
+     * 添加 user
+     *
+     * @param registerUserBO
+     */
+    @Override
+    public int addUser(RegisterUserBO registerUserBO) throws Exception {
+        User temp = userMapper.selectByName(registerUserBO.getUsername());
+        if (temp != null) {
+            return 400;
+        }
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andMobileEqualTo(registerUserBO.getMobile());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() > 0 && users != null) {
+            return 401;
+        }
+        User user = new User();
+        user.setAddTime(new Date());
+        user.setUsername(registerUserBO.getUsername());
+        user.setMobile(registerUserBO.getMobile());
+        user.setPassword(MD5Utils.encrypt(registerUserBO.getPassword()));
+        user.setWeixinOpenid(registerUserBO.getWxCode());
+        user.setNickname(registerUserBO.getUsername());
+        user.setAvatar(imgUrl);
+
+        userMapper.insertSelective(user);
+        return 200;
+    }
+
+    @Override
+    public int resetPsw(ResetBO registerUserBO) throws Exception {
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andMobileEqualTo(registerUserBO.getMobile());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users == null || users.size() == 0) {
+            return 400;
+        }
+        User user = users.get(0);
+        user.setPassword(MD5Utils.encrypt(registerUserBO.getPassword()));
+        userMapper.updateByPrimaryKeySelective(user);
+        return 200;
     }
 
 }

@@ -10,7 +10,7 @@ import javax.xml.ws.Service;
 public interface IssueService {
     BaseRespData querry(BaseParam param, String question);
 
-    BaseRespVo insertInto(Issue issue);
+    Issue insertInto(Issue issue);
 
     BaseRespVo updateQuestion(Issue issue);
 
