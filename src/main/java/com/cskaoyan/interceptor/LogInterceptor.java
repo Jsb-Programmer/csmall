@@ -92,7 +92,7 @@ public class LogInterceptor implements HandlerInterceptor {
             Subject subject = SecurityUtils.getSubject();
             String username = (String) subject.getPrincipal();
             log.setAdmin(username);
-            // TODO: 2021/8/17  
+            // TODO: 2021/8/17
             log.setResult("操作成功");
         }
         log.setAction(label);

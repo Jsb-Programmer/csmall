@@ -193,6 +193,7 @@ public class CartController {
         if (authenticated ==false) {
             return BaseRespVo.fail("请登录", 501);
         }
+
         Integer userId = ((Integer) subject.getPrincipal());
         int goodscount = cartService.goodscount(userId);
         return BaseRespVo.ok(goodscount);

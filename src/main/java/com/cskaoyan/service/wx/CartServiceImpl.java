@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.System;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -331,7 +332,7 @@ public class CartServiceImpl implements CartService {
         //通过传的优惠券id判断是否有没有优惠券
         Integer couponId = checkoutBO.getCouponId();
         checkoutVO.setCouponId(couponId);
-        if (couponId ==0 || couponId == -1){
+        if (couponId ==0){
             //没有优惠券可用
             checkoutVO.setCouponPrice(0.0);
         }else {
