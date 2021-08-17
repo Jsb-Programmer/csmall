@@ -1,9 +1,6 @@
 package com.cskaoyan.service.wx;
 
-import com.cskaoyan.bean.pojo.Address;
-import com.cskaoyan.bean.pojo.Region;
-import com.cskaoyan.bean.pojo.RegionExample;
-import com.cskaoyan.bean.pojo.User;
+import com.cskaoyan.bean.pojo.*;
 import com.cskaoyan.bean.vo.wxAddressVo.WxAddressDetailVo;
 import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.mapper.RegionMapper;
@@ -48,11 +45,30 @@ public class WxAddressServiceImpl implements WxAddressService{
     }
     @Override
     public void save(Address address) {
+        Subject subject1 = SecurityUtils.getSubject();
+        Integer userId = (Integer) subject1.getPrincipal();
+        // 判断是否设置了默认地址
+        if (address.getIsDefault() == true) {
+            // 获取该用户的所有address
+
+            AddressExample addressExample = new AddressExample();
+            AddressExample.Criteria criteria = addressExample.createCriteria();
+            criteria.andUserIdEqualTo(userId);
+            List<Address> addresses = addressMapper.selectByExample(addressExample);
+            // 遍历所有的地址，查看是否有默认地址
+            for (Address address1 : addresses) {
+                if (address1.getIsDefault() == true) {
+                    // 更新这个address为非默认
+                    address1.setIsDefault(false);
+                    addressMapper.updateByPrimaryKeySelective(address1);
+                }
+            }
+        }
         //修改adderess表信息 sql by wpb
-        if (address.getId() != null) {
+
+
+        if (address.getId() == null) {
             // 获得userId
-            Subject subject = SecurityUtils.getSubject();
-            Integer userId = (Integer) subject.getPrincipal();
             address.setUserId(userId);
             address.setAddTime(new Date());
             address.setUpdateTime(new Date());

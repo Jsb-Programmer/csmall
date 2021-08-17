@@ -376,12 +376,16 @@ public class GoodsServiceImpl implements GoodsService {
             searchHistory.setAddTime(new Date());
             searchHistory.setUpdateTime(new Date());
             searchHistoryMapper.insertSelective(searchHistory);
+
+            if ("国庆小长假，居家旅行必备清单".equals(wxListBaseParam.getKeyword()))
+                wxListBaseParam.setKeyword("国庆");
+            if ("中元节，放花灯".equals(wxListBaseParam.getKeyword()))
+                wxListBaseParam.setKeyword("花灯");
         }
 
 
         // 获取goodsList
         PageHelper.startPage(wxListBaseParam.getPage(), wxListBaseParam.getSize());
-
         GoodsExample goodsExample = new GoodsExample();
         GoodsExample.Criteria criteria = goodsExample.createCriteria();
         criteria.andDeletedEqualTo(false);
@@ -389,6 +393,10 @@ public class GoodsServiceImpl implements GoodsService {
             criteria.andCategoryIdEqualTo(wxListBaseParam.getCategoryId());
         if (wxListBaseParam.getKeyword() != null && wxListBaseParam.getKeyword().length() != 0)
             criteria.andNameLike("%" + wxListBaseParam.getKeyword() + "%");
+        if (wxListBaseParam.getIsHot() != null && wxListBaseParam.getIsHot())
+            criteria.andIsHotEqualTo(true);
+        if (wxListBaseParam.getIsNew() != null && wxListBaseParam.getIsNew())
+            criteria.andIsNewEqualTo(true);
         if (wxListBaseParam.getOrder() != null && wxListBaseParam.getOrder().length() != 0
             && wxListBaseParam.getSort() != null && wxListBaseParam.getSort().length() != 0)
             goodsExample.setOrderByClause(wxListBaseParam.getSort() + " " + wxListBaseParam.getOrder());
@@ -399,12 +407,28 @@ public class GoodsServiceImpl implements GoodsService {
         long count = pageInfo.getTotal();
         wxGoodsListVO.setCount(count);
         // 获取filterCategoryList;
+
+        GoodsExample example = new GoodsExample();
+        GoodsExample.Criteria exampleCriteria = example.createCriteria();
+        exampleCriteria.andDeletedEqualTo(false);
+        if (wxListBaseParam.getKeyword() != null && wxListBaseParam.getKeyword().length() != 0)
+            exampleCriteria.andNameLike("%" + wxListBaseParam.getKeyword() + "%");
+        if (wxListBaseParam.getIsHot() != null && wxListBaseParam.getIsHot())
+            exampleCriteria.andIsHotEqualTo(true);
+        if (wxListBaseParam.getIsNew() != null && wxListBaseParam.getIsNew())
+            exampleCriteria.andIsNewEqualTo(true);
+        if (wxListBaseParam.getOrder() != null && wxListBaseParam.getOrder().length() != 0
+                && wxListBaseParam.getSort() != null && wxListBaseParam.getSort().length() != 0)
+            example.setOrderByClause(wxListBaseParam.getSort() + " " + wxListBaseParam.getOrder());
+        List<Goods> goodsList1 = goodsMapper.selectByExample(example);
         List<Category> filterCategoryList = new ArrayList<>();
-        for (Goods goods : goodsList) {
+        Set<String> categoryNames = new HashSet<>();
+        for (Goods goods : goodsList1) {
             CategoryExample categoryExample = new CategoryExample();
             categoryExample.createCriteria().andDeletedEqualTo(false);
             Category category = categoryMapper.selectByPrimaryKey(goods.getCategoryId());
-            filterCategoryList.add(category);
+            if (categoryNames.add(category.getName()))
+                 filterCategoryList.add(category);
         }
         wxGoodsListVO.setFilterCategoryList(filterCategoryList);
         return wxGoodsListVO;

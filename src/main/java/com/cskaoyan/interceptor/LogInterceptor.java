@@ -92,7 +92,26 @@ public class LogInterceptor implements HandlerInterceptor {
             Subject subject = SecurityUtils.getSubject();
             String username = (String) subject.getPrincipal();
             log.setAdmin(username);
-            // TODO: 2021/8/17  
+            // TODO: 2021/8/17
+            // TODO: 2021/8/17
+            log.setResult("操作成功");
+        }
+        if ("/admin/auth/info".equals(requestURI)){
+            label = "登录";
+            permission = "admin:auth:info";
+            log.setAdmin("匿名用户");
+            log.setResult("");
+            log.setStatus(false);
+
+        }else {
+            label = permissionMaps.get(0).getLabel();
+            permission = permissionMaps.get(0).getPermission();
+
+            Subject subject = SecurityUtils.getSubject();
+            String username = (String) subject.getPrincipal();
+            log.setAdmin(username);
+            // TODO: 2021/8/17
+            // TODO: 2021/8/17
             log.setResult("操作成功");
         }
         log.setAction(label);
