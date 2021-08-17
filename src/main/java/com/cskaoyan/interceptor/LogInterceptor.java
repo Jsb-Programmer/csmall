@@ -63,6 +63,9 @@ public class LogInterceptor implements HandlerInterceptor {
 
             String remoteHost = request.getRemoteHost();
             log.setIp(remoteHost);
+            if ("0:0:0:0:0:0:0:1".equals(remoteHost)){
+                log.setIp("localhost");
+            }
             int status = response.getStatus();
             log.setType(1);
             log.setStatus(false);
@@ -83,30 +86,18 @@ public class LogInterceptor implements HandlerInterceptor {
             }
             String label = null;
             String permission = null;
+
             if ("/admin/auth/login".equals(requestURI)){
                 label = "登录";
                 permission = "admin:auth:login";
                 log.setAdmin("匿名用户");
                 log.setResult("账号或密码不正确");
                 log.setStatus(false);
-
-            }else {
-                label = permissionMaps.get(0).getLabel();
-                permission = permissionMaps.get(0).getPermission();
-
-                Subject subject = SecurityUtils.getSubject();
-                String username = (String) subject.getPrincipal();
-                log.setAdmin(username);
-                // TODO: 2021/8/17
-                log.setResult("操作成功");
-            }
-
-            if ("/admin/auth/info".equals(requestURI)){
+            }else if ("/admin/auth/info".equals(requestURI)){
                 label = "登录";
                 permission = "admin:auth:info";
                 log.setAdmin("匿名用户");
                 log.setStatus(false);
-
             }else {
                 label = permissionMaps.get(0).getLabel();
                 permission = permissionMaps.get(0).getPermission();
@@ -117,6 +108,42 @@ public class LogInterceptor implements HandlerInterceptor {
                 // TODO: 2021/8/17
                 log.setResult("操作成功");
             }
+
+//            if ("/admin/auth/login".equals(requestURI)){
+//                label = "登录";
+//                permission = "admin:auth:login";
+//                log.setAdmin("匿名用户");
+//                log.setResult("账号或密码不正确");
+//                log.setStatus(false);
+//
+//            }else {
+//                label = permissionMaps.get(0).getLabel();
+//                permission = permissionMaps.get(0).getPermission();
+//
+//                Subject subject = SecurityUtils.getSubject();
+//                String username = (String) subject.getPrincipal();
+//                log.setAdmin(username);
+//                // TODO: 2021/8/17
+//                log.setResult("操作成功");
+//
+//            }
+//
+//            if ("/admin/auth/info".equals(requestURI)){
+//                label = "登录";
+//                permission = "admin:auth:info";
+//                log.setAdmin("匿名用户");
+//                log.setStatus(false);
+//
+//            }else {
+//                label = permissionMaps.get(0).getLabel();
+//                permission = permissionMaps.get(0).getPermission();
+//
+//                Subject subject = SecurityUtils.getSubject();
+//                String username = (String) subject.getPrincipal();
+//                log.setAdmin(username);
+//                // TODO: 2021/8/17
+//                log.setResult("操作成功");
+//            }
             log.setAction(label);
             log.setComment(permission);
             log.setAddTime(new Date());
