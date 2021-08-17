@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @program: mall
@@ -184,7 +188,7 @@ public class WxOrderController {
      * 付款
      */
     @RequestMapping("prepay")
-    public BaseRespVo prepay(Integer orderId) {
+    public BaseRespVo prepay(Integer orderId, HttpServletResponse response) throws IOException {
         // 判断登录
         Subject subject = SecurityUtils.getSubject();
         boolean authenticated = subject.isAuthenticated();
@@ -192,7 +196,9 @@ public class WxOrderController {
             return BaseRespVo.fail("请登录", 501);
         }
 //        wxOrderService.submit(submitBo);
-        return BaseRespVo.ok();
+        //todo:重定向地址
+//        response.sendRedirect("f:/王道/7. spring/project2/cskaoyan-wx/config/api");
+        return BaseRespVo.fail("付款失败", 724);
     }
 
 
