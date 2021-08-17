@@ -64,4 +64,11 @@ public class OrderHandlerOptionVo {
         return new OrderHandlerOptionVo(false, true, false,
                 true, false, true, false);
     }
+
+
+    // 已评价
+    public OrderHandlerOptionVo hadComment() {
+        return new OrderHandlerOptionVo(false, false, false,
+                true, false, true, false);
+    }
 }
