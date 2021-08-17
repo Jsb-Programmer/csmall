@@ -2,6 +2,8 @@ package com.cskaoyan.service.admin;
 
 import com.cskaoyan.bean.BaseParam;
 import com.cskaoyan.bean.BaseRespData;
+import com.cskaoyan.bean.bo.auth.RegisterUserBO;
+import com.cskaoyan.bean.bo.auth.ResetBO;
 import com.cskaoyan.bean.bo.user.ReceivedAddressBO;
 import com.cskaoyan.bean.bo.user.WxUserLoginBO;
 import com.cskaoyan.bean.pojo.*;
@@ -20,4 +22,8 @@ public interface UserService {
     BaseRespData<ReceivedAddressBO> queryAddress(String name, String userId, BaseParam baseParam);
 
     WxUserLoginBO userLoginInfo(String username, String password) throws Exception;
+
+    int addUser(RegisterUserBO registerUserBO) throws Exception;
+
+    int resetPsw(ResetBO registerUserBO) throws Exception;
 }

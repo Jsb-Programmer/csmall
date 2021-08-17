@@ -84,6 +84,7 @@ public class WxCouponServiceImpl implements WxCouponService {
         CouponUserExample couponUserExample = new CouponUserExample();
         CouponUserExample.Criteria criteria1 = couponUserExample.createCriteria();
         criteria1.andUserIdEqualTo(userId);
+        criteria1.andStatusEqualTo(status);
         List<CouponUser> couponUserList = couponUserMapper.selectByExample(couponUserExample);
 
 
