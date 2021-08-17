@@ -2,9 +2,7 @@ package com.cskaoyan.config;
 
 import com.cskaoyan.interceptor.LogInterceptor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -23,7 +21,7 @@ public class IntercepterConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //HandlerInterceptor是谁、作用范围、顺序
-        InterceptorRegistration registration = registry.addInterceptor(logInterceptor()).addPathPatterns("/admin/**");
+        InterceptorRegistration registration = registry.addInterceptor(logInterceptor()).addPathPatterns("/**");
 
     }
 

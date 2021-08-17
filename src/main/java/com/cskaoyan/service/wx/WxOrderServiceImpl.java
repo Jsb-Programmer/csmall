@@ -69,6 +69,8 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Autowired
     CouponUserMapper couponUserMapper;
 
+
+
     /**
      * 显示订单list
      */
@@ -339,6 +341,13 @@ public class WxOrderServiceImpl implements WxOrderService {
         CheckoutBO checkoutBO = new CheckoutBO();
         checkoutBO.setCartId(submitBo.getCartId());
         checkoutBO.setCouponId(submitBo.getCouponId());
+        AddressExample addressExample = new AddressExample();
+        AddressExample.Criteria criteria2 = addressExample.createCriteria();
+        criteria2.andUserIdEqualTo(userId);
+        List<Address> addresses = addressMapper.selectByExample(addressExample);
+        Address address1 = addresses.get(0);
+
+        checkoutBO.setAddressId(address1.getId());
 
         CheckoutVO checkout = cartService.checkout(checkoutBO, userId);
         BigDecimal actualPrice = BigDecimal.valueOf(checkout.getActualPrice());
