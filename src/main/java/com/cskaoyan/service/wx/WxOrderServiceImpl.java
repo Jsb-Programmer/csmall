@@ -358,21 +358,28 @@ public class WxOrderServiceImpl implements WxOrderService {
         SubmitVo submitVo = new SubmitVo();
         submitVo.setOrderId(id);
 
-        // 创建一个orderGoods
-/*        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setOrderId(id);
-        orderGoods.setGoodsId(cart.getGoodsId());
-        orderGoods.setGoodsName(cart.getGoodsName());
-        orderGoods.setGoodsSn(cart.getGoodsSn());
-        orderGoods.setProductId(cart.getProductId());
-        orderGoods.setNumber(cart.getNumber());
-        orderGoods.setPrice(cart.getPrice());
-        orderGoods.setSpecifications(cart.getSpecifications());
-        orderGoods.setPicUrl(cart.getPicUrl());
-        orderGoods.setComment(0);
-        orderGoods.setAddTime(new Date());
-        orderGoods.setUpdateTime(new Date());
-        orderGoods.setDeleted(false);*/
+        // 创建一个orderGoodsList
+
+        // 获得order-goods
+        List<Cart> checkedGoodsList = checkout.getCheckedGoodsList();
+        for (Cart cart1 : checkedGoodsList) {
+            WxOrderGoods orderGoods = new WxOrderGoods();
+            orderGoods.setOrderId(id);
+            orderGoods.setGoodsId(cart1.getGoodsId());
+            orderGoods.setGoodsName(cart1.getGoodsName());
+            orderGoods.setGoodsSn(cart1.getGoodsSn());
+            orderGoods.setProductId(cart1.getProductId());
+            orderGoods.setNumber(cart1.getNumber());
+            orderGoods.setPrice(cart1.getPrice());
+            orderGoods.setSpecifications(cart1.getSpecifications());
+            orderGoods.setPicUrl(cart1.getPicUrl());
+            orderGoods.setComment(0);
+            orderGoods.setAddTime(new Date());
+            orderGoods.setUpdateTime(new Date());
+            orderGoods.setDeleted(false);
+            orderGoodsMapper.insertSelective(orderGoods);
+        }
+
 
         return submitVo;
     }
