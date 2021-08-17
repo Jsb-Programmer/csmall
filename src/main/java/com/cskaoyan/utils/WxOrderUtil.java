@@ -39,6 +39,8 @@ public class WxOrderUtil {
             return "用户收货";
         }else if(before == 402){
             return "系统收货";
+        }else if(before == 800){
+            return "已评价";
         }else{
             return null;
         }
@@ -62,6 +64,8 @@ public class WxOrderUtil {
             return orderHandlerOptionVo.hadSend();
         } else if (status == 401 || status == 402) {
             return orderHandlerOptionVo.hadReceive();
+        } else if (status == 800) {
+            return orderHandlerOptionVo.hadComment();
         } else {
             return null;
         }

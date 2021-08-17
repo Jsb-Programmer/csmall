@@ -270,6 +270,7 @@ public class WxOrderServiceImpl implements WxOrderService {
             commentsNum = (short) (commentsNum - 1);
         }
         order.setComments(commentsNum);
+        order.setOrderStatus((short) 800);
         order.setUpdateTime(new Date());
         orderMapper.updateByPrimaryKey(order);
 
