@@ -9,9 +9,11 @@ import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.mapper.RegionMapper;
 import com.cskaoyan.mapper.UserMapper;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +49,16 @@ public class WxAddressServiceImpl implements WxAddressService{
     @Override
     public void save(Address address) {
         //修改adderess表信息 sql by wpb
+        if (address.getId() != null) {
+            // 获得userId
+            Subject subject = SecurityUtils.getSubject();
+            Integer userId = (Integer) subject.getPrincipal();
+            address.setUserId(userId);
+            address.setAddTime(new Date());
+            address.setUpdateTime(new Date());
+
+            addressMapper.insertSelective(address);
+        }
         addressMapper.updateByPrimaryKeySelective(address);
     }
 
