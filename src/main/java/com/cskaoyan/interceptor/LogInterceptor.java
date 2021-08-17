@@ -73,12 +73,14 @@ public class LogInterceptor implements HandlerInterceptor {
             permissionMaps = permissionMapMapper.selectByExample(permissionMapExample1);
         }
         String label = null;
+        String permission = null;
         if ("/admin/auth/login".equals(requestURI)){
             label = "登录";
+            permission = "admin:auth:login";
         }else {
             label = permissionMaps.get(0).getLabel();
+            permission = permissionMaps.get(0).getPermission();
         }
-        String permission = permissionMaps.get(0).getPermission();
         log.setAction(label);
         log.setComment(permission);
         log.setAddTime(new Date());
