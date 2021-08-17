@@ -44,29 +44,54 @@ public class CartServiceImpl implements CartService {
     public com.cskaoyan.bean.vo.cart.Index userIndex(Integer userId) {
         //接收数据的map
         List<Index> list = orderMapper.selectOrderStatus(userId);
-        //返回数据的map
         HashMap<String, Integer> mapV = new HashMap<>();
-        mapV.put("unrecv",0);       //前缀为3
-        mapV.put("uncomment",0);    //前缀为4
-        mapV.put("unpaid",0);       //前缀为1
-        mapV.put("unship",0);       //前缀为2
-        //key值转换的map
-        HashMap<Integer, String> mapTemp = new HashMap<>();
-        mapTemp.put(3,"unrecv");
-        mapTemp.put(4,"uncomment");
-        mapTemp.put(1,"unpaid");
-        mapTemp.put(2,"unship");
-        //遍历mapB
+        mapV.put("unrecv",0);
+        mapV.put("uncomment",0);
+        mapV.put("unpaid",0);
+        mapV.put("unship",0);
+        //
         for (Index index : list) {
-            //查询增加的数值
-            Integer count = index.getCount();
-            //查询对应的key
-            String key = mapTemp.get(index.getOrder_status() / 100);
-            //更新的数量
-            int update = mapV.get(key) + count;
-            mapV.put(key,update);
-
+            if (index.getOrder_status() == 101){
+                Integer unpaid = mapV.get("unpaid");
+                mapV.put("unpaid",unpaid+index.getCount());
+            }else if (index.getOrder_status() == 201){
+                Integer unship = mapV.get("unship");
+                mapV.put("unship",unship+index.getCount());
+            }else if (index.getOrder_status() == 301){
+                Integer unrecv = mapV.get("unrecv");
+                mapV.put("unrecv",unrecv+index.getCount());
+            }else if (index.getOrder_status() == 401 || index.getOrder_status() == 402){
+                Integer uncomment = mapV.get("uncomment");
+                mapV.put("uncomment",uncomment+index.getCount());
+            }
         }
+
+
+
+
+//        //
+//        //返回数据的map
+//        mapV.put("unrecv",0);       //前缀为3
+//        mapV.put("uncomment",0);    //前缀为4
+//        mapV.put("unpaid",0);       //前缀为1
+//        mapV.put("unship",0);       //前缀为2
+//        //key值转换的map
+//        HashMap<Integer, String> mapTemp = new HashMap<>();
+//        mapTemp.put(3,"unrecv");
+//        mapTemp.put(4,"uncomment");
+//        mapTemp.put(1,"unpaid");
+//        mapTemp.put(2,"unship");
+//        //遍历mapB
+//        for (Index index : list) {
+//            //查询增加的数值
+//            Integer count = index.getCount();
+//            //查询对应的key
+//            String key = mapTemp.get(index.getOrder_status() / 100);
+//            //更新的数量
+//            int update = mapV.get(key) + count;
+//            mapV.put(key,update);
+//
+//        }
         com.cskaoyan.bean.vo.cart.Index order = new com.cskaoyan.bean.vo.cart.Index();
         order.setUncomment(mapV.get("uncomment"));
         order.setUnpaid(mapV.get("unpaid"));

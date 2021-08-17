@@ -653,6 +653,6 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectOrderStatus" resultType="com.cskaoyan.bean.bo.cart.Index">
-    select order_status, COUNT(1) as `count` FROM cskaoyanmall_order WHERE user_id = #{userId} GROUP BY order_status
+    select order_status, COUNT(1) as `count` FROM cskaoyanmall_order WHERE user_id = #{userId} and order_status != 800 GROUP BY order_status
   </select>
 </mapper>
