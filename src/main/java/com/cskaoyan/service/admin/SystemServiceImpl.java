@@ -406,4 +406,14 @@ public class SystemServiceImpl implements SystemService{
             int i = permissionMapper.updateByExampleSelective(permission, permissionExample);
         }
     }
+
+    @Override
+    public Date notLogin(String username) {
+        LogExample example = new LogExample();
+        example.setOrderByClause("id desc limit 1");
+//        LogExample.Criteria criteria = example.createCriteria();
+//        criteria.andAdminEqualTo("username");
+        List<Log> logs = logMapper.selectByExample(example);
+        return logs.get(0).getAddTime();
+    }
 }

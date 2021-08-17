@@ -32,8 +32,14 @@ public class CartController {
      */
     @RequestMapping("user/index")
     public BaseRespVo userIndex(){
+
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         Index index = cartService.userIndex(userId);
         Order order = new Order();
@@ -49,6 +55,11 @@ public class CartController {
     public BaseRespVo index(){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         CartIndex cartIndex = cartService.index(userId);
         return BaseRespVo.ok(cartIndex);
@@ -78,6 +89,11 @@ public class CartController {
     public BaseRespVo add(@RequestBody AddBO addBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         int i = cartService.add(addBO,userId);
         return BaseRespVo.ok(i);
@@ -93,6 +109,11 @@ public class CartController {
     public BaseRespVo checkout( CheckoutBO checkoutBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         CheckoutVO checkoutVO = cartService.checkout(checkoutBO,userId);
         return BaseRespVo.ok(checkoutVO);
@@ -108,6 +129,11 @@ public class CartController {
     public BaseRespVo delete(@RequestBody DeleteBo deleteBo){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         CartIndex delete = cartService.delete(deleteBo.getProductIds(), userId);
         return BaseRespVo.ok(delete);
@@ -123,6 +149,11 @@ public class CartController {
     public BaseRespVo update(@RequestBody UpdateBO updateBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         int update = cartService.update(updateBO);
         return BaseRespVo.ok();
@@ -138,6 +169,11 @@ public class CartController {
     public BaseRespVo fastadd(@RequestBody AddBO addBO){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         int fastadd = cartService.fastadd(addBO,userId);
         return BaseRespVo.ok(305);
@@ -152,6 +188,11 @@ public class CartController {
     public BaseRespVo goodscount(){
         // TODO: 2021/8/14  userId 暂时指定为 1
         Subject subject = SecurityUtils.getSubject();
+        // 判断登录
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         Integer userId = ((Integer) subject.getPrincipal());
         int goodscount = cartService.goodscount(userId);
         return BaseRespVo.ok(goodscount);

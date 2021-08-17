@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -91,6 +92,8 @@ public class WxCouponServiceImpl implements WxCouponService {
         for (CouponUser couponUser : couponUserList) {
             Integer couponId = couponUser.getCouponId();
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+            coupon.setStartTime(couponUser.getStartTime());
+            coupon.setEndTime(couponUser.getEndTime());
             couponList.add(coupon);
         }
 
@@ -141,6 +144,8 @@ public class WxCouponServiceImpl implements WxCouponService {
 
             List<Coupon> coupons = couponMapper.selectByExample(couponExample);
             for (Coupon coupon : coupons) {
+                coupon.setStartTime(couponUser.getStartTime());
+                coupon.setEndTime(couponUser.getEndTime());
                 couponList.add(coupon);
             }
         }
@@ -161,6 +166,19 @@ public class WxCouponServiceImpl implements WxCouponService {
         Subject subject = SecurityUtils.getSubject();
         Integer userId = (Integer) subject.getPrincipal();
 
+
+        // 获取优惠券时间
+        Date startTime = coupon.getStartTime();
+        Date endTime = coupon.getEndTime();
+        if (startTime == null && endTime == null) {
+            coupon.setStartTime(new Date());
+
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            Date time = c.getTime();
+            coupon.setEndTime(time);
+        }
+
         // 判断优惠券的状态
         if (coupon.getStatus() == 0) {
 
@@ -177,6 +195,7 @@ public class WxCouponServiceImpl implements WxCouponService {
                 if (receiveCount >= limit) {
                     return 750;
                 }
+
 
                 // 创建coupon-user
                 CouponUser couponUser = new CouponUser();
@@ -230,6 +249,18 @@ public class WxCouponServiceImpl implements WxCouponService {
         Integer userId = (Integer) subject.getPrincipal();
 
         for (Coupon coupon1 : coupons) {
+
+            // 获取优惠券时间
+            Date startTime = coupon.getStartTime();
+            Date endTime = coupon.getEndTime();
+            if (startTime == null && endTime == null) {
+                coupon.setStartTime(new Date());
+
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                Date time = c.getTime();
+                coupon.setEndTime(time);
+            }
             // 判断优惠券的状态
             if (coupon1.getStatus() == 0) {
 
@@ -251,10 +282,10 @@ public class WxCouponServiceImpl implements WxCouponService {
                 couponUser.setUserId(userId);
                 couponUser.setCouponId(coupon1.getId());
                 couponUser.setStatus((short) 0);
-                couponUser.setStartTime(coupon1.getStartTime());
-                couponUser.setEndTime(coupon1.getEndTime());
-                couponUser.setAddTime(new Date());
-                couponUser.setUpdateTime(new Date());
+                couponUser.setStartTime(startTime);
+                couponUser.setEndTime(endTime);
+                couponUser.setAddTime(coupon.getStartTime());
+                couponUser.setUpdateTime(coupon.getEndTime());
                 couponUser.setDeleted(false);
 
 
