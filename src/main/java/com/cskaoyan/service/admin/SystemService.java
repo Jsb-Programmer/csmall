@@ -9,6 +9,7 @@ import com.cskaoyan.bean.pojo.Role;
 import com.cskaoyan.bean.pojo.Storage;
 import com.cskaoyan.bean.vo.system.RolePermission;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SystemService {
@@ -42,4 +43,6 @@ public interface SystemService {
     RolePermission rolePermissions(Integer roleaId);
 
     void rolePermissionsUpdate(RolePermissionsUpdate rolePermissionsUpdate);
+
+    Date notLogin(String username);
 }

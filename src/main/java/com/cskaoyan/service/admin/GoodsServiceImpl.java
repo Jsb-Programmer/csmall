@@ -237,6 +237,8 @@ public class GoodsServiceImpl implements GoodsService {
         UpdateGoodBeanBO updateGoodBeanBO = updateGoodBO.getGoods();
         Goods goods = new Goods();
         BeanUtils.copyProperties(updateGoodBeanBO, goods);
+        if (goods.getPicUrl() != null && goods.getPicUrl().equals(failUrl))
+            goods.setPicUrl(null);
         // 将字符串类型的price装换为BigDecimal
         BigDecimal counterPrice = new BigDecimal(updateGoodBO.getGoods().getCounterPrice());
         BigDecimal retailPrice = new BigDecimal(updateGoodBO.getGoods().getRetailPrice());

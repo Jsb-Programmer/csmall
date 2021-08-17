@@ -11,6 +11,8 @@ import com.cskaoyan.bean.vo.wxOrder.OrderDetailDataVo;
 import com.cskaoyan.bean.vo.wxOrder.SubmitVo;
 import com.cskaoyan.bean.vo.wxOrder.WxOrderBaseRespVo;
 import com.cskaoyan.service.wx.WxOrderService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +32,18 @@ public class WxOrderController {
     @Autowired
     WxOrderService wxOrderService;
 
+
+
     /**
      * 显示订单list
      */
     @RequestMapping("list")
     public BaseRespVo orderList(Integer showType, WxOrderBaseParamBO baseParamBO) {
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         WxOrderBaseRespVo data = wxOrderService.getOrderList(showType, baseParamBO);
         if (data == null) {
             return null;
@@ -47,6 +56,11 @@ public class WxOrderController {
      */
     @RequestMapping("detail")
     public BaseRespVo orderDetail(Integer orderId) {
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         OrderDetailDataVo data = wxOrderService.getOrderDetail(orderId);
         return BaseRespVo.ok(data);
     }
@@ -56,6 +70,11 @@ public class WxOrderController {
      */
     @RequestMapping("cancel")
     public BaseRespVo cancelOrder(@RequestBody Order order) {
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         int affectRows = wxOrderService.cancelOrder(order);
         if (affectRows == 1) {
             return BaseRespVo.ok();
@@ -69,6 +88,11 @@ public class WxOrderController {
      */
     @RequestMapping("refund")
     public BaseRespVo refundOrder(@RequestBody Order order) {
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         int affectRows = wxOrderService.refundOrder(order);
         if (affectRows == 1) {
             return BaseRespVo.ok();
@@ -82,6 +106,12 @@ public class WxOrderController {
      */
     @RequestMapping("delete")
     public BaseRespVo deleteOrder(@RequestBody Order order) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         int affectRows = wxOrderService.deleteOrder(order);
         if (affectRows == 1) {
             return BaseRespVo.ok();
@@ -95,6 +125,12 @@ public class WxOrderController {
      */
     @RequestMapping("goods")
     public BaseRespVo goods(Integer orderId, Integer goodsId) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         WxOrderGoods data = wxOrderService.goods(orderId, goodsId);
         return BaseRespVo.ok(data);
     }
@@ -104,6 +140,12 @@ public class WxOrderController {
      */
     @RequestMapping("comment")
     public BaseRespVo comment(@RequestBody OrderCommentBo orderCommentBo) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         wxOrderService.comment(orderCommentBo);
         return BaseRespVo.ok();
     }
@@ -113,6 +155,12 @@ public class WxOrderController {
      */
     @RequestMapping("confirm")
     public BaseRespVo confirm(@RequestBody Order order) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         wxOrderService.confirm(order);
         return BaseRespVo.ok();
     }
@@ -122,6 +170,12 @@ public class WxOrderController {
      */
     @RequestMapping("submit")
     public BaseRespVo submit(@RequestBody SubmitBo submitBo) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
         SubmitVo data = wxOrderService.submit(submitBo);
         return BaseRespVo.ok(data);
     }
@@ -131,6 +185,12 @@ public class WxOrderController {
      */
     @RequestMapping("prepay")
     public BaseRespVo prepay(Integer orderId) {
+        // 判断登录
+        Subject subject = SecurityUtils.getSubject();
+        boolean authenticated = subject.isAuthenticated();
+        if (authenticated ==false) {
+            return BaseRespVo.fail("请登录", 501);
+        }
 //        wxOrderService.submit(submitBo);
         return BaseRespVo.ok();
     }

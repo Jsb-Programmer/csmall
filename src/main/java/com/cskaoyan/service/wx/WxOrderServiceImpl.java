@@ -358,6 +358,22 @@ public class WxOrderServiceImpl implements WxOrderService {
         SubmitVo submitVo = new SubmitVo();
         submitVo.setOrderId(id);
 
+        // 创建一个orderGoods
+/*        OrderGoods orderGoods = new OrderGoods();
+        orderGoods.setOrderId(id);
+        orderGoods.setGoodsId(cart.getGoodsId());
+        orderGoods.setGoodsName(cart.getGoodsName());
+        orderGoods.setGoodsSn(cart.getGoodsSn());
+        orderGoods.setProductId(cart.getProductId());
+        orderGoods.setNumber(cart.getNumber());
+        orderGoods.setPrice(cart.getPrice());
+        orderGoods.setSpecifications(cart.getSpecifications());
+        orderGoods.setPicUrl(cart.getPicUrl());
+        orderGoods.setComment(0);
+        orderGoods.setAddTime(new Date());
+        orderGoods.setUpdateTime(new Date());
+        orderGoods.setDeleted(false);*/
+
         return submitVo;
     }
 

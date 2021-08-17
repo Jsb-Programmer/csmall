@@ -22,6 +22,9 @@ spring:
       max-file-size: 2MB
       max-request-size: 20MB
 
+  main:
+    allow-bean-definition-overriding: true
+
 logging:
   level:
     com.cskaoyan.mapper: debug
