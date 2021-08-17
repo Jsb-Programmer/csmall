@@ -75,6 +75,9 @@ public class CouponController {
     @RequiresPermissions("admin:coupon:create")
     @RequestMapping("create")
     public BaseRespVo createCoupon(@RequestBody Coupon coupon) {
+        if (coupon.getGoodsType() == 1 || coupon.getGoodsType() == 2) {
+            return BaseRespVo.fail("暂时只支持全商品");
+        }
         int affectRows = couponService.createCoupon(coupon);
         if (affectRows == 1) {
             return BaseRespVo.ok(coupon);
