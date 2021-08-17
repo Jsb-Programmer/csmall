@@ -1,6 +1,7 @@
 package com.cskaoyan.interceptor;
 
 import com.cskaoyan.bean.LoginUser;
+import com.cskaoyan.bean.pojo.FootPrint;
 import com.cskaoyan.bean.pojo.Log;
 import com.cskaoyan.bean.pojo.PermissionMap;
 import com.cskaoyan.bean.pojo.PermissionMapExample;
@@ -49,7 +50,7 @@ public class LogInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+        Object principal = SecurityUtils.getSubject().getPrincipal();
         Log log = new Log();
 
         //通过request获取输入的username
@@ -78,6 +79,10 @@ public class LogInterceptor implements HandlerInterceptor {
         }
         String label = null;
         String permission = null;
+        if ("/wx/goods/detail".equals(requestURI)) {
+            FootPrint footPrint = new FootPrint();
+
+        }
         if ("/admin/auth/login".equals(requestURI)){
             label = "登录";
             permission = "admin:auth:login";
