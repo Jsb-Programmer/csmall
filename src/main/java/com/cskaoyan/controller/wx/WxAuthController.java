@@ -28,10 +28,11 @@ public class WxAuthController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("login_by_weixin")
-    public BaseRespVo wxLogin(){
-        return null;
-    }
+   @RequestMapping("login_by_weixin")
+    public String logIn(){
+    return "chitu_qrcode.png";
+}
+
 
     @RequestMapping("login")
     public BaseRespVo accountLogin(@RequestBody LoginUser loginUser) throws Exception {
