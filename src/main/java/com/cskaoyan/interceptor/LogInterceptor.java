@@ -1,9 +1,11 @@
 package com.cskaoyan.interceptor;
 
 import com.cskaoyan.bean.LoginUser;
+import com.cskaoyan.bean.pojo.FootPrint;
 import com.cskaoyan.bean.pojo.Log;
 import com.cskaoyan.bean.pojo.PermissionMap;
 import com.cskaoyan.bean.pojo.PermissionMapExample;
+import com.cskaoyan.mapper.FootPrintMapper;
 import com.cskaoyan.mapper.LogMapper;
 import com.cskaoyan.mapper.PermissionMapMapper;
 import com.google.gson.Gson;
@@ -34,6 +36,8 @@ public class LogInterceptor implements HandlerInterceptor {
     PermissionMapMapper permissionMapMapper;
     @Autowired
     LogMapper logMapper;
+    @Autowired
+    FootPrintMapper footPrintMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,60 +53,94 @@ public class LogInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
-        Log log = new Log();
-
-        //通过request获取输入的username
-
-
-        String remoteHost = request.getRemoteHost();
         String requestURI = request.getRequestURI();
-        log.setIp(remoteHost);
-        int status = response.getStatus();
-        log.setType(1);
-        log.setStatus(false);
-        if (status == 200){
-            log.setStatus(true);
-        }
-        //action 查表赋值
-        String get = "GET " + requestURI;
-        String post = "POST " + requestURI;
-        PermissionMapExample permissionMapExample = new PermissionMapExample();
-        PermissionMapExample.Criteria criteria = permissionMapExample.createCriteria();
-        criteria.andApiEqualTo(get);
-        List<PermissionMap> permissionMaps = permissionMapMapper.selectByExample(permissionMapExample);
-        if (permissionMaps == null){
-            PermissionMapExample permissionMapExample1 = new PermissionMapExample();
-            permissionMapExample1.createCriteria().andApiEqualTo(post);
-            permissionMaps = permissionMapMapper.selectByExample(permissionMapExample1);
-        }
-        String label = null;
-        String permission = null;
-        if ("/admin/auth/login".equals(requestURI)){
-            label = "登录";
-            permission = "admin:auth:login";
-            log.setAdmin("匿名用户");
-            log.setResult("账号或密码不正确");
+        //区分
+        if (requestURI.startsWith("/admin")){
+            Log log = new Log();
+
+            //通过request获取输入的username
+
+
+            String remoteHost = request.getRemoteHost();
+            log.setIp(remoteHost);
+            int status = response.getStatus();
+            log.setType(1);
             log.setStatus(false);
+            if (status == 200){
+                log.setStatus(true);
+            }
+            //action 查表赋值
+            String get = "GET " + requestURI;
+            String post = "POST " + requestURI;
+            PermissionMapExample permissionMapExample = new PermissionMapExample();
+            PermissionMapExample.Criteria criteria = permissionMapExample.createCriteria();
+            criteria.andApiEqualTo(get);
+            List<PermissionMap> permissionMaps = permissionMapMapper.selectByExample(permissionMapExample);
+            if (permissionMaps == null){
+                PermissionMapExample permissionMapExample1 = new PermissionMapExample();
+                permissionMapExample1.createCriteria().andApiEqualTo(post);
+                permissionMaps = permissionMapMapper.selectByExample(permissionMapExample1);
+            }
+            String label = null;
+            String permission = null;
+            if ("/admin/auth/login".equals(requestURI)){
+                label = "登录";
+                permission = "admin:auth:login";
+                log.setAdmin("匿名用户");
+                log.setResult("账号或密码不正确");
+                log.setStatus(false);
 
-        }else {
-            label = permissionMaps.get(0).getLabel();
-            permission = permissionMaps.get(0).getPermission();
+            }else {
+                label = permissionMaps.get(0).getLabel();
+                permission = permissionMaps.get(0).getPermission();
 
+                Subject subject = SecurityUtils.getSubject();
+                String username = (String) subject.getPrincipal();
+                log.setAdmin(username);
+                // TODO: 2021/8/17
+                log.setResult("操作成功");
+            }
+
+            if ("/admin/auth/info".equals(requestURI)){
+                label = "登录";
+                permission = "admin:auth:info";
+                log.setAdmin("匿名用户");
+                log.setStatus(false);
+
+            }else {
+                label = permissionMaps.get(0).getLabel();
+                permission = permissionMaps.get(0).getPermission();
+
+                Subject subject = SecurityUtils.getSubject();
+                String username = (String) subject.getPrincipal();
+                log.setAdmin(username);
+                // TODO: 2021/8/17
+                log.setResult("操作成功");
+            }
+            log.setAction(label);
+            log.setComment(permission);
+            log.setAddTime(new Date());
+            log.setUpdateTime(new Date());
+            log.setDeleted(false);
+
+            //insert 日志
+            int insert = logMapper.insert(log);
+
+        }else if (requestURI.startsWith("/wx/goods/detail")){
+            FootPrint footPrint = new FootPrint();
             Subject subject = SecurityUtils.getSubject();
-            String username = (String) subject.getPrincipal();
-            log.setAdmin(username);
-            // TODO: 2021/8/17
-            log.setResult("操作成功");
-        }
-        log.setAction(label);
-        log.setComment(permission);
-        log.setAddTime(new Date());
-        log.setUpdateTime(new Date());
-        log.setDeleted(false);
+            Integer userId = (Integer)subject.getPrincipal();
 
-        //insert 日志
-        int insert = logMapper.insert(log);
+            footPrint.setUserId(userId);
+            String goodId = request.getParameter("id");
+            footPrint.setGoodsId(Integer.valueOf(goodId));
+
+            footPrint.setAddTime(new Date());
+            footPrint.setUpdateTime(new Date());
+            footPrint.setDeleted(false);
+
+            int insert = footPrintMapper.insert(footPrint);
+        }
     }
 
 }

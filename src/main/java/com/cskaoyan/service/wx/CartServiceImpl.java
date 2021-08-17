@@ -259,6 +259,9 @@ public class CartServiceImpl implements CartService {
     public int fastadd(AddBO addBO, Integer userId) {
         // TODO: 2021/8/15 商品添加之后的数量 
         int add = add(addBO, userId);
+
+        //更新数量
+        int i = cartMapper.updateNumber(addBO.getNumber(),userId,addBO,new Date());
         return add;
     }
 
@@ -271,7 +274,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public int goodscount(Integer userId) {
         CartExample cartExample = new CartExample();
-        cartExample.createCriteria().andUserIdEqualTo(userId);
+        CartExample.Criteria criteria = cartExample.createCriteria();
+        criteria.andUserIdEqualTo(userId);
+        criteria.andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
         int total = 0;
         for (Cart cart : carts) {
@@ -300,7 +305,7 @@ public class CartServiceImpl implements CartService {
         }
         checkoutVO.setCheckedGoodsList(carts);
 
-        //查询客户的默认收获地址
+        //查询客户的收获地址
         AddressExample addressExample = new AddressExample();
         AddressExample.Criteria exampleCriteria = addressExample.createCriteria();
 //        exampleCriteria.andIsDefaultEqualTo(true);

@@ -23,7 +23,7 @@ public class IntercepterConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //HandlerInterceptor是谁、作用范围、顺序
-        InterceptorRegistration registration = registry.addInterceptor(logInterceptor()).addPathPatterns("/admin/**");
+        InterceptorRegistration registration = registry.addInterceptor(logInterceptor()).addPathPatterns("/**");
 
     }
 
