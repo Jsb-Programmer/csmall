@@ -92,7 +92,7 @@ public class WxCouponController {
     }
 
     /**
-     * 领取优惠券
+     * 兑换优惠券
      */
     @RequestMapping("exchange")
     public BaseRespVo exchangeCoupon(@RequestBody Coupon coupon) {

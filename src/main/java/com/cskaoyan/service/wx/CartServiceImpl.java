@@ -336,6 +336,9 @@ public class CartServiceImpl implements CartService {
         }else {
             //查询该优惠券,并使用
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+            if (coupon == null) {
+
+            }
             checkoutVO.setCouponPrice(coupon.getDiscount().doubleValue());
             CouponUserExample couponUserExample = new CouponUserExample();
             CouponUserExample.Criteria couponUserExampleCriteria = couponUserExample.createCriteria();
