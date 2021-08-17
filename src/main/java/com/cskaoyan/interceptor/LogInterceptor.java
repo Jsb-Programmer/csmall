@@ -99,8 +99,13 @@ public class LogInterceptor implements HandlerInterceptor {
                 log.setAdmin("匿名用户");
                 log.setStatus(false);
             }else {
-                label = permissionMaps.get(0).getLabel();
-                permission = permissionMaps.get(0).getPermission();
+                if (permissionMaps == null){
+                    label = "登录";
+                    permission = "默认";
+                }else {
+                    label = permissionMaps.get(0).getLabel();
+                    permission = permissionMaps.get(0).getPermission();
+                }
 
                 Subject subject = SecurityUtils.getSubject();
                 String username = (String) subject.getPrincipal();
