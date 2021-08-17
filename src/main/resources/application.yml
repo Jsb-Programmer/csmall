@@ -19,8 +19,8 @@ spring:
     static-path-pattern: /**
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 50MB
+      max-file-size: 2MB
+      max-request-size: 20MB
 
 logging:
   level:
@@ -34,5 +34,7 @@ file:
 img:
   #图片网络路径URL
   url: http://localhost:8083/wx/storage/fetch/
+  #图片上传失败URL路径
+  failUrl: http://localhost:8083/wx/storage/fetch/fail.jpg
 mybatis:
   type-handlers-package: com.cskaoyan.typehandler
