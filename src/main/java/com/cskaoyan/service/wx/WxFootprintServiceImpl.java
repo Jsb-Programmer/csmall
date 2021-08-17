@@ -42,6 +42,7 @@ public class WxFootprintServiceImpl implements WxFootprintService{
         footPrintExample.setOrderByClause("add_time desc");
         FootPrintExample.Criteria criteria = footPrintExample.createCriteria();
         criteria.andUserIdEqualTo(principal);
+        criteria.andDeletedEqualTo(false);
 
         List<FootPrint> footPrints = footPrintMapper.selectByExample(footPrintExample);
 
@@ -70,6 +71,8 @@ public class WxFootprintServiceImpl implements WxFootprintService{
      */
     @Override
     public void deleteFootprintById(Integer id) {
-        footPrintMapper.deleteByPrimaryKey(id);
+        FootPrint footPrint = footPrintMapper.selectByPrimaryKey(id);
+        footPrint.setDeleted(true);
+        footPrintMapper.updateByPrimaryKeySelective(footPrint);
     }
 }

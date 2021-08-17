@@ -84,6 +84,7 @@ public class AuthController {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()){
             subject.logout();//todo fe can be better
+            return BaseRespVo.ok();
         }
         return BaseRespVo.ok();
     }
