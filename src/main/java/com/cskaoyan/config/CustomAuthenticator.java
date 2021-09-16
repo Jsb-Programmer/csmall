@@ -30,9 +30,10 @@ public class CustomAuthenticator extends ModularRealmAuthenticator {
                 realms.add(originalRealm);
             }
         }
-
-        return realms.size() == 1 ?
-                this.doSingleRealmAuthentication(realms.iterator().next(), authenticationToken):
-                this.doMultiRealmAuthentication(realms, authenticationToken);
+        if (realms.size() == 1) {
+            return doSingleRealmAuthentication( realms.iterator().next(), authenticationToken);
+        } else {
+            return doMultiRealmAuthentication(realms, authenticationToken);
+        }
     }
 }

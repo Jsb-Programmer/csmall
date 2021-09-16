@@ -49,6 +49,7 @@ public class AuthController {
 
     @RequestMapping("dashboard")
     public BaseRespVo dashboard() {
+
         AllKindsTotals allKindsTotals = authService.queryTotals();
         return BaseRespVo.ok(allKindsTotals);
     }

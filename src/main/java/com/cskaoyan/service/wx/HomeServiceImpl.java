@@ -68,7 +68,7 @@ public class HomeServiceImpl implements HomeService {
             // 获取groupon_price
             BigDecimal discount = grouponRule.getDiscount();
             BigDecimal retailPrice = good.getRetailPrice();
-            BigDecimal groupon_price = retailPrice.multiply(discount).divide(new BigDecimal(100));
+            BigDecimal groupon_price = retailPrice.subtract(discount);
             wxGroupOnVO.setGroupon_price(groupon_price);
             // 获取good
             wxGroupOnVO.setGoods(good);

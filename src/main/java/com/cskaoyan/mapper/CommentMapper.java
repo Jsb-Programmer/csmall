@@ -2,6 +2,7 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.pojo.Comment;
 import com.cskaoyan.bean.pojo.CommentExample;
+import com.cskaoyan.bean.vo.goods.CommentDataVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface CommentMapper {
     int updateByPrimaryKeySelective(Comment record);
 
     int updateByPrimaryKey(Comment record);
+
+    List<CommentDataVO> selectCommentWithUserByGoodsId(Integer id);
 }

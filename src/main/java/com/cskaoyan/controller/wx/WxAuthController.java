@@ -44,6 +44,7 @@ public class WxAuthController {
         }catch (Exception e){
             return BaseRespVo.fail("账号密码不对",700);
         }
+
         WxUserLoginBO wxUserLoginBO = userService.userLoginInfo(loginUser.getUsername(),loginUser.getPassword());
 
         return BaseRespVo.ok(wxUserLoginBO);
