@@ -30,5 +30,5 @@ public interface SearchHistoryMapper {
 
     int updateByPrimaryKey(SearchHistory record);
 
-    List<SearchIndexChildVO> selectToKeyword();
+    List<SearchIndexChildVO> selectToKeyword(Integer id);
 }

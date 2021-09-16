@@ -125,7 +125,9 @@ public class HomeServiceImpl implements HomeService {
             GoodsExample goodsExample1 = new GoodsExample();
             GoodsExample.Criteria goodsExample1Criteria = goodsExample1.createCriteria();
             goodsExample1Criteria.andDeletedEqualTo(false);
-            goodsExample1Criteria.andCategoryIdEqualTo(categoryList.get(0).getId());
+            if (categoryList.size() != 0) {
+                goodsExample1Criteria.andCategoryIdEqualTo(categoryList.get(0).getId());
+            }
             goodsExample1.setOrderByClause("sort_order limit 0, 4");
             List<Goods> goods = goodsMapper.selectByExample(goodsExample1);
             wxFloorGoodsVO.setGoodsList(goods);

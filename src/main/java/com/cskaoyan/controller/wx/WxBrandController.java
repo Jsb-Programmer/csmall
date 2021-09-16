@@ -3,7 +3,9 @@ package com.cskaoyan.controller.wx;
 import com.cskaoyan.bean.BaseRespVo;
 import com.cskaoyan.bean.pojo.Brand;
 import com.cskaoyan.bean.vo.brandcs.WxBrandListVO;
+import com.cskaoyan.bean.vo.brandcs.WxDrandDetailVO;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
+import com.cskaoyan.bean.vo.market.BrandDeleteVO;
 import com.cskaoyan.service.admin.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,8 @@ public class WxBrandController {
 
     @RequestMapping("detail")
     public BaseRespVo brandDetail(Integer id){
-        Brand brand = brandService.brandDetail(id);
-        return BaseRespVo.ok(brand);
+        WxDrandDetailVO wxDrandDetailVO = brandService.brandDetail(id);
+        return BaseRespVo.ok(wxDrandDetailVO);
     }
 
 

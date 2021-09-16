@@ -30,10 +30,15 @@ public class SearchController {
         return BaseRespVo.ok(searchIndexVO);
     }
 
+    /**
+     * 搜索框设置
+     * @param keyword
+     * @return
+     */
     @RequestMapping("helper")
-    public BaseRespVo searchHelper(){
-//        searchHistoryService.searchHelper();
-        return BaseRespVo.ok(new ArrayList<>());
+    public BaseRespVo searchHelper(String keyword){
+        List<String> idList = searchHistoryService.searchHelper(keyword);
+        return BaseRespVo.ok(idList);
     }
 
     @RequestMapping("clearhistory")

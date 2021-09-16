@@ -7,6 +7,7 @@ import com.cskaoyan.bean.bo.market.BrandDeleteBO;
 import com.cskaoyan.bean.bo.market.BrandUpdateBO;
 import com.cskaoyan.bean.pojo.Brand;
 import com.cskaoyan.bean.vo.brandcs.WxBrandListVO;
+import com.cskaoyan.bean.vo.brandcs.WxDrandDetailVO;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
 import com.cskaoyan.bean.vo.market.BrandCreateVO;
 import com.cskaoyan.bean.vo.market.BrandDeleteVO;
@@ -23,5 +24,5 @@ public interface BrandService {
 
     WxBrandListVO wxBrandList(Integer page, Integer size);
 
-    Brand brandDetail(Integer id);
+    WxDrandDetailVO brandDetail(Integer id);
 }

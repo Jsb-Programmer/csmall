@@ -19,5 +19,5 @@ public class SearchIndexVO {
     //热门关键词列表
     List<Keyword> hotKeywordList;
     //历史关键字列表
-    List<Keyword> historyKeywordList;
+    List<SearchIndexChildVO> historyKeywordList;
 }

@@ -7,8 +7,10 @@ import com.cskaoyan.bean.bo.market.BrandUpdateBO;
 import com.cskaoyan.bean.pojo.Brand;
 import com.cskaoyan.bean.pojo.BrandExample;
 import com.cskaoyan.bean.vo.brandcs.WxBrandListVO;
+import com.cskaoyan.bean.vo.brandcs.WxDrandDetailVO;
 import com.cskaoyan.bean.vo.market.BaseRespDataVO;
 import com.cskaoyan.bean.vo.market.BrandCreateVO;
+import com.cskaoyan.bean.vo.market.BrandDeleteVO;
 import com.cskaoyan.bean.vo.market.BrandUpdateVO;
 import com.cskaoyan.mapper.BrandMapper;
 import com.github.pagehelper.PageHelper;
@@ -141,8 +143,10 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand brandDetail(Integer id) {
+    public WxDrandDetailVO brandDetail(Integer id) {
         Brand brand = brandMapper.selectByPrimaryKey(id);
-        return brand;
+        WxDrandDetailVO wxDrandDetailVO = new WxDrandDetailVO();
+        wxDrandDetailVO.setBrand(brand);
+        return wxDrandDetailVO;
     }
 }
