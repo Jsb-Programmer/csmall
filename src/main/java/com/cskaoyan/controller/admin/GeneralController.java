@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("admin/issue")
+//窄化请求
 public class GeneralController {
     @Autowired
     IssueService issueService;

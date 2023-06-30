@@ -29,7 +29,8 @@ public class WxCollectController {
     @RequestMapping("list")
     public BaseRespVo list(Integer type,Integer page,Integer size){
         // 判断登录
-        Subject subject = SecurityUtils.getSubject();
+
+               Subject subject = SecurityUtils.getSubject();
         boolean authenticated = subject.isAuthenticated();
         if (authenticated ==false) {
             return BaseRespVo.fail("请登录", 501);
@@ -38,7 +39,7 @@ public class WxCollectController {
         WxCollectVo data = wxCollectService.querry(type, page, size);
         return BaseRespVo.ok(data);
     }
-    // 还没测试
+    // 收藏或取消收藏
     @RequestMapping("addordelete")
     public BaseRespVo addordelete(@RequestBody Collect collect){
 

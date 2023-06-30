@@ -63,5 +63,6 @@ public class StringArrayTypeHandler implements TypeHandler<String[]> {
             e.printStackTrace();
         }
         return strings;
+
     }
 }

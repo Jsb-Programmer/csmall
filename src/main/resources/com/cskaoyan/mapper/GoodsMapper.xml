@@ -538,7 +538,19 @@
   </select>
 
   <select id="selectCollectJoinGoods" resultType="com.cskaoyan.bean.vo.wxCollectVo.WxCollectListVo" >
-    	 select goods.brief as brief,co.id as id,goods.name as name,goods.pic_url as picUrl,goods.retail_price as retailPrice,co.type as type,co.value_id as valueId   from cskaoyanmall_goods as goods  JOIN cskaoyanmall_collect as co ON goods.id = co.value_id where co.user_id = #{userId} and co.deleted = 0
+    	SELECT
+	goods.brief AS brief,
+	co.id AS id,
+	goods.NAME AS NAME,
+	goods.pic_url AS picUrl,
+	goods.retail_price AS retailPrice,
+	co.type AS type,
+	co.value_id AS valueId
+FROM
+	cskaoyanmall_goods AS goods
+	JOIN cskaoyanmall_collect AS co ON goods.id = co.value_id
+WHERE
+	co.user_id = #{userId} and co.deleted = 0 order by co.add_time desc
   </select>
 
 </mapper>

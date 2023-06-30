@@ -45,6 +45,7 @@ public class IssueServiceImpl implements IssueService{
 
     @Override
     public Issue insertInto(Issue issue) {
+        // i 返回自增的主键id
         int i = issueMapper.insertSelective(issue);
         issue.setId(i);
         issue.setAddTime(new Date());

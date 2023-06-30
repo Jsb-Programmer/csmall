@@ -4,7 +4,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     #后缀不要省略，增删改查涉及到中文
-    url: jdbc:mysql://localhost:3306/project2?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/project2?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
     password: 123456
     #默认的DataSource 👉  Hikari；如果要指定数据源类型，可以使用type来指定
@@ -23,7 +23,11 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 20MB
-
+  redis:
+    host: 127.0.0.1
+    password:
+    database: 0
+    port: 6379
   main:
     allow-bean-definition-overriding: true
 

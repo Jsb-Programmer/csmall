@@ -38,7 +38,7 @@ public interface GoodsMapper {
     int updateByPrimaryKey(Goods record);
 
     Goods selectGoodsForGroupon(Integer goodsId);
-    // 新加sql 需要获取collect表里的userId 需要传一个userId.这里先写死
+    // 新加sql 需要获取collect表里的userId 需要传一个userId.这里先写死，按收藏时间顺序排列
     List<WxCollectListVo> selectCollectJoinGoods(Integer userId);
 
 

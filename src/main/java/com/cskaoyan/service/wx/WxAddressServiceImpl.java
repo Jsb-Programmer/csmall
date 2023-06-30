@@ -48,6 +48,7 @@ public class WxAddressServiceImpl implements WxAddressService{
         Subject subject1 = SecurityUtils.getSubject();
         Integer userId = (Integer) subject1.getPrincipal();
         // 判断是否设置了默认地址
+        // 1.修改地址
         if (address.getIsDefault() == true) {
             // 获取该用户的所有address
 
@@ -65,9 +66,8 @@ public class WxAddressServiceImpl implements WxAddressService{
             }
         }
         //修改adderess表信息 sql by wpb
-
-
-        if (address.getId() == null) {
+        // 2.新建地址
+        if (address.getId() == 0||address.getId() ==null) {
             // 获得userId
             address.setUserId(userId);
             address.setAddTime(new Date());

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,7 +34,6 @@ public class WxCollectServiceImpl implements WxCollectService {
         PageHelper.startPage(page, size);
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         List<WxCollectListVo> collectList = goodsMapper.selectCollectJoinGoods(userId);
-
         PageInfo<WxCollectListVo> pageInfo = new PageInfo<>(collectList);
         long totalPages = pageInfo.getTotal();
         return WxCollectVo.create(collectList, totalPages);
@@ -45,25 +45,33 @@ public class WxCollectServiceImpl implements WxCollectService {
         Integer userId = (Integer) SecurityUtils.getSubject().getPrincipal();
         Collect collectSelect = collectMapper.selectByValueId(collect.getValueId());
         collect.setUserId(userId);
+        collect.setAddTime(new Date());
+        // 2021 10/9
+        collect.setUpdateTime(new Date());
 
         if (collectSelect == null) {
-            //bug 根据用户id插入
-            collectMapper.insertSelective(collect);
+            //收藏有两种情况，需要分情况讨论。
+            //1.原来表中没有记录，直接插入 根据用户id插入
+            int i = collectMapper.insertSelective(collect);
             WxCollectAddVo hava = new WxCollectAddVo();
             hava.setType("add");
             return hava;
+            //2. 虽然在前端取消了收藏，但在数据库中，这条记录仍然存在，getDeleted字段值为1，用户还可能反复收藏，
+            //此时不用新插入一条数据，而是直接把原来的记录对应的getDeleted字段值修改即可。
         } else if (collectSelect != null && collectSelect.getDeleted() == true) {
             //把状态码改为0(false)，才能持续delete
             collectMapper.updateStatusToZeroByValueId(collect.getValueId());
             WxCollectAddVo hava = new WxCollectAddVo();
             hava.setType("add");
             return hava;
+            //取消收藏，不删除记录，仅更改对应的字段值。假删除
         } else if (collectSelect != null) {
             collectMapper.updateStatusByValueId(collect.getValueId());
             WxCollectAddVo noHave = new WxCollectAddVo();
             noHave.setType("delete");
             return noHave;
         }
+        // 没有进入if时随便返回一个值，不至于报错。
         WxCollectAddVo noUse = new WxCollectAddVo();
         noUse.setType("空的啊");
 

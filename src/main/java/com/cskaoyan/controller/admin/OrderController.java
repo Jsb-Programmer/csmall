@@ -22,13 +22,7 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping("admin/order")
 public class OrderController {
-    /* *
-    * @author:wpb
-    * @Description:订单的显示与查询
-    * @Date: 2021/8/11
-    * @Param:
-    * @return com.cskaoyan.bean.BaseRespVo
-    **/
+
     @Autowired
     OrderService orderService;
     /**

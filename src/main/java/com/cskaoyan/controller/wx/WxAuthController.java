@@ -11,6 +11,7 @@ import com.cskaoyan.config.SmsComponent;
 import com.cskaoyan.realm.MallToken;
 import com.cskaoyan.service.admin.UserService;
 import com.cskaoyan.utils.MD5Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Map;
  * @create: 2021-08-14 14:46
  **/
 
+@Slf4j
 @RestController
 @RequestMapping("wx/auth")
 public class WxAuthController {
@@ -40,21 +42,23 @@ public class WxAuthController {
     static Date expiredTime;
 
 
-   @RequestMapping("login_by_weixin")
-    public String logIn(){
-    return "chitu_qrcode.png";
-}
+    @RequestMapping("login_by_weixin")
+    public String logIn() {
+        return "chitu_qrcode.png";
+    }
 
 
     @RequestMapping("login")
     public BaseRespVo accountLogin(@RequestBody LoginUser loginUser) throws Exception {
         //"yyyy-MM-dd'T'HH:mm:ss.SSS"
         MallToken mallToken = new MallToken(loginUser.getUsername(),
-                MD5Utils.encrypt(loginUser.getPassword()), "wx");
+                loginUser.getPassword(), "wx");
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(mallToken);
         } catch (Exception e) {
+            log.info("登录异常:"+e.getMessage());
+            e.printStackTrace();
             return BaseRespVo.fail("账号密码不对", 700);
         }
 

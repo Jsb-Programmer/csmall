@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping("auth/login")
     public BaseRespVo login(@RequestBody LoginUser user) throws Exception {
         MallToken admin = new MallToken(user.getUsername(),
-                MD5Utils.encrypt(user.getPassword()), "admin");
+                user.getPassword(), "admin");
         Subject subject = SecurityUtils.getSubject();
 //        ------------------------------新增代码----------------------------------------------------
         if (i >= 2){

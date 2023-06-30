@@ -12,12 +12,6 @@ import java.io.Serializable;
  **/
 @Data
 public class MallConfigVO implements Serializable {
-//    private String cskaoyanmallMallName;
-//    private String cskaoyanmallMallQq;
-//    private String cskaoyanmallMallPhone;
-//    private String cskaoyanmallMallAddress;
-
-
 
     private String cskaoyanmall_mall_name;
     private String cskaoyanmall_mall_qq;

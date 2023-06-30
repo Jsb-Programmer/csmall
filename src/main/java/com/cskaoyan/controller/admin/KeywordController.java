@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @program: mall
  * @description: 关键词
- * @author: Liu
+ * @author: wpb
  * @create: 2021-08-12 21:32
  **/
 @RestController

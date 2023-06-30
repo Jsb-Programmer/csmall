@@ -83,7 +83,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BaseRespVo updateStatus(Order order) {
+        // shipChannel 快递公司    shipSn 快递编号
         //根据orderId 修改订单状态 然后插入 shipChannel shipSn 的信息
+        // 订单状态码 301 表示已发货
 //        orderMapper.updateByPrimaryKeySelective(order);
         orderMapper.updateByPrimaryKeySelectiveNew(order);
         return BaseRespVo.ok();

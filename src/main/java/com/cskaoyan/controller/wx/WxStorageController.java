@@ -38,6 +38,7 @@ public class WxStorageController {
     public BaseRespVo imgUpload(MultipartFile file) {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String originalFilename = file.getOriginalFilename();
+
         int size = (int) file.getSize();
         String contentType = file.getContentType();
         Date date = new Date(System.currentTimeMillis());
